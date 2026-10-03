@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./site.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Ubicación y horario · Hanaki Sushi Barcelona</title>
+<meta name="description" content="Buffet libre japonés en Carrer de Joan Güell, 212, Les Corts, Barcelona. ★ 4,2 en Google. Reserva tu mesa: 931 94 22 61.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=DM+Sans:wght@400;500;600&amp;family=Noto+Serif+JP:wght@300;400&amp;display=swap">
+<style>
+html{scroll-behavior:smooth}
+*{box-sizing:border-box}
+*{font-variant-numeric:lining-nums}
+body{margin:0;background:#0A0A0A;color:#BDB7AE;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#F2EEE8;text-decoration:none}
+a:hover{color:#FFFFFF}
+button,input,textarea{font-family:inherit}
+:focus-visible{outline:2px solid #D11A2A;outline-offset:3px}
+[data-arw]{display:inline-block;transition:transform .2s}
+:hover>[data-arw]{transform:translateX(4px)}
+[data-nl]::after{content:"";position:absolute;left:0;right:0;bottom:8px;height:1px;background:#B3121F;transform:scaleX(0);transition:transform .3s cubic-bezier(.65,0,.35,1)}
+[data-nl]:hover::after,[data-nl][aria-current="true"]::after{transform:scaleX(1)}
+@keyframes hkScroll{0%{transform:translateY(-100%)}100%{transform:translateY(260%)}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+
+<div style="height:32px;background:#000;display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:0 clamp(16px,4vw,56px);font-size:12px;color:#BDB7AE;position:relative;z-index:51">
+
+<div style="display:flex;align-items:center;gap:18px;white-space:nowrap"><a href="tel:+34931942261" style="color:#F2EEE8">931 94 22 61</a><sc-if value="{{ notMob }}" hint-placeholder-val="{{ true }}"><a href="Hanaki%20Barcelona%20Experiencia.dc.html#para-llevar" style="color:#BDB7AE">Para llevar y a domicilio <span data-arw="">→</span></a></sc-if></div>
+</div>
+
+<header style="position:sticky;top:0;z-index:50;height:{{ hdrOuter }};margin-bottom:-{{ hdrOuter }};pointer-events:none">
+<div style="pointer-events:auto;height:{{ hdrH }};background:{{ hdrBg }};backdrop-filter:{{ hdrBlur }};-webkit-backdrop-filter:{{ hdrBlur }};border-bottom:1px solid {{ hdrBd }};transition:height .3s ease,background-color .3s ease,border-color .3s ease">
+<div style="height:100%;padding:0 {{ hdrPad }};display:flex;align-items:center;justify-content:space-between;gap:24px">
+<a ref="{{ logoRef }}" href="Hanaki%20Barcelona%20v3.dc.html#top" aria-label="Hanaki Sushi Barcelona, inicio" style="flex:none;display:flex;align-items:center;gap:{{ lgGap }};color:#F2EEE8;opacity:{{ hdrLogoOp }}"><img src="assets/hanaki-logo-trazo.png" alt="花木" style="height:{{ lgH }};width:auto;display:block"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:{{ lgFs }};line-height:1;letter-spacing:.35em;margin-right:-.35em;padding-top:.1em;color:#F2EEE8">HANAKI</span></a>
+<sc-if value="{{ desk }}" hint-placeholder-val="{{ true }}">
+<nav aria-label="Principal" style="display:flex;align-items:center;gap:clamp(24px,2.6vw,40px)"><sc-for list="{{ links }}" as="l" hint-placeholder-count="6"><a data-nl="" data-ih="" href="{{ l.h }}" aria-current="{{ l.cur }}" style="position:relative;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#D8D3CC;padding:14px 0;white-space:nowrap;transition:color .2s" style-hover="color:#FFFFFF">{{ l.t }}</a></sc-for></nav>
+<div style="flex:none;display:flex;align-items:center;gap:12px">
+<div data-ih="" style="display:flex;align-items:center;margin-right:12px"><sc-for list="{{ langs }}" as="g" hint-placeholder-count="3"><sc-if value="{{ g.sep }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="font-size:11px;color:#3A3A3A">·</span></sc-if><button type="button" onClick="{{ g.pick }}" aria-pressed="{{ g.on }}" style="background:none;border:none;min-width:32px;min-height:44px;font-size:11px;letter-spacing:.14em;color:{{ g.c }};cursor:pointer;transition:color .2s">{{ g.t }}</button></sc-for></div>
+<a data-ih="" href="Hanaki%20Barcelona%20Carta.dc.html" style="display:inline-flex;align-items:center;height:44px;padding:0 28px;border:1px solid #FFFFFF;border-radius:2px;color:#FFFFFF;font-size:11.5px;font-weight:600;letter-spacing:.2em;transition:background-color .2s" style-hover="background:rgba(255,255,255,.08)">CARTA</a>
+<a data-ih="" href="Hanaki%20Barcelona%20Reservar.dc.html" style="display:inline-flex;align-items:center;height:44px;padding:0 28px;background:#B3121F;border:1px solid #B3121F;border-radius:2px;color:#FFFFFF;font-size:11.5px;font-weight:600;letter-spacing:.2em;transition:background-color .2s,border-color .2s" style-hover="background:#D11A2A;border-color:#D11A2A">RESERVAR</a>
+</div>
+</sc-if>
+<sc-if value="{{ notDesk }}" hint-placeholder-val="{{ false }}">
+<div style="flex:none;display:flex;align-items:center;gap:{{ mGap }}">
+<sc-if value="{{ notMob }}" hint-placeholder-val="{{ true }}"><a data-ih="" href="Hanaki%20Barcelona%20Carta.dc.html" style="display:inline-flex;align-items:center;height:44px;padding:0 24px;border:1px solid #FFFFFF;border-radius:2px;color:#FFFFFF;font-size:11.5px;font-weight:600;letter-spacing:.2em">CARTA</a></sc-if>
+<a data-ih="" href="Hanaki%20Barcelona%20Reservar.dc.html" style="display:inline-flex;align-items:center;height:44px;padding:0 {{ resPad }};background:#B3121F;border:1px solid #B3121F;border-radius:2px;color:#FFFFFF;font-size:11px;font-weight:600;letter-spacing:.2em;transition:background-color .2s" style-hover="background:#D11A2A">RESERVAR</a>
+<button data-ih="" type="button" onClick="{{ toggleMenu }}" aria-label="Abrir menú" aria-expanded="{{ menu }}" style="width:44px;height:44px;margin-right:-10px;background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer"><span style="width:22px;height:1px;background:#F2EEE8"></span><span style="width:22px;height:1px;background:#F2EEE8"></span></button>
+</div>
+</sc-if>
+</div>
+</div>
+</header>
+
+<div aria-hidden="true" style="height:{{ hdrOuter }}"></div>
+<sc-if value="{{ intro }}" hint-placeholder-val="{{ false }}">
+<div ref="{{ introRef }}" onClick="{{ skipIntro }}" aria-hidden="true" style="position:fixed;inset:0;z-index:2147483647;cursor:pointer">
+<div data-ibg="" style="position:absolute;inset:0;background:#0A0A0A"></div>
+<video data-ivid="" preload="auto" style="position:absolute;left:0;top:0;width:420px;mix-blend-mode:screen;filter:contrast(1.08);opacity:0;pointer-events:none"><source src="assets/hanaki-logo-trazo.mp4" type="video/mp4"></video>
+<div data-igrp="" style="position:fixed;left:0;top:0;display:flex;align-items:center;transform-origin:0 0;pointer-events:none;color:#F2EEE8"><img src="assets/hanaki-logo-trazo.png" alt="" style="display:block;width:auto;opacity:0"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;line-height:1;letter-spacing:.6em;margin-right:-.35em;opacity:0;white-space:nowrap">HANAKI</span></div>
+<button data-iskip="" type="button" onClick="{{ skipIntro }}" style="position:absolute;right:20px;bottom:16px;min-height:44px;padding:0 10px;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#777;cursor:pointer;transition:color .2s,opacity .3s" style-hover="color:#BDB7AE">Saltar intro</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ menu }}" hint-placeholder-val="{{ false }}">
+<div role="dialog" aria-label="Menú" style="position:fixed;inset:0;z-index:60;background:#0A0A0A;display:flex;flex-direction:column;padding:24px clamp(20px,6vw,40px) 40px;overflow:auto">
+<div style="display:flex;align-items:center;justify-content:space-between;height:56px"><span style="display:flex;align-items:center;font-family:'Cormorant Garamond',serif;font-size:22px;letter-spacing:.26em;color:#F2EEE8"><img src="assets/hanaki-logo-trazo.png" alt="花木" style="height:30px;width:auto;display:block;margin-right:12px">HANAKI</span><button type="button" onClick="{{ toggleMenu }}" aria-label="Cerrar menú" style="width:44px;height:44px;background:none;border:1px solid rgba(242,238,232,.35);border-radius:2px;color:#F2EEE8;font-size:22px;cursor:pointer">×</button></div>
+<nav style="display:flex;flex-direction:column;margin-top:32px"><sc-for list="{{ linksM }}" as="l" hint-placeholder-count="7"><a data-ml="" href="{{ l.h }}" onClick="{{ closeMenu }}" style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:32px;letter-spacing:.1em;text-transform:uppercase;color:#F2EEE8;padding:12px 0;border-bottom:1px solid #222">{{ l.t }}</a></sc-for></nav>
+<div style="display:flex;gap:6px;margin-top:24px"><sc-for list="{{ langs }}" as="g" hint-placeholder-count="3"><button type="button" onClick="{{ g.pick }}" style="background:none;border:none;min-width:44px;min-height:44px;font-size:13px;letter-spacing:.14em;color:{{ g.c }};cursor:pointer">{{ g.t }}</button></sc-for></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto;padding-top:24px"><a href="tel:+34931942261" style="display:flex;align-items:center;justify-content:center;min-height:52px;border:1px solid #FFFFFF;border-radius:2px;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.18em">LLAMAR</a><a href="Hanaki%20Barcelona%20Reservar.dc.html" onClick="{{ closeMenu }}" style="display:flex;align-items:center;justify-content:center;min-height:52px;background:#B3121F;border-radius:2px;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.18em">RESERVAR</a></div>
+</div>
+</sc-if>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="ubicacion" data-screen-label="Ubicación" style="position:relative;overflow:hidden;padding:0 clamp(20px,5vw,72px) clamp(90px,10vw,140px);scroll-margin-top:80px">
+<div aria-hidden="true" style="position:absolute;left:-2%;top:90px;display:{{ wmDisp }};pointer-events:none"><div data-wm="" style="font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(120px,15vw,220px);line-height:1;color:rgba(255,255,255,.04)">場所</div></div>
+<div style="position:relative;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:{{ g2 }};gap:clamp(40px,6vw,80px);align-items:stretch">
+<div style="display:flex;flex-direction:column;align-items:flex-start">
+<div data-line="" style="width:1px;height:64px;background:#B3121F;transform-origin:top;display:{{ lnDisp }}"></div>
+<div data-rv="" style="display:flex;flex-direction:column;gap:8px;margin-top:40px"><div style="display:flex;align-items:center;gap:12px;font-size:11px;letter-spacing:.2em;color:#B89A72"><span style="width:24px;height:1px;background:#B89A72"></span>UBICACIÓN</div><div style="font-family:'Noto Serif JP',serif;font-size:12px;letter-spacing:.3em;color:#8A7B68">場所</div></div>
+<h2 data-rv="" style="margin:20px 0 0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(32px,3.8vw,52px);line-height:1.1;letter-spacing:.1em;color:#F2EEE8;text-wrap:balance">NOS VEMOS EN LES CORTS</h2>
+<address data-rv="" style="font-style:normal;margin-top:24px;font-size:16px;line-height:1.7;color:#F2EEE8">Carrer de Joan Güell, 212<br>Les Corts, 08028 Barcelona<br><a href="tel:+34931942261" style="color:#F2EEE8;border-bottom:1px solid #555">931 94 22 61</a></address>
+<div data-rv="" style="width:100%;margin-top:32px"><div style="font-size:11px;letter-spacing:.2em;color:#B89A72;margin-bottom:10px">HORARIO</div><sc-for list="{{ week }}" as="d" hint-placeholder-count="7"><div style="display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:44px;padding:0 12px;border-bottom:1px solid #222;border-left:2px solid {{ d.bl }};background:{{ d.bg }}"><span style="display:flex;align-items:center;gap:10px;font-size:15px;color:{{ d.c }}">{{ d.t }}<sc-if value="{{ d.today }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:600;letter-spacing:.16em;padding:3px 8px;background:#B3121F;color:#FFFFFF;border-radius:2px">HOY</span></sc-if></span><span style="font-size:15px;color:{{ d.c }}">Todos los días<br>12:00 – 16:30<br>20:00 – 23:30</span></div></sc-for></div>
+<div data-rv="" style="width:100%;margin-top:28px"><div style="font-size:11px;letter-spacing:.2em;color:#B89A72;margin-bottom:10px">CÓMO LLEGAR</div><div style="display:flex;flex-wrap:wrap;gap:8px 20px;font-size:15px;color:#BDB7AE"><span><b style="font-weight:500;color:#F2EEE8">Metro</b> [METRO]</span><span><b style="font-weight:500;color:#F2EEE8">Bus</b> [BUS]</span><span><b style="font-weight:500;color:#F2EEE8">Parking</b> [PARKING]</span></div></div>
+<div data-rv="" style="display:flex;flex-wrap:wrap;gap:14px;margin-top:32px">
+<a href="https://www.google.com/maps/dir/?api=1&amp;destination=Carrer+de+Joan+G%C3%BCell+212+08028+Barcelona" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 28px;background:#B3121F;border:1px solid #B3121F;border-radius:2px;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.18em;transition:background-color .2s,border-color .2s" style-hover="background:#D11A2A;border-color:#D11A2A">CÓMO LLEGAR <span data-arw="">→</span></a>
+<a href="tel:+34931942261" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;border:1px solid #FFFFFF;border-radius:2px;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.18em;transition:background-color .2s" style-hover="background:rgba(255,255,255,.08)">LLAMAR</a>
+</div>
+</div>
+<div data-rv="" style="position:relative;min-height:480px;border:1px solid #222;border-radius:2px;overflow:hidden;background:#161616">
+<iframe title="Mapa: Carrer de Joan Güell, 212, Barcelona" src="https://maps.google.com/maps?q=Carrer%20de%20Joan%20G%C3%BCell%2C%20212%2C%2008028%20Barcelona&amp;z=16&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(1) invert(.92) contrast(.9) brightness(.85)"></iframe>
+<svg aria-hidden="true" width="34" height="46" viewBox="0 0 34 46" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);pointer-events:none"><path d="M17 45C17 45 2 27 2 16.5A15 15 0 0 1 32 16.5C32 27 17 45 17 45Z" fill="#B3121F" stroke="#0A0A0A" stroke-width="1.5"></path><circle cx="17" cy="16.5" r="5" fill="#0A0A0A"></circle></svg>
+</div>
+</div>
+</section>
+
+<footer style="background:#050505;border-top:1px solid #222;padding:clamp(64px,8vw,96px) clamp(20px,5vw,72px) 0">
+<div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:40px">
+<div style="display:flex;flex-direction:column;gap:18px"><div style="display:flex;align-items:center;gap:12px"><img src="assets/hanaki-logo-trazo.png" alt="花木" style="height:34px;width:auto;display:block"><span style="font-family:'Cormorant Garamond',serif;font-size:24px;letter-spacing:.26em;color:#F2EEE8">HANAKI</span></div><p style="margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;line-height:1.4;color:#BDB7AE">[FRASE]</p></div>
+<div style="display:flex;flex-direction:column;gap:12px"><div style="font-size:11px;letter-spacing:.2em;color:#B89A72">HORARIO</div><div style="font-size:15px;line-height:1.7;color:#BDB7AE">Todos los días<br>12:00 – 16:30<br>20:00 – 23:30</div></div>
+<div style="display:flex;flex-direction:column;gap:12px"><div style="font-size:11px;letter-spacing:.2em;color:#B89A72">CONTACTO</div><div style="font-size:15px;line-height:1.7;color:#BDB7AE">Carrer de Joan Güell, 212<br>Les Corts, 08028 Barcelona</div><a href="tel:+34931942261" style="font-family:'Cormorant Garamond',serif;font-size:24px;color:#F2EEE8">931 94 22 61</a></div>
+<div style="display:flex;flex-direction:column;gap:12px"><div style="font-size:11px;letter-spacing:.2em;color:#B89A72">SÍGUENOS</div><div style="display:flex;gap:8px"><a href="https://www.instagram.com/hanakisushi/" target="_blank" rel="noopener" aria-label="Instagram" style="width:44px;height:44px;border:1px solid #2A2A2A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#BDB7AE"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"></circle></svg></a><a href="https://www.facebook.com/p/Sushi-Hanaki-100067956896925/" target="_blank" rel="noopener" aria-label="Facebook" style="width:44px;height:44px;border:1px solid #2A2A2A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#BDB7AE"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M13.6 20.5v-7.3h2.3l.3-2.6h-2.6V9c0-.8.3-1.3 1.3-1.3h1.4V5.4a17 17 0 0 0-2-.1c-2 0-3.3 1.2-3.3 3.4v1.9H8.7v2.6H11v7.3"></path></svg></a><a href="https://www.tiktok.com/@hanaki.sushi" target="_blank" rel="noopener" aria-label="TikTok" style="width:44px;height:44px;border:1px solid #2A2A2A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#BDB7AE"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3.5v11.2a3.8 3.8 0 1 1-3.8-3.8"></path><path d="M14 3.5c.4 2.6 2.3 4.4 5 4.6"></path></svg></a></div><div style="font-size:11px;letter-spacing:.2em;color:#B89A72;margin-top:12px">PAGO</div><div style="display:flex;flex-wrap:wrap;gap:6px"><span style="font-size:11px;letter-spacing:.14em;padding:6px 10px;border:1px solid #2A2A2A;border-radius:2px;color:#BDB7AE">VISA</span><span style="font-size:11px;letter-spacing:.14em;padding:6px 10px;border:1px solid #2A2A2A;border-radius:2px;color:#BDB7AE">MASTERCARD</span><span style="font-size:11px;letter-spacing:.14em;padding:6px 10px;border:1px solid #2A2A2A;border-radius:2px;color:#BDB7AE">EFECTIVO</span></div></div>
+</div>
+<div style="max-width:1280px;margin:56px auto 0;padding:22px 0 28px;border-top:1px solid #222;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px;font-size:12.5px;color:#8E887F">
+<span>© 2026 Hanaki Sushi Barcelona</span>
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 20px"><a href="Hanaki%20Legal.dc.html" style="color:#8E887F;padding:12px 0">Aviso legal</a><a href="Hanaki%20Legal.dc.html" style="color:#8E887F;padding:12px 0">Privacidad</a><a href="Hanaki%20Legal.dc.html" style="color:#8E887F;padding:12px 0">Cookies</a><div style="display:flex"><sc-for list="{{ langs }}" as="g" hint-placeholder-count="3"><button type="button" onClick="{{ g.pick }}" style="background:none;border:none;min-width:36px;min-height:44px;font-size:11px;letter-spacing:.14em;color:{{ g.c }};cursor:pointer">{{ g.t }}</button></sc-for></div></div>
+</div>
+<sc-if value="{{ mob }}" hint-placeholder-val="{{ false }}"><div style="height:76px"></div></sc-if>
+</footer>
+
+<sc-if value="{{ mob }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;left:0;right:0;bottom:0;z-index:48;background:rgba(10,10,10,.96);backdrop-filter:blur(10px);border-top:1px solid #222;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<a href="tel:+34931942261" style="display:flex;align-items:center;justify-content:center;min-height:50px;border:1px solid #FFFFFF;border-radius:2px;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.18em">LLAMAR</a>
+<a href="Hanaki%20Barcelona%20Reservar.dc.html" style="display:flex;align-items:center;justify-content:center;min-height:50px;background:#B3121F;border-radius:2px;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.18em">RESERVAR</a>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;watermarks&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Detalles&quot;},&quot;thread&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Detalles&quot;},&quot;motion&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Detalles&quot;}}">
+class Component extends DCLogic {
+  static CATS = [
+    { name: 'Entrantes', items: [['Sopa de miso'],['Kimchi'],['Ensalada césar'],['Ensalada wakame','',1],['Edamame','',1],['Gyoza de pollo','4 uds.'],['Gyoza vegetal','4 uds.',1],['Siu mai','2 uds.'],['Xiaolongbao','2 uds.'],['Rollitos de pollo','2 uds.'],['Rollitos vegetales','4 uds.',1],['Wantun frito','5 uds.'],['Panecillo','2 uds.'],['Pastel de calabaza','2 uds.',1],['Patatas fritas','',1]] },
+    { name: 'Arroz y pasta', items: [['Ramen de ternera'],['Ramen de pollo rebozado'],['Ramen de langostino'],['Guabao de pollo picante'],['Guabao de cerdo'],['Guabao de pato'],['Guabao de langostino'],['Arroz Hanaki'],['Arroz blanco','',1],['Arroz con pollo teriyaki'],['Arroz marisco'],['Arroz con ternera picante'],['Yakisoba de verduras','',1],['Yaki udon','verduras y gambas'],['Fideos de arroz','verduras y pollo'],['Tallarines Hanaki']] },
+    { name: 'Fritos', items: [['Takoyaki','3 uds.'],['Tempura de langostino','2 uds.'],['Tempura de verduras','con sal y pimienta',1],['Plátano frito con miel','2 uds.',1],['Langostinos con sésamo','4 uds.'],['Pollo quimono'],['Katsu de pollo'],['Cerdo agridulce'],['Pollo al limón'],['Bao frito de cerdo'],['Nuggets de pollo'],['Anillas de calamar'],['Muslitos de mar'],['Alitas de pollo'],['Boniato dulce','',1]] },
+    { name: 'Plancha', items: [['Brocheta de gambas','2 uds.'],['Brocheta de pollo','2 uds.'],['Brocheta de salmón','2 uds.'],['Brocheta de atún','2 uds.'],['Rejos'],['Espárragos','',1],['Champiñones','',1],['Sepia']] },
+    { name: 'Salteados', items: [['Gambas picantes'],['Ternera con salsa de ostras'],['Pollo con almendras'],['Ternera al curry'],['Ternera picante'],['Ternera teriyaki'],['Pollo picante'],['Pollo teriyaki']] },
+    { name: 'Sushi', items: [['Maki de salmón','4 uds.'],['Maki de atún','4 uds.'],['Maki de aguacate','4 uds.',1],['Maki de pepino','4 uds.',1],['Maki de surimi','4 uds.'],['Onigiri de salmón','Salmón a la plancha, aguacate y sésamo'],['Onigiri spicy','Salmón a la plancha, aguacate spicy, mayonesa y sésamo'],['Maki tempura salmón y mango','Con queso'],['Maki de salmón frito','4 uds.'],['Maki de queso philadelphia','4 uds.'],['Maki salmón philadelphia','4 uds.'],['Maki tempura de fresa','Con queso'],['Maki salmón y aguacate','4 uds.'],['Nigiri de salmón','2 uds.'],['Nigiri pez mantequilla','2 uds.'],['Nigiri de gambas','2 uds.'],['Nigiri de mango','2 uds.',1],['Nigiri salmón flambeado','2 uds.'],['Nigiri salmón flambeado con queso','Con kataifi'],['Nigiri salmón flambeado teriyaki','Con cebolla crujiente'],['Temaki de salmón','1 ud.'],['Temaki de pollo','1 ud.'],['Gunkan de salmón','2 uds.'],['Gunkan crema de queso','2 uds.'],['Gunkan de wakame','2 uds.',1],['Gunkan kimchi y sésamo','2 uds.'],['Uramaki de salmón','Aguacate y cobertura de salmón · 4 uds.'],['Uramaki queso y salmón','Aguacate, philadelphia y sésamo · 4 uds.'],['Uramaki salmón tobiko','Aguacate envuelto en tobiko · 4 uds.'],['Salmón con aguacate','Mayonesa picante y kataifi'],['Uramaki de langostino','Langostino en tempura, pepino y alga · 4 uds.'],['Tempura de langostino','Pepino, mayonesa picante y kataifi'],['Uramaki de pollo','Pollo crujiente, pepino, sésamo y cebolla crujiente · 4 uds.'],['Pollo crujiente','Pepino, mayonesa picante, kataifi y sésamo'],['Uramaki de aguacate','Philadelphia y cobertura de aguacate · 4 uds.',1],['Uramaki de surimi','Aguacate, pepino, salmón flambeado, teriyaki, mayonesa y tobiko · 4 uds.'],['Uramaki de filete','Filete y queso crujiente, cobertura de sésamo · 4 uds.'],['Filete con queso','Mayonesa picante y togarashi'],['Uramaki de gamba','Gamba, aguacate, pepino y tobiko · 4 uds.'],['Gamba teriyaki','Pepino teriyaki y cebolla crujiente'],['Uramaki de plátano','Plátano rebozado con sésamo · 4 uds.',1],['Uramaki salmón frito','Aguacate, mayonesa y cebolla crujiente · 4 uds.'],['Salmón frito con aguacate','Mayonesa picante y kataifi'],['Uramaki salmón togarashi','Aguacate, queso y cobertura de togarashi · 4 uds.'],['Uramaki tempura de salmón','Aguacate y philadelphia · 4 uds.'],['Uramaki tempura de surimi','Surimi en tempura y aguacate · 4 uds.'],['Uramaki tempura de langostino','Langostino en tempura y mayonesa · 4 uds.'],['Maki tempura de salmón','4 uds.'],['Maki tempura salmón y queso','Con chips picantes'],['Uramaki surimi crujiente','Surimi, aguacate y cebolla crujiente · 4 uds.'],['Surimi con aguacate','Mayonesa picante y kataifi'],['Uramaki aguacate y pez mantequilla','Togarashi, teriyaki, sésamo y philadelphia']] },
+    { name: 'Plato especial', items: [['Gyoza frita','4 uds.'],['Vieiras','Segunda +1 €'],['Almejas'],['Gambón','2 uds.'],['Gambas con sal y pimienta','6 uds.'],['Temaki de langostino'],['Entrecot'],['Pincho de ternera con queso','2 uds.'],['Ensalada Hanaki','Con salsa de sésamo'],['Ensalada poke'],['Queso tonkatsu'],['Pato japonés'],['Nigiri de atún','2 uds.'],['Nigiri de anguila','2 uds.'],['Nigiri Hanaki','Salmón flambeado · 2 uds.'],['Nigiri de atún flambeado','2 uds.'],['Nigiri pez mantequilla flambeado','2 uds.'],['Temaki de atún','1 ud.'],['Gunkan de atún','2 uds.'],['Gunkan pez mantequilla','2 uds.'],['Gunkan Hanaki','Surimi, aguacate, mayonesa, pepino, cebolla crujiente, queso, salsa rosa y tobiko · 4 uds.'],['Uramaki atún picante','Aguacate, pepino, salsa rosa y togarashi · 4 uds.'],['Uramaki de atún','Aguacate y sésamo · 4 uds.'],['Atún con aguacate teriyaki','Con cebolla crujiente'],['Uramaki langostino y tobiko','Langostino en tempura, pepino, mayonesa y tobiko · 4 uds.'],['Uramaki de anguila','Aguacate, philadelphia, anguila teriyaki y sésamo · 4 uds.'],['Futomaki tempura','Salmón a la plancha, aguacate, teriyaki y sésamo · 4 uds.'],['Sashimi de salmón','4 uds. · segunda +1 €'],['Sashimi pez mantequilla','4 uds. · segunda +1 €'],['Sashimi de atún','4 uds. · segunda +1 €'],['Carpaccio de ternera'],['Tataki de salmón','4 uds. · segunda +1 €'],['Tataki de atún','4 uds. · segunda +1 €'],['Carpaccio de salmón','Salsa de maracuyá · 4 uds. · segunda +1 €'],['Tataki pez mantequilla','4 uds. · segunda +1 €'],['Tartar de salmón'],['Tartar de atún'],['Cookie de salmón','Mango, philadelphia y maracuyá'],['Tartar de salmón y mango'],['Tartar de arroz y salmón'],['Sushi mixto','12 uds.'],['Uramaki spicy surimi','Con togarashi · 4 uds.'],['Uramaki surimi picado','Sin togarashi · 4 uds.']] },
+  ];
+  static NUMS = { 5: [58,59,60,163,164,61,62,63,64,65,66,67,68,70,71,73,74,76,94,162,78,80,83,84,144,165,85,86,87,170,88,166,89,167,90,91,92,168,93,173,96,98,171,99,101,102,103,104,174,105,169,142], 6: [24,155,37,41,46,77,112,113,107,108,115,116,117,118,145,146,153,79,130,131,133,95,123,172,120,121,139,81,82,138,110,125,126,149,154,127,129,143,147,148,106,150,151] };
+  static IMGS = [90,82,168,99,76,133,173,131,24,37,41,46,58,59,60,61,62,63,64,65,66,67,68,70,71,73,74,77,78,79,80,81,83,84,85,86,87,88,89,91,92,93,94,95,96,98,101,102,103,104,105,106,107,108,110,112,113,115,116,117,118,120,121,123,125,126,127,129,130,138,139,142,143,144,145,146,147,148,149,150,151,153,154,155,162,163,164,165,166,167,169,170,171,172,174];
+  static AL = {"24":"G","37":"C M","41":"C M","46":"C Pi","58":"P","59":"P","60":"V","61":"P Se","62":"P Se Pi","63":"G P L","64":"G C P S L","65":"L","66":"P L","67":"G L","68":"L","70":"P","71":"P","73":"C","74":"V","76":"G P S H Se","77":"G C P S","78":"G P S Se","79":"G P S Se","80":"G S Se","81":"P","82":"P","83":"G P S Se","84":"L F","85":"P","86":"P L Se","87":"P","88":"G S Se","89":"G S Se","90":"L Se","91":"G P S L Se","92":"G S L Se","93":"C","94":"P L","95":"P S Pi","96":"L Se","98":"G S L Se","99":"P Pi","101":"G P L Pi","102":"G C L Pi","103":"G C L Pi","104":"G P","105":"G C S M","106":"G C P L Se M","107":"G C P S Se M","108":"G P Se","110":"Se","112":"G S Se","113":"S L Se","115":"G L","116":"G","117":"P","118":"G P S Se","120":"G C L","121":"G P S Se","123":"G P Se","125":"G P S Se","126":"G P S Se","127":"G P S Se","129":"G P S Se","130":"G P S Se","131":"G P S Se","133":"G C P S L Se M","138":"P","139":"G P S Se","142":"G P S L Se Pi","143":"G P L","144":"P Se","145":"P L Se","146":"P L Se V Pi","147":"G P S L Se","148":"G P S L Se","149":"G P S Se","150":"G C P S L Se M Pi","151":"G C P S L Se M","153":"G P S Se","154":"G P S Se","155":"C M","162":"P","163":"V","164":"C","165":"Pi","166":"G P L","167":"G Se","168":"G L Pi","169":"G C Pi","170":"G P Pi","171":"G P Pi","172":"G P","173":"G C","174":"G P L Pi"};
+  static ALN = {"Sopa de miso":"G S V","Kimchi":"Pi","Ensalada césar":"L","Ensalada wakame":"Se V","Edamame":"V","Gyoza de pollo":"G Se","Gyoza vegetal":"G Se V","Siu mai":"G C H","Xiaolongbao":"G","Rollitos de pollo":"G","Rollitos vegetales":"G","Wantun frito":"G","Panecillo":"G S L","Pastel de calabaza":"G Se V","Patatas fritas":"G","Ramen de ternera":"G H S Se Pi","Ramen de pollo rebozado":"G H S Se Pi","Ramen de langostino":"G H S Se C Pi","Guabao de pollo picante":"G L Se Pi","Guabao de cerdo":"G S","Guabao de pato":"G S","Guabao de langostino":"G C L","Arroz Hanaki":"G H S Se","Arroz blanco":"Se","Arroz con pollo teriyaki":"G H S","Arroz marisco":"C H","Arroz con ternera picante":"G H S Se Pi","Yakisoba de verduras":"G S Se V","Yaki udon":"G C P S Se M","Fideos de arroz":"G S Se","Tallarines Hanaki":"G H S","Takoyaki":"G C S L M","Tempura de langostino":"G C","Tempura de verduras":"G V","Plátano frito con miel":"G V","Langostinos con sésamo":"G S Pi","Pollo quimono":"G S","Katsu de pollo":"G S","Cerdo agridulce":"G","Pollo al limón":"G","Bao frito de cerdo":"G","Nuggets de pollo":"G","Anillas de calamar":"G M","Muslitos de mar":"G C","Alitas de pollo":"G","Boniato dulce":"G","Brocheta de gambas":"G C S Se","Brocheta de pollo":"G S Se","Brocheta de salmón":"G C S Se","Brocheta de atún":"P Se","Rejos":"C M","Espárragos":"V","Champiñones":"V","Sepia":"G S Se M","Gambas picantes":"G S Se M Pi","Ternera con salsa de ostras":"G S","Pollo con almendras":"G S F","Ternera al curry":"G S","Ternera picante":"G S Pi","Ternera teriyaki":"G S Se","Pollo picante":"G S Pi","Pollo teriyaki":"G S Se"};
+  static ALK = {G:'Gluten',C:'Crustáceos',H:'Huevo',P:'Pescado',Ca:'Cacahuetes',S:'Soja',L:'Lactosa',F:'Frutos de cáscara',Ap:'Apio',Mo:'Mostaza',Se:'Sésamo',Su:'Sulfitos',Al:'Altramuces',M:'Moluscos',Pi:'Picante',V:'Vegetariano',Ce:'Cerdo',T:'Ternera',Co:'Cordero',Po:'Pollo'};
+  static ALC = {G:'gluten',C:'crustaceos',H:'huevo',P:'pescado',Ca:'cacahuetes',S:'soja',L:'lactosa',F:'frutos',Ap:'apio',Mo:'mostaza',Se:'sesamo',Su:'sulfitos',Al:'altramuces',M:'moluscos',Pi:'picante',V:'vegetariano',Ce:'cerdo',T:'ternera',Co:'cordero',Po:'pollo'};
+  static NUMN = {"Sopa de miso":"1","Kimchi":"140","Ensalada césar":"141","Ensalada wakame":"4","Edamame":"6","Gyoza de pollo":"7","Gyoza vegetal":"8","Siu mai":"9","Xiaolongbao":"11","Rollitos de pollo":"12","Rollitos vegetales":"13","Wantun frito":"15","Panecillo":"16","Pastel de calabaza":"18","Patatas fritas":"34","Ramen de ternera":"2","Ramen de pollo rebozado":"3","Ramen de langostino":"152","Guabao de pollo picante":"5","Guabao de cerdo":"10","Guabao de pato":"176","Guabao de langostino":"20","Arroz Hanaki":"25","Arroz blanco":"26","Arroz con pollo teriyaki":"27","Arroz marisco":"28","Arroz con ternera picante":"29","Yakisoba de verduras":"30","Yaki udon":"31","Fideos de arroz":"32","Tallarines Hanaki":"42","Takoyaki":"17","Tempura de langostino":"21","Tempura de verduras":"22","Plátano frito con miel":"23","Langostinos con sésamo":"48","Pollo quimono":"56","Katsu de pollo":"57","Cerdo agridulce":"55","Pollo al limón":"55A","Bao frito de cerdo":"156","Nuggets de pollo":"157","Anillas de calamar":"158","Muslitos de mar":"159","Alitas de pollo":"160","Boniato dulce":"161","Brocheta de gambas":"33","Brocheta de pollo":"35","Brocheta de salmón":"36","Brocheta de atún":"114","Rejos":"38","Espárragos":"39","Champiñones":"40","Sepia":"43","Gambas picantes":"44","Ternera con salsa de ostras":"45","Pollo con almendras":"47","Ternera al curry":"49","Ternera picante":"50","Ternera teriyaki":"52","Pollo picante":"53","Pollo teriyaki":"54"};
+  static NIMGS = {"Rejos":"assets/platos/navajas.jpg","Rollitos de pollo":"assets/platos/rollitos-de-pollo.jpg","Ramen de pollo rebozado":"assets/platos/ramen-de-pollo-rebozado.jpg","Arroz con ternera picante":"assets/platos/arroz-con-ternera-picante.jpg","Champiñones":"assets/platos/champinones.jpg","Ramen de ternera":"assets/platos/ramen-de-ternera.jpg","Ramen de langostino":"assets/platos/ramen-de-langostino.jpg","Pollo picante":"assets/platos/pollo-picante.jpg","Brocheta de pollo":"assets/platos/brocheta-de-pollo.jpg","Pollo quimono":"assets/platos/pollo-quimono.jpg","Pastel de calabaza":"assets/platos/pastel-de-calabaza.jpg","Brocheta de atún":"assets/platos/brocheta-de-atun.jpg","Brocheta de gambas":"assets/platos/brocheta-de-gambas.jpg","Guabao de langostino":"assets/platos/guabao-de-langostino.jpg","Guabao de pato":"assets/platos/guabao-de-pato.jpg","Pollo al limón":"assets/platos/pollo-al-limon.jpg","Tempura de langostino":"assets/platos/tempura-de-langostino.jpg","Takoyaki":"assets/platos/takoyaki.jpg","Tallarines Hanaki":"assets/platos/tallarines-hanaki.jpg","Boniato dulce":"assets/platos/boniato-dulce.jpg","Brocheta de salmón":"assets/platos/brocheta-de-salmon.jpg","Gyoza de pollo":"assets/platos/gyoza-de-pollo.jpg","Sopa de miso":"assets/platos/sopa-de-miso.jpg","Muslitos de mar":"assets/platos/muslitos-de-mar.jpg","Patatas fritas":"assets/platos/patatas-fritas.jpg","Nuggets de pollo":"assets/platos/nuggets-de-pollo.jpg","Pollo teriyaki":"assets/platos/pollo-teriyaki.jpg","Arroz con pollo teriyaki":"assets/platos/arroz-con-pollo-teriyaki.jpg","Bao frito de cerdo":"assets/platos/bao-frito-de-cerdo.jpg","Gyoza vegetal":"assets/platos/gyoza-vegetal.jpg","Siu mai":"assets/platos/siu-mai.jpg","Panecillo":"assets/platos/panecillo.jpg","Pollo con almendras":"assets/platos/pollo-con-almendras.jpg","Edamame":"assets/platos/edamame.jpg","Alitas de pollo":"assets/platos/alitas-de-pollo.jpg","Xiaolongbao":"assets/platos/xiaolongbao.jpg","Plátano frito con miel":"assets/platos/platano-frito-con-miel.jpg","Ternera con salsa de ostras":"assets/platos/ternera-con-salsa-de-ostras.jpg","Anillas de calamar":"assets/platos/anillas-de-calamar.jpg","Katsu de pollo":"assets/platos/katsu-de-pollo.jpg","Guabao de pollo picante":"assets/platos/guabao-de-pollo-picante.jpg","Langostinos con sésamo":"assets/platos/langostinos-con-sesamo.jpg","Yakisoba de verduras":"assets/platos/yakisoba-de-verduras.jpg","Arroz blanco":"assets/platos/arroz-blanco.jpg","Ternera picante":"assets/platos/ternera-picante.jpg","Arroz Hanaki":"assets/platos/arroz-hanaki.jpg","Ensalada césar":"assets/platos/ensalada-cesar.jpg","Espárragos":"assets/platos/esparragos.jpg","Arroz marisco":"assets/platos/arroz-marisco.jpg","Tempura de verduras":"assets/platos/tempura-de-verduras.jpg","Guabao de cerdo":"assets/platos/guabao-de-cerdo.jpg","Sepia":"assets/platos/sepia.jpg","Wantun frito":"assets/platos/wantun-frito.jpg","Rollitos vegetales":"assets/platos/rollitos-vegetales.jpg","Gambas picantes":"assets/platos/gambas-picantes.jpg","Cerdo agridulce":"assets/platos/cerdo-agridulce.jpg","Ensalada wakame":"assets/platos/ensalada-wakame.jpg","Kimchi":"assets/platos/kimchi.jpg","Yaki udon":"assets/platos/yaki-udon.jpg","Fideos de arroz":"assets/platos/fideos-de-arroz.jpg","Ternera al curry":"assets/platos/ternera-al-curry.jpg","Ternera teriyaki":"assets/platos/ternera-teriyaki.jpg"};
+  logoRef = React.createRef(); introRef = React.createRef();
+  static introWanted(p) { return false; try { if (sessionStorage.getItem('hk-intro-seen')) return false; } catch (e) {} if (p && p.motion === false) return false; return !window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  state = { intro: Component.introWanted(this.props), active: '', w: typeof window !== 'undefined' ? window.innerWidth : 1440, scrolled: false, menu: false, lang: 'ES', tab: 'mid', chip: 'TODO', rv: 0, faq: -1, calOff: 0, date: null, time: null, ad: 2, ni: 0, be: 0, name: '', phone: '', email: '', notes: '', priv: false, err: {}, sent: false, rating: 0, reviews: 0 };
+
+  componentDidMount() {
+    this.rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches || this.props.motion === false;
+    this.onR = () => this.setState({ w: window.innerWidth });
+    this.onS = () => { const s = window.scrollY > 40; if (s !== this.state.scrolled) this.setState({ scrolled: s }); this.parallax(); };
+    window.addEventListener('resize', this.onR);
+    window.addEventListener('scroll', this.onS, { passive: true });
+    this.io = new IntersectionObserver(es => {
+      const hits = es.filter(e => e.isIntersecting).map(e => e.target);
+      hits.sort((a, b) => (a.compareDocumentPosition(b) & 4) ? -1 : 1);
+      hits.forEach((el, i) => { this.io.unobserve(el); this.show(el, i); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -5% 0px' });
+    this.spy = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) this.setState({ active: '#' + e.target.id }); }), { rootMargin: '-45% 0px -50% 0px' });
+    ['carta', 'precios', 'como-funciona', 'el-local', 'grupos', 'ubicacion', 'top', 'resenas', 'para-llevar', 'reservar', 'faq'].forEach(id => { const el = document.getElementById(id); el && this.spy.observe(el); });
+    if (this.state.intro) { this.startIntro(); this.setup(); } else { this.setup(); this.count(); }
+  }
+  startIntro() {
+    const ov = this.introRef.current, a = this.logoRef.current;
+    if (!ov || !a) { this.finishIntro(); return; }
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    document.documentElement.style.overflow = 'hidden';
+    this.cascadeEls = [...document.querySelectorAll('[data-ih]'), ...document.querySelectorAll('#top [data-rv]')];
+    this.cascadeEls.forEach(el => { el.setAttribute('data-rvi', ''); el._ot = el.style.transition; el.style.transition = 'none'; el.style.opacity = '0'; el.style.transform = 'translateY(16px)'; });
+    const r = a.getBoundingClientRect(), img = a.querySelector('img'), txt = a.querySelector('span'), ir = img.getBoundingClientRect(), ts = getComputedStyle(txt);
+    const g = ov.querySelector('[data-igrp]'), gi = g.querySelector('img'), gt = g.querySelector('span'), v = ov.querySelector('video');
+    g.style.left = r.left + 'px'; g.style.top = r.top + 'px'; g.style.height = r.height + 'px'; g.style.gap = getComputedStyle(a).columnGap;
+    gi.style.height = ir.height + 'px'; gt.style.fontSize = ts.fontSize; gt.style.paddingTop = ts.paddingTop;
+    const vw = window.innerWidth, vh = window.innerHeight, H = ir.height, LW = H * 820 / 432;
+    const S = (vw < 760 ? vw * 0.7 : 420) / (LW * 1920 / 820);
+    const ox = ir.left - r.left, oy = ir.top - r.top;
+    const sx = vw / 2 - LW * S / 2, sy = vh / 2 - H * S / 2;
+    const tx1 = sx - ox * S - r.left, ty1 = sy - oy * S - r.top;
+    g.style.transform = 'translate(' + tx1 + 'px,' + ty1 + 'px) scale(' + S + ')';
+    const k = LW * S / 820;
+    v.style.width = 1920 * k + 'px'; v.style.height = 1080 * k + 'px'; v.style.left = (sx - 549 * k) + 'px'; v.style.top = (sy - 323 * k) + 'px';
+    this.ix = { ov, g, gi, gt, v, S, ty1, tx2: vw / 2 - r.width * S / 2 - r.left };
+    this.it = [];
+    let started = false;
+    v.muted = true; v.defaultMuted = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.setAttribute('muted', '');
+    v.addEventListener('playing', () => { started = true; v.style.opacity = '1'; }, { once: true });
+    v.addEventListener('ended', () => this.introPhase2(), { once: true });
+    const p = v.play(); if (p && p.catch) p.catch(() => this.finishIntro());
+    this.it.push(setTimeout(() => { if (!started) this.finishIntro(); }, 1500));
+    this.it.push(setTimeout(() => this.introPhase2(), 5000));
+    this.onSkipKey = e => { if (e.key === 'Escape') this.finishIntro(); };
+    this.onSkipScroll = () => this.finishIntro();
+    window.addEventListener('keydown', this.onSkipKey);
+    window.addEventListener('wheel', this.onSkipScroll, { passive: true });
+    window.addEventListener('touchmove', this.onSkipScroll, { passive: true });
+  }
+  introPhase2() {
+    if (this.p2 || this.ixDone || !this.ix) return; this.p2 = true;
+    const { gi, gt, g, v, S, tx2, ty1 } = this.ix;
+    gi.style.transition = v.style.transition = 'opacity .15s linear';
+    gi.style.opacity = '1'; v.style.opacity = '0';
+    this.it.push(setTimeout(() => {
+      gt.style.transition = 'opacity .7s ease, letter-spacing .8s cubic-bezier(.65,0,.35,1)';
+      g.style.transition = 'transform .8s cubic-bezier(.65,0,.35,1)';
+      gt.style.opacity = '1'; gt.style.letterSpacing = '.35em';
+      g.style.transform = 'translate(' + tx2 + 'px,' + ty1 + 'px) scale(' + S + ')';
+    }, 150));
+    this.it.push(setTimeout(() => this.introPhase3(), 150 + 1000));
+  }
+  introPhase3() {
+    if (this.ixDone) return;
+    const { ov, g } = this.ix, bg = ov.querySelector('[data-ibg]'), sk = ov.querySelector('[data-iskip]');
+    ov.style.pointerEvents = 'none'; if (sk) sk.style.opacity = '0';
+    g.style.transition = 'transform .9s cubic-bezier(.65,0,.35,1)'; g.style.transform = 'translate(0px,0px) scale(1)';
+    bg.style.transition = 'opacity .9s cubic-bezier(.65,0,.35,1)'; bg.style.opacity = '0';
+    const base = 200;
+    this.cascadeEls.forEach((el, i) => { el.style.transition = 'opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1)'; el.style.transitionDelay = (base + i * 80) + 'ms'; el.style.opacity = '1'; el.style.transform = 'none'; });
+    this.cascadeEnd = base + this.cascadeEls.length * 80 + 700;
+    this.it.push(setTimeout(() => this.finishIntro(true), 920));
+  }
+  finishIntro(natural) {
+    if (this.ixDone) return; this.ixDone = true;
+    (this.it || []).forEach(clearTimeout);
+    window.removeEventListener('keydown', this.onSkipKey); window.removeEventListener('wheel', this.onSkipScroll); window.removeEventListener('touchmove', this.onSkipScroll);
+    document.documentElement.style.overflow = '';
+    try { sessionStorage.setItem('hk-intro-seen', '1'); } catch (e) {}
+    const els = this.cascadeEls || [];
+    if (!natural) els.forEach(el => { el.style.transition = 'none'; el.style.transitionDelay = ''; el.style.opacity = '1'; el.style.transform = 'none'; });
+    setTimeout(() => els.forEach(el => { el.style.transitionDelay = ''; el.style.opacity = ''; el.style.transform = ''; el.style.transition = el._ot || ''; }), natural ? Math.max(0, (this.cascadeEnd || 0) - 900) : 40);
+    this.setState({ intro: false }, () => { this.setup(); this.count(); });
+  }
+  menuCascade() {
+    if (!this.state.menu || this.rm) return;
+    const els = [...document.querySelectorAll('[data-ml]')];
+    els.forEach(el => { el.style.transition = 'none'; el.style.opacity = '0'; el.style.transform = 'translateY(16px)'; });
+    requestAnimationFrame(() => requestAnimationFrame(() => els.forEach((el, i) => { el.style.transition = 'opacity .5s ease ' + (80 + i * 80) + 'ms, transform .5s cubic-bezier(.2,.7,.2,1) ' + (80 + i * 80) + 'ms'; el.style.opacity = '1'; el.style.transform = 'none'; })));
+  }
+  componentDidUpdate() { this.setup(); }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onR);
+    window.removeEventListener('scroll', this.onS);
+    this.io && this.io.disconnect(); this.spy && this.spy.disconnect(); (this.it || []).forEach(clearTimeout); document.documentElement.style.overflow = '';
+    cancelAnimationFrame(this.raf);
+  }
+  setup() {
+    if (this.rm || !this.io) return;
+    document.querySelectorAll('[data-rv]:not([data-rvi]),[data-line]:not([data-rvi])').forEach(el => {
+      el.setAttribute('data-rvi', '');
+      if (el.hasAttribute('data-line')) { el.style.transform = 'scaleY(0)'; el.style.transition = 'transform 1s cubic-bezier(.2,.7,.2,1)'; }
+      else { el.style.opacity = '0'; el.style.transform = 'translateY(16px)'; el.style.transition = 'opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1)'; }
+      this.io.observe(el);
+    });
+  }
+  show(el, i) {
+    if (el.hasAttribute('data-line')) { el.style.transform = 'scaleY(1)'; return; }
+    el.style.transitionDelay = (Math.min(i, 10) * 80) + 'ms';
+    el.style.opacity = '1'; el.style.transform = 'none';
+  }
+  parallax() {
+    if (this.rm) return;
+    const h = window.innerHeight;
+    document.querySelectorAll('[data-wm]').forEach(el => {
+      const r = el.parentElement.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > h + 200) return;
+      el.style.transform = 'translateY(' + ((r.top + r.height / 2 - h / 2) * -0.06).toFixed(1) + 'px)';
+    });
+  }
+  count() {
+    if (this.rm) { this.setState({ rating: 4.2, reviews: 2342 }); return; }
+    const t0 = performance.now(), D = 1600;
+    const step = t => {
+      const p = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - p, 3);
+      this.setState({ rating: 4.2 * e, reviews: 2342 * e });
+      if (p < 1) this.raf = requestAnimationFrame(step);
+    };
+    this.raf = requestAnimationFrame(step);
+  }
+
+  renderVals() {
+    const s = this.state, mob = s.w < 760, desk = s.w >= 1360, mid = s.w < 1000;
+    const set = o => this.setState(o);
+    const clrErr = k => ({ ...s.err, [k]: false });
+    const DN = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const MN = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+    const ML = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const key = d => d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+    const selKey = s.date ? key(s.date) : null;
+    const pickDate = d => () => set({ date: d, err: clrErr('date') });
+
+    const base = new Date(today.getFullYear(), today.getMonth() + s.calOff, 1);
+    const lead = (base.getDay() + 6) % 7, nDays = new Date(base.getFullYear(), base.getMonth() + 1, 0).getDate();
+    const cal = [];
+    for (let i = 0; i < lead; i++) cal.push({ n: '', vis: 'hidden', dis: true, bg: 'transparent', bd: 'transparent', c: 'transparent', deco: 'none', cur: 'default', aria: '', sel: false });
+    for (let n = 1; n <= nDays; n++) {
+      const d = new Date(base.getFullYear(), base.getMonth(), n), past = d < today, sel = key(d) === selKey;
+      cal.push({ n, vis: 'visible', dis: past, sel, pick: pickDate(d), aria: DN[d.getDay()] + ' ' + n + ' ' + MN[d.getMonth()] + (past ? ', no disponible' : ''),
+        bg: sel ? '#B3121F' : 'transparent', bd: sel ? '#B3121F' : (past ? 'transparent' : '#222'), c: past ? '#555' : '#F2EEE8', deco: past ? 'line-through' : 'none', cur: past ? 'not-allowed' : 'pointer' });
+    }
+    const strip = Array.from({ length: 28 }, (_, i) => {
+      const d = new Date(today); d.setDate(today.getDate() + i); const sel = key(d) === selKey;
+      return { n: d.getDate(), wd: DN[d.getDay()].toUpperCase(), m: MN[d.getMonth()], sel, pick: pickDate(d), aria: DN[d.getDay()] + ' ' + d.getDate() + ' ' + MN[d.getMonth()],
+        bg: sel ? '#B3121F' : '#121212', bd: sel ? '#B3121F' : (s.err.date ? '#FF6B6B' : '#222'), c2: sel ? '#FFFFFF' : '#8E887F' };
+    });
+
+    const slotGroups = [['COMIDA', ['12:00', '[FRANJA C2]', '[FRANJA C3]', '[FRANJA C4]']], ['CENA', ['[FRANJA N1]', '[FRANJA N2]', '[FRANJA N3]', '[FRANJA N4]']]];
+    const slots = slotGroups.map(([t, arr]) => ({ t, items: arr.map(h => ({ t: h, sel: s.time === h, bg: s.time === h ? '#B3121F' : '#121212', bd: s.time === h ? '#B3121F' : (s.err.time ? '#FF6B6B' : '#2A2A2A'), pick: () => set({ time: h, err: clrErr('time') }) })) }));
+
+    const plural = (n, a, b) => n + ' ' + (n === 1 ? a : b);
+    const people = [plural(s.ad, 'adulto', 'adultos')].concat(s.ni ? [plural(s.ni, 'niño', 'niños')] : [], s.be ? [plural(s.be, 'bebé', 'bebés')] : []).join(', ');
+    const dateTxt = s.date ? DN[s.date.getDay()] + ' ' + s.date.getDate() + ' ' + MN[s.date.getMonth()] : 'Elige día';
+    const summary = dateTxt + ' · ' + (s.time || 'Elige hora') + ' · ' + people;
+
+    const ppl = [['ad', 'Adultos', '', 1], ['ni', 'Niños', 'De 3 a 8 años', 0], ['be', 'Bebés', 'Menores de 3 años', 0]].map(([k, t, sub, min]) => ({
+      t, sub, v: s[k], decOp: s[k] <= min ? .35 : 1, decL: 'Quitar ' + t.toLowerCase(), incL: 'Añadir ' + t.toLowerCase(),
+      dec: () => set({ [k]: Math.max(min, s[k] - 1) }), inc: () => set({ [k]: Math.min(20, s[k] + 1) })
+    }));
+
+    const submit = e => {
+      e.preventDefault();
+      const err = { date: !s.date, time: !s.time, name: !s.name.trim(), phone: s.phone.replace(/\D/g, '').length < 9, priv: !s.priv };
+      if (Object.values(err).some(Boolean)) set({ err }); else { set({ sent: true, err: {} }); }
+    };
+
+    const tabs = [['mid', 'MEDIODÍA'], ['night', 'NOCHE Y FINES DE SEMANA']].map(([k, t]) => ({ t, on: s.tab === k, c: s.tab === k ? '#F2EEE8' : '#8E887F', bd: s.tab === k ? '#B3121F' : 'transparent', pick: () => set({ tab: k }) }));
+    const pAd = { t: 'ADULTOS', sub: 'Precio por persona', price: s.tab === 'night' ? '21,50 €' : '16,50 €', bd: '#B3121F' };
+    const pNi = { t: 'NIÑOS', sub: 'De 3 a 8 años', price: s.tab === 'night' ? '12,90 €' : '10,90 €', bd: '#222' };
+    const pBe = { t: 'BEBÉS', sub: 'Menores de 3 años', price: 'GRATIS', bd: '#222' };
+
+    const C = Component.CATS, ci = Math.min(s.cat || 0, C.length - 1);
+    const mkDish = i => ([n, u, v], j) => { const no = (Component.NUMS[i] || [])[j]; const ak = no ? Component.AL[no] : Component.ALN[n]; const ph = no && Component.IMGS.includes(no) ? 'assets/platos/' + no + '.jpg' : (Component.NIMGS[n] || ''); const txt = (n + ' ' + (u || '')).toLowerCase(); const ex = []; if (/cerdo/.test(txt)) ex.push('Ce'); if (/ternera|filete|entrecot/.test(txt)) ex.push('T'); if (/cordero/.test(txt)) ex.push('Co'); if (/pollo/.test(txt)) ex.push('Po'); const keys = (ak || '').split(' ').filter(Boolean).concat(ex); const ics = keys.map(k => ({ src: 'assets/alergenos/' + Component.ALC[k] + '.png', t: Component.ALK[k] })); const dn = no || Component.NUMN[n] || ''; return { n, u: u || '', hasU: !!u, ics, hasAl: ics.length > 0, veg: !!v, no: dn ? 'Nº ' + dn : '', ph, hasPh: !!ph, noPh: !ph, phL: '[FOTO: ' + n + ', 1:1]' }; };
+    const allItems = C[ci].items.map(mkDish(ci));
+    const dishes = s.allDishes ? allItems : allItems.slice(0, 8);
+    const catMore = allItems.length > 8, catMoreL = s.allDishes ? 'VER MENOS' : 'VER LOS ' + allItems.length + ' PLATOS DE ' + C[ci].name.toUpperCase();
+    const reviews = [1, 2, 3].map(i => ({ q: '[RESEÑA ' + i + ': texto de la reseña de Google]', n: '[NOMBRE]', d: '[FECHA]' }));
+    const todayIdx = (new Date().getDay() + 6) % 7;
+    const wm = this.props.watermarks ?? true, ln = this.props.thread ?? true;
+
+    return {
+      mob, notMob: !mob, desk, notDesk: !desk, menu: s.menu,
+      toggleMenu: () => this.setState({ menu: !s.menu }, () => this.menuCascade()), closeMenu: () => set({ menu: false }),
+      intro: s.intro, introRef: this.introRef, logoRef: this.logoRef, skipIntro: () => this.finishIntro(false), hdrLogoOp: s.intro ? 0 : 1,
+      hdrOuter: mob ? '64px' : '88px', hdrH: mob ? '64px' : (s.scrolled ? '72px' : '88px'), hdrPad: mob ? '20px' : 'clamp(24px,4.4vw,64px)',
+      lgH: mob ? '26px' : '30px', lgFs: mob ? '18px' : '22px', lgGap: mob ? '12px' : '16px', mGap: mob ? '8px' : '12px', resPad: mob ? '16px' : '24px',
+      hdrBg: s.scrolled || s.menu ? 'rgba(10,10,10,.85)' : 'transparent', hdrBlur: s.scrolled ? 'blur(12px)' : 'none', hdrBd: s.scrolled ? '#1E1E1E' : 'transparent',
+      links: [['Carta', 'Hanaki%20Barcelona%20Carta.dc.html'], ['Precios', 'Hanaki%20Barcelona%20v3.dc.html#precios'], ['Cómo funciona', 'Hanaki%20Barcelona%20Experiencia.dc.html#como-funciona'], ['El local', 'Hanaki%20Barcelona%20Experiencia.dc.html#el-local'], ['Grupos', 'Hanaki%20Barcelona%20Experiencia.dc.html#grupos'], ['Ubicación', '#ubicacion']].map(([t, h]) => ({ t, h, cur: s.active === h ? 'true' : 'false' })),
+      linksM: [['Carta', 'Hanaki%20Barcelona%20Carta.dc.html'], ['Precios', 'Hanaki%20Barcelona%20v3.dc.html#precios'], ['Cómo funciona', 'Hanaki%20Barcelona%20Experiencia.dc.html#como-funciona'], ['El local', 'Hanaki%20Barcelona%20Experiencia.dc.html#el-local'], ['Grupos', 'Hanaki%20Barcelona%20Experiencia.dc.html#grupos'], ['Reservar', 'Hanaki%20Barcelona%20Reservar.dc.html'], ['Ubicación', '#ubicacion']].map(([t, h]) => ({ t, h })),
+      langs: ['ES', 'CA', 'EN'].map((t, i) => ({ t, sep: i > 0, on: s.lang === t, c: s.lang === t ? '#FFFFFF' : '#6B6B6B', pick: () => set({ lang: t }) })),
+      g4: mob ? '1fr 1fr' : 'repeat(4,minmax(0,1fr))', statBd: mob ? 'none' : '1px solid rgba(242,238,232,.14)',
+      g3: mid ? '1fr' : 'repeat(3,minmax(0,1fr))', condBd: mid ? 'none' : '1px solid #222',
+      g3s: mob ? '1fr' : 'repeat(3,minmax(0,1fr))',
+      g64: mid ? '1fr' : 'minmax(0,3fr) minmax(0,2fr)', g46: mid ? '1fr' : 'minmax(0,2fr) minmax(0,3fr)', g2: mid ? '1fr' : 'minmax(0,1fr) minmax(0,1fr)', g2f: mob ? '1fr' : '1fr 1fr',
+      chipWrap: mob ? 'nowrap' : 'wrap', chipJust: mob ? 'flex-start' : 'center',
+      wmDisp: wm ? 'flex' : 'none', lnDisp: ln ? 'block' : 'none',
+      ratingTxt: s.rating.toFixed(1).replace('.', ','), reviewsTxt: String(Math.round(s.reviews)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+      scrollCue: React.createElement('div', { 'aria-hidden': true, style: { width: 1, height: 56, background: 'rgba(242,238,232,.18)', position: 'relative', overflow: 'hidden' } },
+        React.createElement('div', { style: { position: 'absolute', left: 0, top: 0, width: 1, height: '40%', background: '#F2EEE8', animation: 'hkScroll 2.2s cubic-bezier(.6,0,.3,1) infinite' } })),
+      tabs, horario: s.tab === 'mid' ? '12:00 – 16:30' : '20:00 – 23:30',
+      prices: mid ? [pAd, pNi, pBe] : [pNi, pAd, pBe], includes: ['[INCLUYE 1]', '[INCLUYE 2]', '[INCLUYE 3]'],
+      steps: [['01', 'Te sentamos'], ['02', 'Pides desde la tablet'], ['03', 'Te lo traemos al momento'], ['04', 'Repite sin límite']].map(([n, t]) => ({ n, t })),
+      chips: C.map((c, i) => ({ t: c.name.toUpperCase(), on: i === ci, bg: i === ci ? '#B3121F' : 'transparent', bd: i === ci ? '#B3121F' : '#2A2A2A', pick: () => set({ cat: i, allDishes: false }) })),
+      dishes, catMore, catMoreL, toggleDishes: () => set({ allDishes: !s.allDishes }),
+      rvCur: reviews[s.rv], rvPrev: () => set({ rv: (s.rv + 2) % 3 }), rvNext: () => set({ rv: (s.rv + 1) % 3 }),
+      rvDots: reviews.map((_, i) => ({ on: i === s.rv, w: i === s.rv ? '22px' : '8px', c: i === s.rv ? '#B3121F' : '#9A9084', l: 'Reseña ' + (i + 1), pick: () => set({ rv: i }) })),
+      combos: [1, 2, 3].map(i => ({ n: '[COMBO ' + i + ']' })),
+      sent: s.sent, notSent: !s.sent, reset: () => set({ sent: false, date: null, time: null, name: '', phone: '', email: '', notes: '', priv: false }),
+      wk: ['L', 'M', 'X', 'J', 'V', 'S', 'D'], cal, strip, monthLabel: ML[base.getMonth()] + ' ' + base.getFullYear(),
+      calPrev: () => set({ calOff: Math.max(0, s.calOff - 1) }), calNext: () => set({ calOff: Math.min(5, s.calOff + 1) }), calPrevDis: s.calOff === 0, calPrevOp: s.calOff === 0 ? .35 : 1,
+      slots, ppl, summary, submit,
+      name: s.name, phone: s.phone, email: s.email, notes: s.notes, priv: s.priv,
+      setName: e => set({ name: e.target.value, err: clrErr('name') }), setPhone: e => set({ phone: e.target.value, err: clrErr('phone') }),
+      setEmail: e => set({ email: e.target.value }), setNotes: e => set({ notes: e.target.value }), togglePriv: () => set({ priv: !s.priv, err: clrErr('priv') }),
+      errDate: !!s.err.date, errDateBd: s.err.date ? '#FF6B6B' : '#222', errTime: !!s.err.time, errName: !!s.err.name, errNameBd: s.err.name ? '#FF6B6B' : '#2A2A2A',
+      errPhone: !!s.err.phone, errPhoneBd: s.err.phone ? '#FF6B6B' : '#2A2A2A', errPriv: !!s.err.priv, hasErr: Object.values(s.err).some(Boolean),
+      faqs: ['¿Hace falta reservar?', '¿Cuánto tiempo puedo estar?', '¿Qué precio tienen los niños?', '¿Tenéis opciones vegetarianas o sin gluten?', '¿Las bebidas están incluidas?', '¿Se puede pedir para llevar?'].map((q, i) => ({
+        q, open: s.faq === i, rot: s.faq === i ? '45deg' : '0deg', c: s.faq === i ? '#B3121F' : '#F2EEE8', pick: () => set({ faq: s.faq === i ? -1 : i })
+      })),
+      week: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'].map((t, i) => ({ t, today: i === todayIdx, c: i === todayIdx ? '#FFFFFF' : '#BDB7AE', bl: i === todayIdx ? '#B3121F' : 'transparent', bg: i === todayIdx ? 'rgba(179,18,31,.14)' : 'transparent' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><meta name="robots" content="noindex, nofollow"><link rel="icon" type="image/png" href="assets/hanaki-logo.png"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap"><style>body{margin:0;background:#0A0A0A;color:#F2EEE8;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}a{color:#B89A72;text-decoration:none}a:hover{color:#F2EEE8}input{font-family:inherit}</style></helmet>
+<header style="position:sticky;top:0;z-index:10;background:rgba(10,10,10,.95);backdrop-filter:blur(8px);border-bottom:1px solid #222;padding:14px clamp(14px,4vw,48px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+<div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap"><h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(24px,3vw,32px);letter-spacing:.14em">CARTA POR NÚMERO</h1><span style="font-size:11px;font-weight:600;letter-spacing:.2em;color:#B3121F;border:1px solid #B3121F;padding:4px 10px">PRIVADO · USO INTERNO</span></div>
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px"><input type="search" value="{{ q }}" onInput="{{ setQ }}" placeholder="Buscar nº o plato…" style="min-height:44px;width:220px;max-width:100%;background:#141414;border:1px solid #2A2A2A;color:#F2EEE8;padding:0 14px;font-size:15px;outline:none"><button type="button" onClick="{{ toggleMiss }}" style="min-height:44px;padding:0 16px;background:{{ missBg }};border:1px solid #2A2A2A;color:#F2EEE8;font-size:12px;font-weight:600;letter-spacing:.14em;cursor:pointer">SOLO SIN FOTO · {{ missCount }}</button></div>
+</header>
+<main style="padding:16px clamp(14px,4vw,48px) 60px">
+<div style="font-size:13px;color:#8E887F;margin-bottom:12px">{{ summary }}</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:clamp(26px,2.6vw,36px) clamp(14px,1.9vw,28px)">
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="12">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="position:relative;aspect-ratio:16/10;overflow:hidden;background:#000">
+<sc-if value="{{ r.hasPh }}" hint-placeholder-val="{{ false }}"><img src="{{ r.ph }}" alt="{{ r.n }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></sc-if>
+<sc-if value="{{ r.noPh }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:flex-end;padding:10px 12px;border:1px dashed #B3121F;background:#120808;color:#FF6B6B;font-size:12px;font-weight:600;letter-spacing:.2em">SIN FOTO</div></sc-if>
+<span style="position:absolute;left:0;top:0;background:#B3121F;color:#FFFFFF;font-family:'Cormorant Garamond',serif;font-size:26px;line-height:1;padding:6px 12px 7px">{{ r.no }}</span>
+</div>
+<div style="display:flex;align-items:baseline;gap:8px;margin-top:8px;font-size:16px;font-weight:600;color:#F2EEE8"><span style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:#B89A72">{{ r.no }}.</span><span>{{ r.n }}</span></div>
+<div style="font-size:13px;line-height:1.45;color:#BDB7AE">{{ r.u }}</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:2px"><span style="border:1px solid #2A2A2A;color:#8E887F;border-radius:999px;padding:3px 12px;font-size:11px;letter-spacing:.06em">{{ r.cat }}</span><sc-if value="{{ r.hasPr }}" hint-placeholder-val="{{ false }}"><span style="border:1px solid rgba(242,238,232,.45);color:#F2EEE8;border-radius:999px;padding:3px 12px;font-size:11px">{{ r.pr }}</span></sc-if></div>
+<sc-if value="{{ r.hasAl }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;line-height:1.5;color:#8E887F">{{ r.al }}</div></sc-if>
+</div>
+</sc-for>
+</div>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { data: [], q: '', miss: false };
+  async componentDidMount() {
+    try {
+      const t = await (await fetch('Hanaki%20Barcelona%20Carta.dc.html')).text();
+      const g = k => { const m = t.match(new RegExp('static ' + k + ' = (.*);\\n')); return m ? JSON.parse(m[1]) : null; };
+      const CATS = g('CATS') || [], NUMS = g('NUMS') || {}, AL = g('AL') || {}, PH = g('PH') || {};
+      const AK = { G: 'Gluten', C: 'Crustáceos', H: 'Huevo', P: 'Pescado', Ca: 'Cacahuete', S: 'Soja', L: 'Lácteos', F: 'Frutos de cáscara', Ap: 'Apio', Mo: 'Mostaza', Se: 'Sésamo', Su: 'Sulfitos', M: 'Moluscos', Al: 'Altramuz' };
+      const data = [];
+      CATS.forEach((c, i) => c.items.forEach(([n, u, v, pr], j) => { const no = (NUMS[i] || [])[j]; const p = PH[no]; data.push({ no, n, u: u || '', cat: c.name, pr: pr ? pr + ' €' : '', ph: p ? 'assets/platos/' + p + (/postres/.test(p) ? '.png' : '.jpg') : '', al: (AL[no] || '').split(' ').filter(k => AK[k]).map(k => AK[k]).join(' · ') }); }));
+      data.sort((a, b) => a.no - b.no);
+      this.setState({ data });
+    } catch (e) {}
+  }
+  renderVals() {
+    const s = this.state, q = s.q.trim().toLowerCase();
+    const rows = s.data.filter(d => (!s.miss || !d.ph) && (!q || String(d.no).startsWith(q) || d.n.toLowerCase().includes(q))).map(d => ({ ...d, hasPh: !!d.ph, noPh: !d.ph, hasPr: !!d.pr, hasAl: !!d.al }));
+    const missCount = s.data.filter(d => !d.ph).length;
+    return {
+      rows, q: s.q, missCount,
+      setQ: e => this.setState({ q: e.target.value }),
+      toggleMiss: () => this.setState(x => ({ miss: !x.miss })),
+      missBg: s.miss ? '#8E0E19' : 'transparent',
+      summary: s.data.length ? rows.length + ' de ' + s.data.length + ' platos · ' + missCount + ' sin foto' : 'Cargando carta…'
+    };
+  }
+}
+</script>
+</body>
+</html>
