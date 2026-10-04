@@ -53,12 +53,45 @@
   var GA_ID = '';
   var ga = function () { if (!GA_ID || window.__hkGa || !(get() || {}).analiticas) return; window.__hkGa = 1; var sc = document.createElement('script'); sc.async = true; sc.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID; document.head.appendChild(sc); window.dataLayer = window.dataLayer || []; window.gtag = function () { dataLayer.push(arguments); }; gtag('js', new Date()); gtag('config', GA_ID, { anonymize_ip: true }); };
   window.addEventListener('hanaki-consent', ga);
-  window.HanakiCookies = { get: get, open: function () { open(true); }, accepted: function (k) { var c = get(); return !!(c && c[k]); } };
+  // Iframes de terceros (mapa de Google): usan data-consent-src en vez de src y solo cargan con consentimiento
+  // "externas" o si el usuario pulsa "Ver mapa" en el aviso que se muestra dentro del propio iframe.
+  var TXT = {
+    es: ['Mapa de Google', 'Al cargarlo, Google puede usar cookies.', 'VER MAPA'],
+    ca: ['Mapa de Google', 'En carregar-lo, Google pot fer servir galetes.', 'VEURE MAPA'],
+    en: ['Google Map', 'Loading it lets Google use cookies.', 'SHOW MAP'],
+    fr: ['Carte Google', 'En la chargeant, Google peut utiliser des cookies.', 'VOIR LA CARTE']
+  };
+  var aviso = function () {
+    var l; try { l = (localStorage.getItem('hanaki-bcn-lang') || document.documentElement.lang || 'es').slice(0, 2).toLowerCase(); } catch (e) { l = 'es'; }
+    var t = TXT[l] || TXT.es;
+    // Colores claros a propósito: el iframe del mapa lleva un filtro gris+invertido que lo deja oscuro
+    return '<!doctype html><meta charset="utf-8"><style>html,body{margin:0;height:100%}body{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:10px;box-sizing:border-box;background:#ECE8E2;color:#4A4A4A;font:12px/1.4 "DM Sans",system-ui,sans-serif;text-align:center}b{color:#0C0C0C;font-weight:600;font-size:13px}button{font:inherit;font-size:11px;font-weight:600;letter-spacing:.18em;padding:9px 16px;background:none;color:#0C0C0C;border:1px solid rgba(12,12,12,.4);cursor:pointer}button:hover{border-color:#0C0C0C;background:rgba(12,12,12,.06)}@media(min-height:300px){body{justify-content:flex-end;padding-bottom:18%}}</style>' +
+      '<b>' + t[0] + '</b><span>' + t[1] + '</span><button type="button" onclick="parent.HanakiCookies.loadFrame()">' + t[2] + '</button>';
+  };
+  var permitido = false; // el usuario pulsó "Ver mapa" en esta página
+  var gateFrames = function () {
+    var ok = permitido || (get() || {}).externas;
+    document.querySelectorAll('iframe[data-consent-src]').forEach(function (f) {
+      if (ok) {
+        if (f.getAttribute('src') === f.dataset.consentSrc) return;
+        f.removeAttribute('srcdoc'); f.src = f.dataset.consentSrc;
+      } else if (!f.hasAttribute('srcdoc')) {
+        f.srcdoc = aviso();
+      }
+    });
+  };
+  window.addEventListener('hanaki-consent', gateFrames);
+
+  window.HanakiCookies = { get: get, open: function () { open(true); }, accepted: function (k) { var c = get(); return !!(c && c[k]); }, loadFrame: function () { permitido = true; gateFrames(); } };
   // Cualquier elemento con data-cookie-settings reabre el panel
   document.addEventListener('click', function (e) {
     var t = e.target.closest && e.target.closest('[data-cookie-settings]');
     if (t) { e.preventDefault(); close(); open(true); }
   });
-  var start = function () { document.head.appendChild(css); if (!get()) open(false); else ga(); };
+  var start = function () {
+    document.head.appendChild(css); if (!get()) open(false); else ga();
+    // La web se renderiza por plantillas que crean y repintan los iframes: vigilar el DOM y sus atributos
+    gateFrames(); new MutationObserver(gateFrames).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['src', 'srcdoc', 'data-consent-src'] });
+  };
   if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
 })();
