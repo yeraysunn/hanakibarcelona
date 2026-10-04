@@ -49,12 +49,16 @@
     });
     document.body.appendChild(el);
   }
+  // Analítica: pon aquí tu ID de Google Analytics 4 (G-XXXXXXX). Solo se carga si el usuario acepta "Análisis".
+  var GA_ID = '';
+  var ga = function () { if (!GA_ID || window.__hkGa || !(get() || {}).analiticas) return; window.__hkGa = 1; var sc = document.createElement('script'); sc.async = true; sc.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID; document.head.appendChild(sc); window.dataLayer = window.dataLayer || []; window.gtag = function () { dataLayer.push(arguments); }; gtag('js', new Date()); gtag('config', GA_ID, { anonymize_ip: true }); };
+  window.addEventListener('hanaki-consent', ga);
   window.HanakiCookies = { get: get, open: function () { open(true); }, accepted: function (k) { var c = get(); return !!(c && c[k]); } };
   // Cualquier elemento con data-cookie-settings reabre el panel
   document.addEventListener('click', function (e) {
     var t = e.target.closest && e.target.closest('[data-cookie-settings]');
     if (t) { e.preventDefault(); close(); open(true); }
   });
-  var start = function () { document.head.appendChild(css); if (!get()) open(false); };
+  var start = function () { document.head.appendChild(css); if (!get()) open(false); else ga(); };
   if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
 })();

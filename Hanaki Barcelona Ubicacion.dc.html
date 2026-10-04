@@ -9,8 +9,22 @@
 <body>
 <x-dc>
 <helmet>
+<script src="./i18n-bcn.js"></script>
 <title>Ubicación y horario · Hanaki Sushi Barcelona</title>
 <meta name="description" content="Buffet libre japonés en Carrer de Joan Güell, 212, Les Corts, Barcelona. ★ 4,2 en Google. Reserva tu mesa: 931 94 22 61.">
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://[DOMINIO-BARCELONA]/Hanaki%20Barcelona%20Ubicacion.dc.html">
+<meta name="theme-color" content="#0B0B0B">
+<link rel="icon" type="image/png" href="assets/hanaki-logo.png"><link rel="apple-touch-icon" href="assets/hanaki-logo.png">
+<meta property="og:type" content="restaurant">
+<meta property="og:site_name" content="Hanaki Sushi Barcelona">
+<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="Ubicación y horario · Hanaki Sushi Barcelona">
+<meta property="og:description" content="Buffet libre japonés en Carrer de Joan Güell, 212, Les Corts, Barcelona. ★ 4,2 en Google. Reserva tu mesa: 931 94 22 61.">
+<meta property="og:url" content="https://[DOMINIO-BARCELONA]/Hanaki%20Barcelona%20Ubicacion.dc.html">
+<meta property="og:image" content="https://[DOMINIO-BARCELONA]/assets/fachada.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=DM+Sans:wght@400;500;600&amp;family=Noto+Serif+JP:wght@300;400&amp;display=swap">
@@ -34,7 +48,7 @@ button,input,textarea{font-family:inherit}
 
 <div style="height:32px;background:#000;display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:0 clamp(16px,4vw,56px);font-size:12px;color:#BDB7AE;position:relative;z-index:51">
 
-<div style="display:flex;align-items:center;gap:18px;white-space:nowrap"><a href="tel:+34931942261" style="color:#F2EEE8">931 94 22 61</a><sc-if value="{{ notMob }}" hint-placeholder-val="{{ true }}"><a href="Hanaki%20Barcelona%20Experiencia.dc.html#para-llevar" style="color:#BDB7AE">Para llevar y a domicilio <span data-arw="">→</span></a></sc-if></div>
+<div style="display:flex;align-items:center;gap:18px;white-space:nowrap"><a href="tel:+34931942261" style="color:#F2EEE8">931 94 22 61</a><sc-if value="{{ notMob }}" hint-placeholder-val="{{ true }}"></sc-if></div>
 </div>
 
 <header style="position:sticky;top:0;z-index:50;height:{{ hdrOuter }};margin-bottom:-{{ hdrOuter }};pointer-events:none">
@@ -46,13 +60,13 @@ button,input,textarea{font-family:inherit}
 <div style="flex:none;display:flex;align-items:center;gap:12px">
 <div data-ih="" style="display:flex;align-items:center;margin-right:12px"><sc-for list="{{ langs }}" as="g" hint-placeholder-count="3"><sc-if value="{{ g.sep }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="font-size:11px;color:#3A3A3A">·</span></sc-if><button type="button" onClick="{{ g.pick }}" aria-pressed="{{ g.on }}" style="background:none;border:none;min-width:32px;min-height:44px;font-size:11px;letter-spacing:.14em;color:{{ g.c }};cursor:pointer;transition:color .2s">{{ g.t }}</button></sc-for></div>
 <a data-ih="" href="Hanaki%20Barcelona%20Carta.dc.html" style="display:inline-flex;align-items:center;height:44px;padding:0 28px;border:1px solid #FFFFFF;border-radius:2px;color:#FFFFFF;font-size:11.5px;font-weight:600;letter-spacing:.2em;transition:background-color .2s" style-hover="background:rgba(255,255,255,.08)">CARTA</a>
-<a data-ih="" href="Hanaki%20Barcelona%20Reservar.dc.html" style="display:inline-flex;align-items:center;height:44px;padding:0 28px;background:#B3121F;border:1px solid #B3121F;border-radius:2px;color:#FFFFFF;font-size:11.5px;font-weight:600;letter-spacing:.2em;transition:background-color .2s,border-color .2s" style-hover="background:#D11A2A;border-color:#D11A2A">RESERVAR</a>
+<a data-ih="" href="Hanaki%20Barcelona%20v3.dc.html#reservas" style="display:inline-flex;align-items:center;height:44px;padding:0 28px;background:#B3121F;border:1px solid #B3121F;border-radius:2px;color:#FFFFFF;font-size:11.5px;font-weight:600;letter-spacing:.2em;transition:background-color .2s,border-color .2s" style-hover="background:#D11A2A;border-color:#D11A2A">RESERVAR</a>
 </div>
 </sc-if>
 <sc-if value="{{ notDesk }}" hint-placeholder-val="{{ false }}">
 <div style="flex:none;display:flex;align-items:center;gap:{{ mGap }}">
-<sc-if value="{{ notMob }}" hint-placeholder-val="{{ true }}"><a data-ih="" href="Hanaki%20Barcelona%20Carta.dc.html" style="display:inline-flex;align-items:center;height:44px;padding:0 24px;border:1px solid #FFFFFF;border-radius:2px;color:#FFFFFF;font-size:11.5px;font-weight:600;letter-spacing:.2em">CARTA</a></sc-if>
-<a data-ih="" href="Hanaki%20Barcelona%20Reservar.dc.html" style="display:inline-flex;align-items:center;height:44px;padding:0 {{ resPad }};background:#B3121F;border:1px solid #B3121F;border-radius:2px;color:#FFFFFF;font-size:11px;font-weight:600;letter-spacing:.2em;transition:background-color .2s" style-hover="background:#D11A2A">RESERVAR</a>
+<a data-ih="" href="Hanaki%20Barcelona%20Carta.dc.html" style="display:inline-flex;align-items:center;height:44px;padding:0 {{ resPad }};border:1px solid #FFFFFF;border-radius:2px;color:#FFFFFF;font-size:11.5px;font-weight:600;letter-spacing:.2em">CARTA</a>
+<a data-ih="" href="Hanaki%20Barcelona%20v3.dc.html#reservas" style="display:inline-flex;align-items:center;height:44px;padding:0 {{ resPad }};background:#B3121F;border:1px solid #B3121F;border-radius:2px;color:#FFFFFF;font-size:11px;font-weight:600;letter-spacing:.2em;transition:background-color .2s" style-hover="background:#D11A2A">RESERVAR</a>
 <button data-ih="" type="button" onClick="{{ toggleMenu }}" aria-label="Abrir menú" aria-expanded="{{ menu }}" style="width:44px;height:44px;margin-right:-10px;background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer"><span style="width:22px;height:1px;background:#F2EEE8"></span><span style="width:22px;height:1px;background:#F2EEE8"></span></button>
 </div>
 </sc-if>
@@ -75,7 +89,7 @@ button,input,textarea{font-family:inherit}
 <div style="display:flex;align-items:center;justify-content:space-between;height:56px"><span style="display:flex;align-items:center;font-family:'Cormorant Garamond',serif;font-size:22px;letter-spacing:.26em;color:#F2EEE8"><img src="assets/hanaki-logo-trazo.png" alt="花木" style="height:30px;width:auto;display:block;margin-right:12px">HANAKI</span><button type="button" onClick="{{ toggleMenu }}" aria-label="Cerrar menú" style="width:44px;height:44px;background:none;border:1px solid rgba(242,238,232,.35);border-radius:2px;color:#F2EEE8;font-size:22px;cursor:pointer">×</button></div>
 <nav style="display:flex;flex-direction:column;margin-top:32px"><sc-for list="{{ linksM }}" as="l" hint-placeholder-count="7"><a data-ml="" href="{{ l.h }}" onClick="{{ closeMenu }}" style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:32px;letter-spacing:.1em;text-transform:uppercase;color:#F2EEE8;padding:12px 0;border-bottom:1px solid #222">{{ l.t }}</a></sc-for></nav>
 <div style="display:flex;gap:6px;margin-top:24px"><sc-for list="{{ langs }}" as="g" hint-placeholder-count="3"><button type="button" onClick="{{ g.pick }}" style="background:none;border:none;min-width:44px;min-height:44px;font-size:13px;letter-spacing:.14em;color:{{ g.c }};cursor:pointer">{{ g.t }}</button></sc-for></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto;padding-top:24px"><a href="tel:+34931942261" style="display:flex;align-items:center;justify-content:center;min-height:52px;border:1px solid #FFFFFF;border-radius:2px;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.18em">LLAMAR</a><a href="Hanaki%20Barcelona%20Reservar.dc.html" onClick="{{ closeMenu }}" style="display:flex;align-items:center;justify-content:center;min-height:52px;background:#B3121F;border-radius:2px;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.18em">RESERVAR</a></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto;padding-top:24px"><a href="tel:+34931942261" style="display:flex;align-items:center;justify-content:center;min-height:52px;border:1px solid #FFFFFF;border-radius:2px;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.18em">LLAMAR</a><a href="Hanaki%20Barcelona%20v3.dc.html#reservas" onClick="{{ closeMenu }}" style="display:flex;align-items:center;justify-content:center;min-height:52px;background:#B3121F;border-radius:2px;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.18em">RESERVAR</a></div>
 </div>
 </sc-if>
 
@@ -136,10 +150,7 @@ button,input,textarea{font-family:inherit}
 </footer>
 
 <sc-if value="{{ mob }}" hint-placeholder-val="{{ false }}">
-<div style="position:fixed;left:0;right:0;bottom:0;z-index:48;background:rgba(10,10,10,.96);backdrop-filter:blur(10px);border-top:1px solid #222;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:10px">
-<a href="tel:+34931942261" style="display:flex;align-items:center;justify-content:center;min-height:50px;border:1px solid #FFFFFF;border-radius:2px;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.18em">LLAMAR</a>
-<a href="Hanaki%20Barcelona%20Reservar.dc.html" style="display:flex;align-items:center;justify-content:center;min-height:50px;background:#B3121F;border-radius:2px;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.18em">RESERVAR</a>
-</div>
+<div style="position:fixed;left:0;right:0;bottom:0;z-index:48;background:rgba(10,10,10,.96);backdrop-filter:blur(10px);border-top:1px solid #222;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:10px"><a href="tel:+34931942261" style="display:flex;align-items:center;justify-content:center;min-height:50px;background:#B3121F;border-radius:2px;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.22em;grid-column:1/-1">LLAMAR PARA RESERVAR · 931 94 22 61</a></div>
 </sc-if>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;watermarks&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Detalles&quot;},&quot;thread&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Detalles&quot;},&quot;motion&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Detalles&quot;}}">
@@ -165,7 +176,7 @@ class Component extends DCLogic {
   static introWanted(p) { return false; try { if (sessionStorage.getItem('hk-intro-seen')) return false; } catch (e) {} if (p && p.motion === false) return false; return !window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
   state = { intro: Component.introWanted(this.props), active: '', w: typeof window !== 'undefined' ? window.innerWidth : 1440, scrolled: false, menu: false, lang: 'ES', tab: 'mid', chip: 'TODO', rv: 0, faq: -1, calOff: 0, date: null, time: null, ad: 2, ni: 0, be: 0, name: '', phone: '', email: '', notes: '', priv: false, err: {}, sent: false, rating: 0, reviews: 0 };
 
-  componentDidMount() {
+  componentDidMount() { this.onHL = () => this.forceUpdate(); window.addEventListener('hanaki-lang', this.onHL);
     this.rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches || this.props.motion === false;
     this.onR = () => this.setState({ w: window.innerWidth });
     this.onS = () => { const s = window.scrollY > 40; if (s !== this.state.scrolled) this.setState({ scrolled: s }); this.parallax(); };
@@ -364,9 +375,9 @@ class Component extends DCLogic {
       hdrOuter: mob ? '64px' : '88px', hdrH: mob ? '64px' : (s.scrolled ? '72px' : '88px'), hdrPad: mob ? '20px' : 'clamp(24px,4.4vw,64px)',
       lgH: mob ? '26px' : '30px', lgFs: mob ? '18px' : '22px', lgGap: mob ? '12px' : '16px', mGap: mob ? '8px' : '12px', resPad: mob ? '16px' : '24px',
       hdrBg: s.scrolled || s.menu ? 'rgba(10,10,10,.85)' : 'transparent', hdrBlur: s.scrolled ? 'blur(12px)' : 'none', hdrBd: s.scrolled ? '#1E1E1E' : 'transparent',
-      links: [['Carta', 'Hanaki%20Barcelona%20Carta.dc.html'], ['Precios', 'Hanaki%20Barcelona%20v3.dc.html#precios'], ['Cómo funciona', 'Hanaki%20Barcelona%20Experiencia.dc.html#como-funciona'], ['El local', 'Hanaki%20Barcelona%20Experiencia.dc.html#el-local'], ['Grupos', 'Hanaki%20Barcelona%20Experiencia.dc.html#grupos'], ['Ubicación', '#ubicacion']].map(([t, h]) => ({ t, h, cur: s.active === h ? 'true' : 'false' })),
-      linksM: [['Carta', 'Hanaki%20Barcelona%20Carta.dc.html'], ['Precios', 'Hanaki%20Barcelona%20v3.dc.html#precios'], ['Cómo funciona', 'Hanaki%20Barcelona%20Experiencia.dc.html#como-funciona'], ['El local', 'Hanaki%20Barcelona%20Experiencia.dc.html#el-local'], ['Grupos', 'Hanaki%20Barcelona%20Experiencia.dc.html#grupos'], ['Reservar', 'Hanaki%20Barcelona%20Reservar.dc.html'], ['Ubicación', '#ubicacion']].map(([t, h]) => ({ t, h })),
-      langs: ['ES', 'CA', 'EN'].map((t, i) => ({ t, sep: i > 0, on: s.lang === t, c: s.lang === t ? '#FFFFFF' : '#6B6B6B', pick: () => set({ lang: t }) })),
+      links: [['Carta', 'Hanaki%20Barcelona%20Carta.dc.html'], ['Precios', 'Hanaki%20Barcelona%20v3.dc.html#precios'], ['Cómo funciona', 'Hanaki%20Barcelona%20v3.dc.html#como-funciona'], ['El local', 'Hanaki%20Barcelona%20v3.dc.html#galeria'], ['Ubicación', '#ubicacion']].map(([t, h]) => ({ t, h, cur: s.active === h ? 'true' : 'false' })),
+      linksM: [['Carta', 'Hanaki%20Barcelona%20Carta.dc.html'], ['Precios', 'Hanaki%20Barcelona%20v3.dc.html#precios'], ['Cómo funciona', 'Hanaki%20Barcelona%20v3.dc.html#como-funciona'], ['El local', 'Hanaki%20Barcelona%20v3.dc.html#galeria'], ['Reservar', 'Hanaki%20Barcelona%20v3.dc.html#reservas'], ['Ubicación', '#ubicacion']].map(([t, h]) => ({ t, h })),
+      langs: ((L) => ['ES', 'CA', 'EN', 'FR'].map((t, i) => ({ t, sep: i > 0, on: L === t, c: L === t ? '#FFFFFF' : '#9A948B', pick: () => { if (window.HanakiI18n) window.HanakiI18n.set(t.toLowerCase()); else { try { localStorage.setItem('hanaki-bcn-lang', t.toLowerCase()); } catch (e) {} } set({ lang: t }); } })))(((window.HanakiI18n && window.HanakiI18n.get()) || 'es').toUpperCase()),
       g4: mob ? '1fr 1fr' : 'repeat(4,minmax(0,1fr))', statBd: mob ? 'none' : '1px solid rgba(242,238,232,.14)',
       g3: mid ? '1fr' : 'repeat(3,minmax(0,1fr))', condBd: mid ? 'none' : '1px solid #222',
       g3s: mob ? '1fr' : 'repeat(3,minmax(0,1fr))',

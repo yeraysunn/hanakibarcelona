@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /Hanaki%20Barcelona%20Numeros.dc.html
+
+Sitemap: https://[DOMINIO-BARCELONA]/sitemap.xml
