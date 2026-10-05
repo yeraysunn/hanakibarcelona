@@ -41,7 +41,7 @@ class Component extends DCLogic {
       const CATS = g('CATS') || [], NUMS = g('NUMS') || {}, AL = g('AL') || {}, PH = g('PH') || {};
       const AK = { G: 'Gluten', C: 'Crustáceos', H: 'Huevo', P: 'Pescado', Ca: 'Cacahuete', S: 'Soja', L: 'Lácteos', F: 'Frutos de cáscara', Ap: 'Apio', Mo: 'Mostaza', Se: 'Sésamo', Su: 'Sulfitos', M: 'Moluscos', Al: 'Altramuz' };
       const data = [];
-      CATS.forEach((c, i) => c.items.forEach(([n, u, v, pr], j) => { const no = (NUMS[i] || [])[j]; const p = PH[no]; data.push({ no, n, u: u || '', cat: c.name, pr: pr ? pr + ' €' : '', ph: p ? 'assets/platos/' + p + (/postres/.test(p) ? '.png' : '.jpg') : '', al: (AL[no] || '').split(' ').filter(k => AK[k]).map(k => AK[k]).join(' · ') }); }));
+      CATS.forEach((c, i) => c.items.forEach(([n, u, v, pr, pk], j) => { const no = (NUMS[i] || [])[j]; const p = pk || PH[no]; data.push({ no, n, u: u || '', cat: c.name, pr: pr ? pr + ' €' : '', ph: p ? 'assets/platos/' + p + (/postres/.test(p) ? '.png' : '.jpg') : '', al: (AL[no] || '').split(' ').filter(k => AK[k]).map(k => AK[k]).join(' · ') }); }));
       data.sort((a, b) => a.no - b.no);
       this.setState({ data });
     } catch (e) {}
