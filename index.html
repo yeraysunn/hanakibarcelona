@@ -98,7 +98,7 @@ button,input,textarea{font-family:inherit}
 <div aria-hidden="true" style="position:absolute;right:0;top:0;bottom:0;width:{{ heroMW }};background:#0A0A0A;opacity:{{ heroMediaOp }};transition:opacity 1.2s ease">
 <div style="position:absolute;inset:0;background:#161616"></div>
 <sc-if value="{{ posterOk }}" hint-placeholder-val="{{ true }}"><img src="assets/bcn-hero-poster.jpg" alt="" onError="{{ posterErr }}" fetchpriority="high" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ heroObjPos }};display:block"></sc-if>
-<sc-if value="{{ useVid }}" hint-placeholder-val="{{ false }}"><video ref="{{ heroVidRef }}" autoplay="" muted="" loop="" playsinline="" preload="auto" src="assets/bcn-hero.mp4" poster="assets/bcn-hero-poster.jpg" disablepictureinpicture="" onPlaying="{{ onVidPlay }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ heroObjPos }};display:block;opacity:{{ vidOp }};transition:opacity .6s ease"></video></sc-if>
+<sc-if value="{{ useVid }}" hint-placeholder-val="{{ false }}"><video ref="{{ heroVidRef }}" muted="" loop="" playsinline="" preload="auto" src="assets/bcn-hero.mp4" poster="assets/bcn-hero-poster.jpg" disablepictureinpicture="" onPlaying="{{ onVidPlay }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ heroObjPos }};display:block;opacity:{{ vidOp }};transition:opacity .6s ease"></video></sc-if>
 <div style="position:absolute;inset:0;pointer-events:none;background:{{ heroFade }}"></div>
 </div>
 <div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:160px;background:linear-gradient(180deg,rgba(10,10,10,.85),rgba(10,10,10,0));pointer-events:none"></div>
@@ -408,23 +408,23 @@ class Component extends DCLogic {
     gi.style.transition = v.style.transition = 'opacity .15s linear';
     gi.style.opacity = '1'; v.style.opacity = '0';
     this.it.push(setTimeout(() => {
-      gt.style.transition = 'opacity .7s ease, letter-spacing .8s cubic-bezier(.65,0,.35,1)';
-      g.style.transition = 'transform .8s cubic-bezier(.65,0,.35,1)';
+      gt.style.transition = 'opacity .35s ease, letter-spacing .4s cubic-bezier(.65,0,.35,1)';
+      g.style.transition = 'transform .4s cubic-bezier(.65,0,.35,1)';
       gt.style.opacity = '1'; gt.style.letterSpacing = '.35em';
       g.style.transform = 'translate(' + tx2 + 'px,' + ty1 + 'px) scale(' + S + ')';
     }, 150));
-    this.it.push(setTimeout(() => this.introPhase3(), 150 + 1000));
+    this.it.push(setTimeout(() => this.introPhase3(), 150 + 420));
   }
   introPhase3() {
     if (this.ixDone) return;
     const { ov, g } = this.ix, bg = ov.querySelector('[data-ibg]'), sk = ov.querySelector('[data-iskip]');
     ov.style.pointerEvents = 'none'; if (sk) sk.style.opacity = '0';
-    g.style.transition = 'transform .9s cubic-bezier(.65,0,.35,1)'; g.style.transform = 'translate(0px,0px) scale(1)';
-    bg.style.transition = 'opacity .9s cubic-bezier(.65,0,.35,1)'; bg.style.opacity = '0';
-    const base = 200;
-    this.cascadeEls.forEach((el, i) => { el.style.transition = 'opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1)'; el.style.transitionDelay = (base + i * 80) + 'ms'; el.style.opacity = '1'; el.style.transform = 'none'; });
-    this.cascadeEnd = base + this.cascadeEls.length * 80 + 700;
-    this.it.push(setTimeout(() => this.finishIntro(true), 920));
+    g.style.transition = 'transform .6s cubic-bezier(.65,0,.35,1)'; g.style.transform = 'translate(0px,0px) scale(1)';
+    bg.style.transition = 'opacity .6s cubic-bezier(.65,0,.35,1)'; bg.style.opacity = '0';
+    const base = 60;
+    this.cascadeEls.forEach((el, i) => { el.style.transition = 'opacity .45s ease, transform .45s cubic-bezier(.2,.7,.2,1)'; el.style.transitionDelay = (base + i * 35) + 'ms'; el.style.opacity = '1'; el.style.transform = 'none'; });
+    this.cascadeEnd = base + this.cascadeEls.length * 35 + 500;
+    this.it.push(setTimeout(() => this.finishIntro(true), 620));
   }
   finishIntro(natural) {
     if (this.ixDone) return; this.ixDone = true;
@@ -462,7 +462,8 @@ class Component extends DCLogic {
     requestAnimationFrame(() => this.setState({ heroIn: true }));
     const v = this.heroVidRef.current, top = document.getElementById('top');
     if (!v || !top) return;
-    v.muted = true; v.defaultMuted = true; v.playsInline = true;
+    v.muted = true; v.defaultMuted = true; v.playsInline = true; v.loop = true; v.currentTime = 0;
+    v.addEventListener('ended', () => { v.currentTime = 0; const p = v.play(); p && p.catch && p.catch(() => {}); });
     this.heroIO = new IntersectionObserver(([e]) => { if (e.isIntersecting) { const p = v.play(); p && p.catch && p.catch(() => {}); } else v.pause(); }, { threshold: 0 });
     this.heroIO.observe(top);
   }
