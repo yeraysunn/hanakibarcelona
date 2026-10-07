@@ -355,8 +355,8 @@ class Component extends DCLogic {
     };
 
     const tabs = [['mid', 'MEDIODÍA'], ['night', 'NOCHE Y FINES DE SEMANA']].map(([k, t]) => ({ t, on: s.tab === k, c: s.tab === k ? '#F2EEE8' : '#8E887F', bd: s.tab === k ? '#B3121F' : 'transparent', pick: () => set({ tab: k }) }));
-    const pAd = { t: 'ADULTOS', sub: 'Precio por persona', price: s.tab === 'night' ? '21,50 €' : '16,50 €', bd: '#B3121F' };
-    const pNi = { t: 'NIÑOS', sub: 'De 3 a 8 años', price: s.tab === 'night' ? '12,90 €' : '10,90 €', bd: '#222' };
+    const pAd = { t: 'ADULTOS', sub: 'Precio por persona', price: s.tab === 'night' ? '22,95 €' : '16,95 €', bd: '#B3121F' };
+    const pNi = { t: 'NIÑOS', sub: 'De 3 a 8 años', price: s.tab === 'night' ? '13,95 €' : '11,95 €', bd: '#222' };
     const pBe = { t: 'BEBÉS', sub: 'Menores de 3 años', price: 'GRATIS', bd: '#222' };
 
     const C = Component.CATS, ci = Math.min(s.cat || 0, C.length - 1);
