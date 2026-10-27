@@ -78,7 +78,7 @@ button,input,textarea{font-family:inherit}
 <sc-if value="{{ intro }}" hint-placeholder-val="{{ false }}">
 <div ref="{{ introRef }}" onClick="{{ skipIntro }}" aria-hidden="true" style="position:fixed;inset:0;z-index:2147483647;cursor:pointer">
 <div data-ibg="" style="position:absolute;inset:0;background:#0A0A0A"></div>
-<video data-ivid="" preload="auto" style="position:absolute;left:0;top:0;width:420px;mix-blend-mode:screen;filter:contrast(1.08);opacity:0;pointer-events:none"><source src="assets/hanaki-logo-trazo.mp4" type="video/mp4"></video>
+<video data-ivid="" muted="" playsinline="" webkit-playsinline="" disablepictureinpicture="" disableremoteplayback="" x-webkit-airplay="deny" preload="auto" style="position:absolute;left:0;top:0;width:420px;mix-blend-mode:screen;filter:contrast(1.08);opacity:0;pointer-events:none"><source src="assets/hanaki-logo-trazo.mp4" type="video/mp4"></video>
 <div data-igrp="" style="position:fixed;left:0;top:0;display:flex;align-items:center;transform-origin:0 0;pointer-events:none;color:#F2EEE8"><img src="assets/hanaki-logo-trazo.png" alt="" style="display:block;width:auto;opacity:0"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;line-height:1;letter-spacing:.6em;margin-right:-.35em;opacity:0;white-space:nowrap">HANAKI</span></div>
 <button data-iskip="" type="button" onClick="{{ skipIntro }}" style="position:absolute;right:20px;bottom:16px;min-height:44px;padding:0 10px;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#777;cursor:pointer;transition:color .2s,opacity .3s" style-hover="color:#BDB7AE">Saltar intro</button>
 </div>
@@ -214,7 +214,8 @@ class Component extends DCLogic {
     this.ix = { ov, g, gi, gt, v, S, ty1, tx2: vw / 2 - r.width * S / 2 - r.left };
     this.it = [];
     let started = false;
-    v.muted = true; v.defaultMuted = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.setAttribute('muted', '');
+    v.muted = true; v.defaultMuted = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', ''); v.setAttribute('muted', ''); v.controls = false;
+    v.addEventListener('webkitbeginfullscreen', () => { try { v.webkitExitFullscreen(); } catch (e) {} v.pause(); this.introPhase2(); }, { once: true });
     v.addEventListener('playing', () => { started = true; v.style.opacity = '1'; }, { once: true });
     v.addEventListener('ended', () => this.introPhase2(), { once: true });
     const p = v.play(); if (p && p.catch) p.catch(() => this.finishIntro());
