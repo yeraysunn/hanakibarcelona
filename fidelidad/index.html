@@ -56,7 +56,7 @@
 <script>
 (function(){
   // "Ver mi tarjeta": si ya se abrió en este móvil va directa; si no, se busca por teléfono + nombre
-  var guardado; try { guardado = localStorage.getItem('hk-fid-token'); } catch(e){}
+  var guardado = HK_TOKEN.leer();
   var verBtn = document.getElementById('ver-btn'), ver = document.getElementById('ver'), vErr = document.getElementById('v-err'), vBtn = document.getElementById('v-btn');
   if (guardado) verBtn.href = 'tarjeta.html?t=' + guardado;
   function abrirVer(){ ver.hidden = false; verBtn.hidden = true; document.getElementById('v-email').focus(); }
@@ -81,7 +81,7 @@
     try {
       if (fase === 1) return await enviarCodigo();
       var j = await pedir({ email: vEmail.value, codigo: vCod.value });
-      try { localStorage.setItem('hk-fid-token', j.token); } catch(e){}
+      HK_TOKEN.guardar(j.token);
       location.href = 'tarjeta.html?t=' + j.token;
     } catch (ex) { vErr.textContent = ex.message; vErr.hidden = false; boton(fase === 1 ? 'ENVIARME EL CÓDIGO' : 'ABRIR MI TARJETA'); }
   });
@@ -102,7 +102,7 @@
       var r = await fetch('/api/fidelidad/registro', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(d) });
       var j = await r.json().catch(function(){ return {}; });
       if (!r.ok) throw new Error(j.error || 'No se pudo crear la tarjeta.');
-      try { localStorage.setItem('hk-fid-token', j.token); } catch(e){}
+      HK_TOKEN.guardar(j.token);
       location.href = 'tarjeta.html?t=' + j.token + '&nueva=1';
     } catch (ex) { fallo(ex.message); btn.disabled = false; btn.innerHTML = 'CREAR MI TARJETA <span aria-hidden="true">→</span>'; }
   });
