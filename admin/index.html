@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
 <link rel="stylesheet" href="/fidelidad/estilo.css">
+<script src="/admin/i18n.js"></script>
 <style>
 body{display:flex;align-items:center;justify-content:center;padding:24px 16px;position:relative;overflow:hidden}
 body::before{content:"花木";position:fixed;right:-4vw;bottom:-6vh;font-family:'Noto Serif JP',serif;font-size:min(60vw,420px);line-height:1;color:rgba(243,238,230,.03);writing-mode:vertical-rl;pointer-events:none}
@@ -23,14 +24,17 @@ body::before{content:"花木";position:fixed;right:-4vw;bottom:-6vh;font-family:
 .bienvenida .lead{margin-bottom:30px;color:var(--muted);text-align:center}
 .bienvenida form{text-align:left}
 .bienvenida .nota{text-align:center;margin-top:18px}
+#idioma{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(243,238,230,.35);color:var(--txt-hi);padding:9px 12px;font-size:12px;font-weight:600;letter-spacing:.08em;cursor:pointer}#idioma:hover{border-color:var(--oro);color:var(--oro)}#idioma span{font:inherit;letter-spacing:inherit;color:inherit}
+#idioma{position:fixed;top:max(16px,env(safe-area-inset-top));right:16px;z-index:5}
 #cargando{color:var(--muted);font-size:14px}
 </style>
 </head>
 <body>
+<button type="button" id="idioma"></button>
 <main class="bienvenida">
   <img src="/assets/hanaki-logo.png" alt="花木 Hanaki">
   <div class="etq">Panel Hanaki</div>
-  <h1>Bienvenida <em>admin</em></h1>
+  <h1><span>Bienvenido</span> <em>admin</em></h1>
 
   <div id="cargando">Comprobando…</div>
 
@@ -64,7 +68,7 @@ body::before{content:"花木";position:fixed;right:-4vw;bottom:-6vh;font-family:
       if (!r.ok) throw new Error(j.error || 'No se pudo entrar.');
       entrar();
     } catch(ex){
-      $('l-err').textContent = ex.message; $('l-err').hidden = false; $('entrar').disabled = false; $('pass').select();
+      $('l-err').textContent = T(ex.message); $('l-err').hidden = false; $('entrar').disabled = false; $('pass').select();
     }
   });
 })();

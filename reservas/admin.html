@@ -14,7 +14,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
 <link rel="stylesheet" href="../fidelidad/estilo.css">
+<script src="/admin/i18n.js"></script>
 <style>
+#idioma{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(243,238,230,.35);color:var(--txt-hi);padding:9px 12px;font-size:12px;font-weight:600;letter-spacing:.08em;cursor:pointer}#idioma:hover{border-color:var(--oro);color:var(--oro)}#idioma span{font:inherit;letter-spacing:inherit;color:inherit}
 .wrap{max-width:760px}
 .tabs{display:flex;gap:8px;margin-bottom:20px}
 .tabs a{flex:1;text-align:center;padding:12px;border:1px solid var(--linea);color:var(--txt);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:.2em}
@@ -46,7 +48,7 @@
 </head>
 <body>
 <main class="wrap">
-  <header class="cab"><a href="/admin/"><img src="../assets/hanaki-logo.png" alt="花木"><span>HANAKI</span></a><button id="salir" class="btn sec" style="width:auto;padding:10px 14px;font-size:10px" hidden>SALIR</button></header>
+  <header class="cab"><a href="/admin/"><img src="../assets/hanaki-logo.png" alt="花木"><span>HANAKI</span></a><div style="display:flex;gap:8px"><button type="button" id="idioma"></button><button id="salir" class="btn sec" style="width:auto;padding:10px 14px;font-size:10px" hidden>SALIR</button></div></header>
 
   <section id="panel" hidden>
     <nav class="tabs"><a href="/reservas/admin.html" class="on" aria-current="page">RESERVAS</a><a href="/fidelidad/admin.html">FIDELIZACIÓN</a></nav>
@@ -71,8 +73,8 @@
   var fechaSel = null, datos = [], hoy = null, conocidas = null;
 
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
-  var tt; function toast(m){ var t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(tt); tt = setTimeout(function(){ t.hidden = true; }, 3200); }
-  function largo(fe){ var p = fe.split('-').map(Number), d = new Date(p[0], p[1]-1, p[2]); return DIAS[d.getDay()] + ' ' + p[2] + ' de ' + MESES[p[1]-1]; }
+  var tt; function toast(m){ var t = $('toast'); t.textContent = T(m); t.hidden = false; clearTimeout(tt); tt = setTimeout(function(){ t.hidden = true; }, 3200); }
+  function largo(fe){ return HK_FECHA(fe); }
   function mover(fe, n){ var p = fe.split('-').map(Number), d = new Date(p[0], p[1]-1, p[2] + n); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
 
   async function api(ruta, opt){
@@ -92,37 +94,37 @@
     hoy = j.hoy; fechaSel = j.fecha; datos = j.reservas;
     // aviso de reservas nuevas mientras el panel está abierto
     var ids = datos.map(function(r){ return r.id; });
-    if (conocidas && conocidas.fecha === fechaSel) { var nuevas = ids.filter(function(id){ return conocidas.ids.indexOf(id) < 0; }); if (nuevas.length) { toast('Nueva reserva (' + nuevas.length + ')'); if (navigator.vibrate) navigator.vibrate([80,60,80]); } }
+    if (conocidas && conocidas.fecha === fechaSel) { var nuevas = ids.filter(function(id){ return conocidas.ids.indexOf(id) < 0; }); if (nuevas.length) { toast(T('Nueva reserva ({n})', {n: nuevas.length})); if (navigator.vibrate) navigator.vibrate([80,60,80]); } }
     conocidas = { fecha: fechaSel, ids: ids };
     pintar(j.pendientes);
   }
 
   function pintar(pendientes){
     $('fecha').value = fechaSel;
-    var tl = largo(fechaSel); $('titdia').textContent = (fechaSel === hoy ? 'Hoy · ' : fechaSel === mover(hoy, 1) ? 'Mañana · ' : '') + tl.charAt(0).toUpperCase() + tl.slice(1);
+    var tl = largo(fechaSel); $('titdia').textContent = (fechaSel === hoy ? T('Hoy · ') : fechaSel === mover(hoy, 1) ? T('Mañana · ') : '') + tl.charAt(0).toUpperCase() + tl.slice(1);
     var activas = datos.filter(function(r){ return r.estado !== 'cancelada' && r.estado !== 'no_vino'; });
     var pers = function(lst){ return lst.reduce(function(s, r){ return s + r.adultos + r.ninos + r.bebes; }, 0); };
-    $('resumen').textContent = activas.length + ' reserva' + (activas.length === 1 ? '' : 's') + ' · ' + pers(activas) + ' personas';
+    $('resumen').textContent = T(activas.length === 1 ? '{n} reserva · {p} personas' : '{n} reservas · {p} personas', {n: activas.length, p: pers(activas)});
     var otras = (pendientes || []).filter(function(p){ return p.fecha !== fechaSel; });
-    $('avisos').innerHTML = otras.length ? '<div class="aviso">Pendientes de confirmar en otros días: ' + otras.map(function(p){ return '<button type="button" data-ir="' + p.fecha + '">' + largo(p.fecha) + ' (' + p.n + ')</button>'; }).join(', ') + '</div>' : '';
-    if (!datos.length) { $('lista').innerHTML = '<div class="vacio">No hay reservas este día.</div>'; return; }
+    $('avisos').innerHTML = otras.length ? '<div class="aviso">' + T('Pendientes de confirmar en otros días: ') + otras.map(function(p){ return '<button type="button" data-ir="' + p.fecha + '">' + largo(p.fecha) + ' (' + p.n + ')</button>'; }).join(', ') + '</div>' : '';
+    if (!datos.length) { $('lista').innerHTML = '<div class="vacio">' + T('No hay reservas este día.') + '</div>'; return; }
     var grupos = [['MEDIODÍA', datos.filter(function(r){ return r.hora < '17:00'; })], ['NOCHE', datos.filter(function(r){ return r.hora >= '17:00'; })]];
     $('lista').innerHTML = grupos.filter(function(g){ return g[1].length; }).map(function(g){
       var act = g[1].filter(function(r){ return r.estado !== 'cancelada' && r.estado !== 'no_vino'; });
-      return '<div class="turno">' + g[0] + '<span>' + pers(act) + ' personas</span></div>' + g[1].map(tarjeta).join('');
+      return '<div class="turno">' + T(g[0]) + '<span>' + T('{p} personas', {p: pers(act)}) + '</span></div>' + g[1].map(tarjeta).join('');
     }).join('');
   }
 
   function tarjeta(r){
-    var p = [r.adultos + ' adulto' + (r.adultos === 1 ? '' : 's')]; if (r.ninos) p.push(r.ninos + ' niño' + (r.ninos === 1 ? '' : 's')); if (r.bebes) p.push(r.bebes + ' bebé' + (r.bebes === 1 ? '' : 's'));
-    var tags = (r.cumple ? '<span class="tag">CUMPLEAÑOS</span>' : '') + (r.trona ? '<span class="tag">TRONA</span>' : '') + (r.carrito ? '<span class="tag">CARRITO</span>' : '');
-    var b = function(est, txt, cls){ return '<button type="button" class="btn ' + (cls || 'sec') + '" data-id="' + r.id + '" data-e="' + est + '">' + txt + '</button>'; };
+    var p = [T(r.adultos === 1 ? '{n} adulto' : '{n} adultos', {n: r.adultos})]; if (r.ninos) p.push(T(r.ninos === 1 ? '{n} niño' : '{n} niños', {n: r.ninos})); if (r.bebes) p.push(T(r.bebes === 1 ? '{n} bebé' : '{n} bebés', {n: r.bebes}));
+    var tags = (r.cumple ? '<span class="tag">' + T('CUMPLEAÑOS') + '</span>' : '') + (r.trona ? '<span class="tag">' + T('TRONA') + '</span>' : '') + (r.carrito ? '<span class="tag">' + T('CARRITO') + '</span>' : '');
+    var b = function(est, txt, cls){ return '<button type="button" class="btn ' + (cls || 'sec') + '" data-id="' + r.id + '" data-e="' + est + '">' + T(txt) + '</button>'; };
     var acc = r.estado === 'pendiente' ? b('confirmada', 'CONFIRMAR', '') + b('cancelada', 'CANCELAR')
       : r.estado === 'confirmada' ? b('llego', 'HA LLEGADO', 'oro') + b('no_vino', 'NO VINO') + b('cancelada', 'CANCELAR')
       : b(r.estado === 'cancelada' ? 'pendiente' : 'confirmada', 'DESHACER');
     return '<div class="res ' + r.estado + '"><div class="h">' + r.hora + '</div>' +
-      '<h3>' + esc(r.nombre) + ' <span class="chip e-' + r.estado + '">' + ESTADO[r.estado] + '</span>' + tags + '</h3>' +
-      '<p><b style="color:var(--txt-hi)">' + (r.adultos + r.ninos + r.bebes) + ' pers.</b> · ' + p.join(', ') + ' · <a href="tel:' + esc(r.telefono) + '">' + esc(r.telefono) + '</a>' + (r.email ? ' · ' + esc(r.email) : '') + '</p>' +
+      '<h3>' + esc(r.nombre) + ' <span class="chip e-' + r.estado + '">' + T(ESTADO[r.estado]) + '</span>' + tags + '</h3>' +
+      '<p><b style="color:var(--txt-hi)">' + (r.adultos + r.ninos + r.bebes) + ' ' + T('pers.') + '</b> · ' + p.join(', ') + ' · <a href="tel:' + esc(r.telefono) + '">' + esc(r.telefono) + '</a>' + (r.email ? ' · ' + esc(r.email) : '') + '</p>' +
       (r.comentarios ? '<p style="grid-column:1/-1;color:var(--txt-hi);font-style:italic">«' + esc(r.comentarios) + '»</p>' : '') +
       '<div class="acc">' + acc + '</div></div>';
   }
@@ -130,11 +132,11 @@
   $('lista').addEventListener('click', async function(e){
     var b = e.target.closest('button[data-e]'); if (!b) return;
     var r = datos.find(function(x){ return x.id === +b.dataset.id; }), est = b.dataset.e;
-    if (est === 'cancelada' && !confirm('¿Cancelar la reserva de ' + r.nombre + '?' + (r.email ? ' Se le enviará un email.' : ''))) return;
+    if (est === 'cancelada' && !confirm(T('¿Cancelar la reserva de {n}?', {n: r.nombre}) + (r.email ? T(' Se le enviará un email.') : ''))) return;
     b.disabled = true;
     try {
       var j = await api('/api/reservas/admin/estado', { method:'POST', body: JSON.stringify({ id: r.id, estado: est }) });
-      toast(ESTADO[est] + ' · ' + r.nombre + (j.email === true ? ' · email enviado' : j.email === 'error' ? ' · no se pudo enviar el email' : ''));
+      toast(T(ESTADO[est]) + ' · ' + r.nombre + (j.email === true ? T(' · email enviado') : j.email === 'error' ? T(' · no se pudo enviar el email') : ''));
       cargar();
     } catch(ex){ toast(ex.message); b.disabled = false; }
   });
