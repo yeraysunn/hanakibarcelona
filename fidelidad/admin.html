@@ -29,30 +29,29 @@
 .barra input{flex:1;min-width:0;background:var(--bg2);border:1px solid var(--linea);color:var(--txt-hi);padding:13px 14px;outline:none}
 .barra input:focus{border-color:var(--oro)}
 .lista{display:flex;flex-direction:column;gap:8px}
-.soc{border:1px solid var(--linea);background:var(--bg2);padding:14px;display:grid;grid-template-columns:1fr auto;gap:10px 14px;align-items:center}
+.soc{border:1px solid var(--linea);background:var(--bg2);padding:14px;display:grid;grid-template-columns:1fr;gap:12px}
 .soc.sel{border-color:var(--oro)}
 .soc h3{margin:0;font-size:16px;font-weight:600;color:var(--txt-hi)}
 .soc p{margin:3px 0 0;font-size:12.5px;color:var(--muted)}
-.mini{display:flex;gap:4px;margin-top:8px}
-.mini i{width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(201,164,92,.5)}
-.mini i.on{background:var(--rojo);border-color:var(--rojo-hi)}
-.acc{grid-column:1/-1;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px}
+.tipos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tbtn{flex-direction:column;gap:5px;padding:12px 4px;letter-spacing:.14em}
+.tbtn b{font-size:11px;font-weight:600;letter-spacing:.14em}
+.tbtn span{font-size:16px;font-weight:500;letter-spacing:.02em}
+.acc{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .acc .btn{padding:13px 8px;font-size:11px;letter-spacing:.14em}
 .chip{display:inline-block;background:var(--rojo);color:#fff;font-size:10px;font-weight:600;letter-spacing:.12em;padding:3px 7px;margin-left:6px;vertical-align:2px}
-.cnt{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--txt-hi);text-align:right;line-height:1}
-.cnt span{font-size:16px;color:var(--muted)}
 #cam{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column}
 #cam video{flex:1;width:100%;object-fit:cover;min-height:0}
 #cam .marco{position:absolute;left:50%;top:42%;width:min(70vw,300px);aspect-ratio:1;transform:translate(-50%,-50%);border:3px solid var(--oro);box-shadow:0 0 0 2000px rgba(0,0,0,.45);pointer-events:none}
 #cam .pie{padding:16px 16px max(16px,env(safe-area-inset-bottom));display:flex;gap:10px;flex-direction:column;background:#000}
 #toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;background:#141414;border:1px solid var(--oro);color:var(--txt-hi);padding:14px 18px;font-size:14px;max-width:calc(100% - 32px);box-shadow:0 20px 50px rgba(0,0,0,.6);text-align:center}
 #toast.ok{border-color:#3C9A5F}#toast.mal{border-color:var(--rojo-hi)}
-#ficha{position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.7);display:flex;align-items:flex-end;justify-content:center}
-#ficha .hoja{width:100%;max-width:560px;max-height:88vh;max-height:88dvh;overflow:auto;background:var(--bg2);border:1px solid var(--linea);border-bottom:none;padding:20px 18px max(20px,env(safe-area-inset-bottom))}
-@media(min-width:620px){#ficha{align-items:center}#ficha .hoja{border-bottom:1px solid var(--linea)}}
-#ficha .fcab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
-#ficha h2{margin:0;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.1;color:var(--txt-hi)}
-#ficha .x{background:none;border:1px solid var(--linea);color:var(--txt-hi);width:40px;height:40px;font-size:20px;cursor:pointer;flex:none}
+#ficha,#sellar{position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.7);display:flex;align-items:flex-end;justify-content:center}
+#ficha .hoja,#sellar .hoja{width:100%;max-width:560px;max-height:88vh;max-height:88dvh;overflow:auto;background:var(--bg2);border:1px solid var(--linea);border-bottom:none;padding:20px 18px max(20px,env(safe-area-inset-bottom))}
+@media(min-width:620px){#ficha,#sellar{align-items:center}#ficha .hoja,#sellar .hoja{border-bottom:1px solid var(--linea)}}
+#ficha .fcab,#sellar .fcab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+#ficha h2,#sellar h2{margin:0;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.1;color:var(--txt-hi)}
+#ficha .x,#sellar .x{background:none;border:1px solid var(--linea);color:var(--txt-hi);width:40px;height:40px;font-size:20px;cursor:pointer;flex:none}
 .datos{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:14px;margin:0 0 18px;border-top:1px solid var(--linea);padding-top:14px}
 .datos dt{font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--oro2);padding-top:2px}
 .datos dd{margin:0;color:var(--txt-hi);word-break:break-word}
@@ -64,6 +63,9 @@
 .hist time{color:var(--muted);font-variant-numeric:tabular-nums}
 .btn.borrar{background:none;border-color:rgba(209,26,42,.6);color:#F5C9CD}
 .btn.borrar:hover{background:var(--rojo);color:var(--txt-hi)}
+.ftipos{margin:0 0 20px}
+.ftipos .fila{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(243,238,230,.06);font-size:14px;color:var(--txt-hi)}
+.ftipos .fila .btn{width:auto;padding:9px 18px;font-size:12px;letter-spacing:.1em}
 .vacio{border:1px dashed var(--linea);padding:28px;text-align:center;color:var(--muted);font-size:14px}
 </style>
 </head>
@@ -95,9 +97,18 @@
   <div class="hoja" role="dialog" aria-modal="true" aria-labelledby="f-nombre">
     <div class="fcab"><div><div class="etq">Ficha del cliente</div><h2 id="f-nombre"></h2></div><button type="button" class="x" id="f-cerrar" aria-label="Cerrar">×</button></div>
     <dl class="datos" id="f-datos"></dl>
+    <div class="hist-tit"><span>Corregir sellos</span></div>
+    <div class="ftipos" id="f-tipos"></div>
     <div class="hist-tit"><span>Historial de sellos</span><span id="f-nmov"></span></div>
     <ul class="hist" id="f-hist"></ul>
     <button type="button" class="btn borrar" id="f-borrar">BORRAR CLIENTE</button>
+  </div>
+</div>
+<div id="sellar" hidden>
+  <div class="hoja" role="dialog" aria-modal="true" aria-labelledby="s-nombre">
+    <div class="fcab"><div><div class="etq">Sellar tarjeta</div><h2 id="s-nombre"></h2></div><button type="button" class="x" id="s-cerrar" aria-label="Cerrar">×</button></div>
+    <p class="nota" style="margin:0 0 14px">Elige qué ha tomado el cliente</p>
+    <div class="tipos" id="s-tipos"></div>
   </div>
 </div>
 <div id="toast" hidden></div>
@@ -105,6 +116,20 @@
 <script>
 (function(){
   var OBJ = (window.HK_FID || {}).objetivo || 8;
+  // Tres tipos de sello, cada uno con su contador y su premio (la lista real llega del servidor en cargar())
+  var TIPOS = [{ id: 'mediodia', nombre: 'Buffet mediodía' }, { id: 'noche', nombre: 'Buffet noche' }, { id: 'menu', nombre: 'Menú' }];
+  var CORTO = { mediodia: 'MEDIODÍA', noche: 'NOCHE', menu: 'MENÚ' };
+  function nombreTipo(id){ var t = TIPOS.find(function(x){ return x.id === id; }); return T(t ? t.nombre : id); }
+  function sellosDe(s, id){ return s['sellos_' + id] || 0; }
+  function hayListo(s){ return TIPOS.some(function(t){ return sellosDe(s, t.id) >= OBJ; }); }
+  // Un botón por tipo: +1 sello, o CANJEAR si ese contador ya está lleno
+  function botonesTipos(s){
+    return TIPOS.map(function(t){
+      var n = sellosDe(s, t.id), listo = n >= OBJ;
+      return '<button class="btn tbtn' + (listo ? ' oro' : '') + '" data-a="' + (listo ? 'canjear' : 'sello') + '" data-tipo="' + esc(t.id) + '">' +
+        '<b>' + T(CORTO[t.id] || t.nombre.toUpperCase()) + '</b><span>' + (listo ? T('CANJEAR') : '+1 · ' + n + '/' + OBJ) + '</span></button>';
+    }).join('');
+  }
   var $ = function(id){ return document.getElementById(id); };
   var datos = [], seleccionado = null;
 
@@ -131,7 +156,7 @@
   var qBusca = '';
   async function cargar(){
     var j = await api('socios' + (qBusca ? '?q=' + encodeURIComponent(qBusca) : ''));
-    OBJ = j.objetivo || OBJ; datos = j.socios;
+    OBJ = j.objetivo || OBJ; datos = j.socios; if (j.tipos && j.tipos.length) TIPOS = j.tipos;
     var s = j.stats;
     $('s-socios').textContent = s.socios; $('s-nuevos').textContent = T('+{n} esta semana', {n: s.nuevosSemana});
     $('s-hoy').textContent = s.sellosHoy; $('s-total').textContent = T('{n} en total', {n: s.sellosTotales});
@@ -145,20 +170,20 @@
   function pintar(){
     if (!datos.length) { $('lista').innerHTML = '<div class="vacio">' + (qBusca ? T('Nadie coincide con «{q}».', {q: esc(qBusca)}) : T('Todavía no hay socios. Comparte el enlace <b>hanakisushi.com/fidelidad</b>.')) + '</div>'; return; }
     $('lista').innerHTML = datos.map(function(s){
-      var puntos = ''; for (var i = 0; i < OBJ; i++) puntos += '<i class="' + (i < s.sellos ? 'on' : '') + '"></i>';
-      var listo = s.sellos >= OBJ;
       return '<div class="soc' + (seleccionado === s.id ? ' sel' : '') + '" data-id="' + s.id + '">' +
-        '<div><h3>' + esc(s.nombre) + (listo ? '<span class="chip">' + T('PREMIO LISTO') + '</span>' : '') + '</h3>' +
-        '<p>' + esc(s.telefono) + ' · ' + esc(s.codigo) + ' · ' + T('último sello:') + ' ' + fecha(s.ultimo_sello) + (s.premios ? ' · ' + T(s.premios > 1 ? '{n} premios' : '{n} premio', {n: s.premios}) : '') + '</p>' +
-        '<div class="mini">' + puntos + '</div></div>' +
-        '<div class="cnt">' + s.sellos + '<span>/' + OBJ + '</span></div>' +
-        '<div class="acc">' +
-          (listo ? '<button class="btn oro" data-a="canjear">' + T('CANJEAR PREMIO') + '</button>' : '<button class="btn" data-a="sello">' + T('+1 SELLO') + '</button>') +
-          '<button class="btn sec" data-a="quitar">−1</button>' +
-          '<button class="btn sec" data-a="enlace">' + T('ENLACE') + '</button>' +
-          '<button class="btn sec" data-a="ficha">' + T('FICHA') + '</button>' +
-        '</div></div>';
+        '<div><h3>' + esc(s.nombre) + (hayListo(s) ? '<span class="chip">' + T('PREMIO LISTO') + '</span>' : '') + '</h3>' +
+        '<p>' + esc(s.telefono) + ' · ' + esc(s.codigo) + ' · ' + T('último sello:') + ' ' + fecha(s.ultimo_sello) + (s.premios ? ' · ' + T(s.premios > 1 ? '{n} premios' : '{n} premio', {n: s.premios}) : '') + '</p></div>' +
+        '<div class="tipos">' + botonesTipos(s) + '</div>' +
+        '<div class="acc"><button class="btn sec" data-a="enlace">' + T('ENLACE') + '</button><button class="btn sec" data-a="ficha">' + T('FICHA') + '</button></div>' +
+        '</div>';
     }).join('');
+  }
+
+  // Confirma si hace falta y ejecuta la acción de un botón de tipo (sello / canjear / quitar)
+  function pulsarTipo(a, s, tipo){
+    if (a === 'quitar' && !confirm(T('¿Quitar un sello de {t} a {n}?', {t: nombreTipo(tipo), n: s.nombre}))) return;
+    if (a === 'canjear' && !confirm(T('¿Canjear {t} de {n}? Ese contador vuelve a 0.', {t: nombreTipo(tipo), n: s.nombre}))) return;
+    accion(a, { id: s.id }, tipo);
   }
 
   $('lista').addEventListener('click', function(e){
@@ -167,22 +192,20 @@
     var a = b.dataset.a;
     if (a === 'enlace') return copiarEnlace(s);
     if (a === 'ficha') return abrirFicha(id);
-    if (a === 'quitar' && !confirm(T('¿Quitar un sello a {n}?', {n: s.nombre}))) return;
-    if (a === 'canjear' && !confirm(T('¿Canjear el buffet gratis de {n}? La tarjeta vuelve a 0.', {n: s.nombre}))) return;
-    accion(a, { id: id });
+    pulsarTipo(a, s, b.dataset.tipo);
   });
 
-  async function accion(a, ref, forzar){
+  async function accion(a, ref, tipo, forzar){
     try {
-      var j = await api('accion', { method:'POST', body: JSON.stringify(Object.assign({ accion: a, forzar: !!forzar }, ref)) });
-      var s = j.socio; seleccionado = s.id;
-      if (a === 'sello') toast(T('✓ Sello para {n} · {s}/{o}', {n: s.nombre, s: s.sellos, o: OBJ}) + (s.sellos >= OBJ ? T(' — ¡PREMIO CONSEGUIDO!') : ''), 'ok');
+      var j = await api('accion', { method:'POST', body: JSON.stringify(Object.assign({ accion: a, tipo: tipo, forzar: !!forzar }, ref)) });
+      var s = j.socio, n = sellosDe(s, tipo), t = nombreTipo(tipo); seleccionado = s.id;
+      if (a === 'sello') toast(T('✓ Sello de {t} para {n} · {s}/{o}', {t: t, n: s.nombre, s: n, o: OBJ}) + (n >= OBJ ? T(' — ¡PREMIO CONSEGUIDO!') : ''), 'ok');
       else if (a === 'canjear') toast(T('✓ Premio canjeado. {n} empieza de nuevo.', {n: s.nombre}), 'ok');
-      else toast(T('Sello quitado. {n} · {s}/{o}', {n: s.nombre, s: s.sellos, o: OBJ}));
+      else toast(T('Sello de {t} quitado. {n} · {s}/{o}', {t: t, n: s.nombre, s: n, o: OBJ}));
       if (navigator.vibrate) navigator.vibrate(60);
       await cargar();
     } catch(e){
-      if (e.status === 409 && e.data && e.data.aviso) { if (confirm(T(e.data.aviso))) return accion(a, ref, true); return; }
+      if (e.status === 409 && e.data && e.data.aviso) { if (confirm(T(e.data.aviso))) return accion(a, ref, tipo, true); return; }
       toast(e.message, 'mal');
     }
   }
@@ -197,8 +220,8 @@
   var tb; $('buscar').addEventListener('input', function(){ clearTimeout(tb); tb = setTimeout(function(){ qBusca = $('buscar').value.trim(); cargar().catch(function(){}); }, 250); });
 
   $('exportar').onclick = function(){
-    var filas = [['nombre','telefono','email','codigo','sellos','sellos_totales','premios','acepta_promos','alta','ultimo_sello']].concat(datos.map(function(s){
-      return [s.nombre, s.telefono, s.email || '', s.codigo, s.sellos, s.sellos_totales, s.premios, s.acepta_promos ? 'si' : 'no', s.creado, s.ultimo_sello || ''];
+    var filas = [['nombre','telefono','email','codigo','sellos_mediodia','sellos_noche','sellos_menu','sellos_totales','premios','acepta_promos','alta','ultimo_sello']].concat(datos.map(function(s){
+      return [s.nombre, s.telefono, s.email || '', s.codigo, s.sellos_mediodia || 0, s.sellos_noche || 0, s.sellos_menu || 0, s.sellos_totales, s.premios, s.acepta_promos ? 'si' : 'no', s.creado, s.ultimo_sello || ''];
     }));
     var csv = '﻿' + filas.map(function(f){ return f.map(function(v){ return '"' + String(v).replace(/"/g, '""') + '"'; }).join(';'); }).join('\n');
     var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = 'socios-hanaki.csv'; a.click();
@@ -220,12 +243,16 @@
         fila('EMAIL', s.email ? '<a href="mailto:' + esc(s.email) + '">' + esc(s.email) + '</a>' : '–') +
         fila('ALTA', fechaLarga(s.creado)) +
         fila('CÓDIGO', esc(s.codigo)) +
-        fila('SELLOS', s.sellos + '/' + OBJ + ' · ' + T('{n} en total', {n: s.sellos_totales})) +
+        fila('SELLOS', T('{n} en total', {n: s.sellos_totales})) +
         fila('PREMIOS', String(s.premios)) +
         fila('PROMOS', s.acepta_promos ? T('Sí') : T('No'));
+      $('f-tipos').innerHTML = TIPOS.map(function(t){
+        var n = sellosDe(s, t.id);
+        return '<div class="fila"><span>' + esc(nombreTipo(t.id)) + ' · <b>' + n + '/' + OBJ + '</b></span><button type="button" class="btn sec" data-q="' + esc(t.id) + '"' + (n ? '' : ' disabled') + '>−1</button></div>';
+      }).join('');
       $('f-nmov').textContent = mov.length ? String(mov.length) : '';
       $('f-hist').innerHTML = mov.length ? mov.map(function(m){
-        return '<li><span class="t-' + esc(m.tipo) + '">' + T(TIPO[m.tipo] || m.tipo) + '</span><time>' + fechaLarga(m.creado) + '</time></li>';
+        return '<li><span class="t-' + esc(m.tipo) + '">' + T(TIPO[m.tipo] || m.tipo) + (m.tipo_sello ? ' · ' + nombreTipo(m.tipo_sello) : '') + '</span><time>' + fechaLarga(m.creado) + '</time></li>';
       }).join('') : '<li><span style="color:var(--muted)">' + T('Todavía no tiene sellos.') + '</span></li>';
       $('ficha').hidden = false;
     } catch(e){ toast(e.message, 'mal'); }
@@ -234,6 +261,13 @@
   $('f-cerrar').onclick = cerrarFicha;
   $('ficha').addEventListener('click', function(e){ if (e.target === $('ficha')) cerrarFicha(); });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !$('ficha').hidden) cerrarFicha(); });
+  $('f-tipos').addEventListener('click', async function(e){
+    var b = e.target.closest('button[data-q]'); if (!b || fichaId == null) return;
+    var id = fichaId, s = datos.find(function(x){ return x.id === id; }) || { nombre: $('f-nombre').textContent };
+    if (!confirm(T('¿Quitar un sello de {t} a {n}?', {t: nombreTipo(b.dataset.q), n: s.nombre}))) return;
+    await accion('quitar', { id: id }, b.dataset.q);
+    abrirFicha(id);
+  });
   $('f-borrar').onclick = async function(){
     var s = datos.find(function(x){ return x.id === fichaId; }), nombre = s ? s.nombre : $('f-nombre').textContent;
     if (!confirm(T('¿Borrar a {n} y todo su historial? No se puede deshacer.', {n: nombre}))) return;
@@ -281,11 +315,22 @@
     try {
       var j = await api('socio?token=' + encodeURIComponent(token)), s = j.socio;
       seleccionado = s.id; $('buscar').value = ''; qBusca = '';
-      if (s.sellos >= OBJ) { if (confirm(T('{n} tiene el BUFFET GRATIS listo. ¿Canjearlo ahora?', {n: s.nombre}))) return accion('canjear', { token: token }); return cargar(); }
-      if (confirm(T('¿Poner un sello a {n}? ({s}/{o})', {n: s.nombre, s: s.sellos, o: OBJ}))) await accion('sello', { token: token });
-      else await cargar();
+      await cargar();
+      abrirSellar(s);
     } catch(e){ toast(e.message, 'mal'); }
   }
+
+  // Hoja para elegir qué ha tomado el cliente (se abre al escanear su QR)
+  var sellando = null;
+  function abrirSellar(s){ sellando = s; $('s-nombre').textContent = s.nombre; $('s-tipos').innerHTML = botonesTipos(s); $('sellar').hidden = false; }
+  function cerrarSellar(){ $('sellar').hidden = true; sellando = null; }
+  $('s-cerrar').onclick = cerrarSellar;
+  $('sellar').addEventListener('click', function(e){ if (e.target === $('sellar')) cerrarSellar(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !$('sellar').hidden) cerrarSellar(); });
+  $('s-tipos').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-a]'); if (!b || !sellando) return;
+    var s = sellando; cerrarSellar(); pulsarTipo(b.dataset.a, s, b.dataset.tipo);
+  });
 
   iniciar();
 })();

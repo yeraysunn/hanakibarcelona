@@ -1,8 +1,8 @@
 // POST /api/fidelidad/registro — alta de un cliente nuevo
-import { json, db, handle, body, HttpError, nuevoToken, nuevoCodigo, normalizarTelefono, tarjetaPublica } from './_lib.js';
+import { json, dbListo, handle, body, HttpError, nuevoToken, nuevoCodigo, normalizarTelefono, tarjetaPublica } from './_lib.js';
 
 export const onRequestPost = handle(async ({ request, env }) => {
-  const DB = db(env);
+  const DB = await dbListo(env);
   const d = await body(request);
 
   if (d.web) return json({ ok: true }); // campo trampa anti-bots

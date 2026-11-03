@@ -1,8 +1,23 @@
 // Utilidades compartidas de la tarjeta de fidelidad (Cloudflare Pages Functions + D1).
 // No exporta onRequest, así que no crea ninguna ruta pública.
 
-export const SELLOS_PREMIO = 8;          // sellos necesarios para el buffet gratis
+export const SELLOS_PREMIO = 8;          // sellos necesarios para el premio (de cada tipo)
 export const MINUTOS_ENTRE_SELLOS = 60;  // aviso si se intenta sellar dos veces seguidas
+
+// Cada socio colecciona los sellos por separado en tres tipos (columnas sellos_<id> y premios_<id> en la tabla socios).
+export const TIPOS = {
+  mediodia: { nombre: 'Buffet mediodía', premio: 'Buffet de mediodía gratis' },
+  noche:    { nombre: 'Buffet noche',    premio: 'Buffet de noche gratis' },
+  menu:     { nombre: 'Menú',            premio: 'Menú gratis' },
+};
+export const TIPO_IDS = Object.keys(TIPOS);
+
+// Valida el tipo que llega del cliente (solo estos ids se usan para formar nombres de columna)
+export function tipoDe(v) {
+  const t = String(v || '');
+  if (!Object.prototype.hasOwnProperty.call(TIPOS, t)) throw new HttpError(400, 'Elige el tipo de sello: mediodía, noche o menú.');
+  return t;
+}
 
 export function json(data, status = 200, headers = {}) {
   return new Response(JSON.stringify(data), {
@@ -18,6 +33,35 @@ export function db(env) {
 
 export class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }
+}
+
+// Añade solo las columnas que falten (sellos y premios por tipo). Se ejecuta una vez por instancia:
+// así no hay que tocar la base de datos a mano al desplegar. Los sellos que ya tenía cada socio pasan a «mediodía».
+let esquemaListo = false;
+export async function esquema(DB) {
+  if (esquemaListo) return;
+  const columnas = async (tabla) => new Set((await DB.prepare(`PRAGMA table_info(${tabla})`).all()).results.map((c) => c.name));
+  const anadir = async (sql) => {
+    try { await DB.prepare(sql).run(); return true; }
+    catch (e) { if (/duplicate column/i.test(String(e && e.message))) return false; throw e; }
+  };
+  const socios = await columnas('socios');
+  let migrar = false;
+  for (const t of TIPO_IDS) {
+    const s = await (socios.has('sellos_' + t) ? false : anadir(`ALTER TABLE socios ADD COLUMN sellos_${t} INTEGER NOT NULL DEFAULT 0`));
+    if (t === 'mediodia' && s) migrar = true;
+    if (!socios.has('premios_' + t)) await anadir(`ALTER TABLE socios ADD COLUMN premios_${t} INTEGER NOT NULL DEFAULT 0`);
+  }
+  if (migrar) await DB.prepare('UPDATE socios SET sellos_mediodia = sellos, premios_mediodia = premios').run();
+  if (!(await columnas('movimientos')).has('tipo_sello')) await anadir('ALTER TABLE movimientos ADD COLUMN tipo_sello TEXT');
+  esquemaListo = true;
+}
+
+// Base de datos con el esquema al día (usar en las rutas de fidelidad en lugar de db(env))
+export async function dbListo(env) {
+  const DB = db(env);
+  await esquema(DB);
+  return DB;
 }
 
 export function handle(fn) {
@@ -63,9 +107,11 @@ export function tarjetaPublica(s) {
   return {
     nombre: s.nombre,
     codigo: s.codigo,
-    sellos: s.sellos,
     objetivo: SELLOS_PREMIO,
-    premioListo: s.sellos >= SELLOS_PREMIO,
+    tipos: TIPO_IDS.map((id) => {
+      const n = s['sellos_' + id] || 0;
+      return { id, nombre: TIPOS[id].nombre, premio: TIPOS[id].premio, sellos: n, premioListo: n >= SELLOS_PREMIO, premios: s['premios_' + id] || 0 };
+    }),
     premios: s.premios,
     desde: s.creado,
   };

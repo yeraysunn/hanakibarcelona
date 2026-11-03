@@ -4,7 +4,7 @@
 - **Tarjeta del cliente:** `https://hanakisushi.com/fidelidad/tarjeta.html?t=…` (se guarda en la pantalla de inicio del móvil)
 - **Panel del personal:** `https://hanakisushi.com/admin/` — pantalla «Bienvenida admin» con la contraseña (la sesión dura 30 días en cada dispositivo). Dentro, pestañas *Reservas* y *Fidelización*.
 
-8 sellos = 1 buffet gratis. Para cambiarlo: `SELLOS_PREMIO` en `functions/api/fidelidad/_lib.js` y `objetivo` en `fidelidad/config.js`.
+Hay **tres tipos de sello**, cada uno con su propio contador: buffet de mediodía, buffet de noche y menú. 8 sellos de un tipo = 1 premio de ese tipo (buffet de mediodía gratis, buffet de noche gratis o menú gratis). Para cambiar los 8 sellos: `SELLOS_PREMIO` en `functions/api/fidelidad/_lib.js` y `objetivo` en `fidelidad/config.js`. Los tipos y los textos de los premios están en `TIPOS` (mismo archivo `_lib.js`).
 
 ## Puesta en marcha (una sola vez, en Cloudflare)
 
@@ -24,10 +24,11 @@ Todo entra en los planes gratuitos de Cloudflare y Resend.
 
 ## Uso en el local
 
-- El cliente enseña el QR de su tarjeta → en el panel, *Escanear tarjeta* → confirmar sello.
+- El cliente enseña el QR de su tarjeta → en el panel, *Escanear tarjeta* → elegir qué ha tomado (mediodía, noche o menú) y se pone el sello. En la lista de clientes hay un botón por tipo con el mismo efecto.
 - Si el QR no funciona: buscar por nombre, teléfono o el código de 6 letras que aparece bajo el QR.
 - Si se intenta sellar dos veces en menos de 60 min, el panel pide confirmación.
-- Con 8 sellos aparece *Canjear premio*; al canjear, la tarjeta vuelve a 0.
+- Cuando un tipo llega a 8 sellos, su botón pasa a *Canjear*; al canjear, ese contador vuelve a 0 (los otros no cambian).
+- Para quitar un sello por error: *Ficha* → *Corregir sellos* → −1 en el tipo que corresponda.
 - *Enlace* reenvía su tarjeta a un cliente que la ha perdido.
 - *CSV* descarga la lista de socios (para Excel).
 

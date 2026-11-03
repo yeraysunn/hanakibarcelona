@@ -37,9 +37,10 @@
         <div class="t-marca"><img src="../assets/hanaki-logo.png" alt=""><div><b>HANAKI</b><small>SUSHI · BARCELONA</small></div></div>
         <div class="t-cont"><small>SELLOS</small><b id="cont">0<span>/8</span></b></div>
       </div>
+      <div class="tabs-t" id="tabs" role="tablist" aria-label="Tipo de sello"></div>
       <div class="sellos" id="sellos"></div>
       <div class="premio"><small>PREMIO</small><b id="premio-txt">Buffet gratis</b></div>
-      <div class="listo" id="listo" hidden><b>¡Tu buffet gratis está listo!</b>Enseña esta tarjeta al personal para canjearlo.</div>
+      <div class="listo" id="listo" hidden><b id="listo-t">¡Tu premio está listo!</b>Enseña esta tarjeta al personal para canjearlo.</div>
       <div class="qr"><div id="qr"></div><span id="codigo">······</span></div>
       <div class="t-nombre" id="nombre"></div>
     </article>
@@ -82,27 +83,56 @@
   document.getElementById('qr').innerHTML = qr.createImgTag(5, 0);
   document.querySelector('#qr img').alt = 'Código QR de tu tarjeta';
 
-  document.getElementById('premio-txt').textContent = C.premio;
-  var anteriores = -1;
+  var ultima = null, sel = null, previos = {};
+  var CORTO = { mediodia: 'MEDIODÍA', noche: 'NOCHE', menu: 'MENÚ' };
 
-  function pintar(t){
-    estado.hidden = true; document.getElementById('vista').hidden = false;
-    document.getElementById('cont').innerHTML = t.sellos + '<span>/' + t.objetivo + '</span>';
-    document.getElementById('codigo').textContent = t.codigo;
-    document.getElementById('nombre').textContent = t.nombre.toUpperCase();
-    document.getElementById('listo').hidden = !t.premioListo;
+  // Dibuja el tipo elegido (sellos, premio y aviso). animar = true solo cuando acaba de llegar un sello nuevo.
+  function dibujar(animar){
+    var x = ultima.tipos.filter(function(t){ return t.id === sel; })[0];
+    var ant = animar && previos[sel] != null ? previos[sel] : -1;
+    document.getElementById('cont').innerHTML = x.sellos + '<span>/' + ultima.objetivo + '</span>';
+    document.getElementById('premio-txt').textContent = x.premio;
+    document.getElementById('listo').hidden = !x.premioListo;
+    document.getElementById('listo-t').textContent = '¡Tienes ' + x.premio.toLowerCase() + '!';
     var box = document.getElementById('sellos'), html = '';
-    for (var i = 0; i < t.objetivo; i++) {
-      var lleno = i < t.sellos, ult = i === t.objetivo - 1;
-      var nuevo = lleno && anteriores >= 0 && i >= anteriores;
+    for (var i = 0; i < ultima.objetivo; i++) {
+      var lleno = i < x.sellos, ult = i === ultima.objetivo - 1;
+      var nuevo = lleno && ant >= 0 && i >= ant;
       var rot = ((i * 37) % 21) - 10; // giro distinto en cada sello, como un sello real
       html += '<div class="sello' + (ult && !lleno ? ' ult' : '') + (nuevo ? ' nuevo' : '') + '">' +
         (lleno ? '<img src="' + C.sello + '" alt="Sello ' + (i + 1) + '" style="--rot:' + rot + 'deg;transform:rotate(' + rot + 'deg)">'
                : (ult ? 'GRATIS' : (i + 1))) + '</div>';
     }
     box.innerHTML = html;
-    if (anteriores >= 0 && t.sellos > anteriores && navigator.vibrate) navigator.vibrate([40, 60, 40]);
-    anteriores = t.sellos;
+    document.getElementById('tabs').innerHTML = ultima.tipos.map(function(t){
+      return '<button type="button" role="tab" data-id="' + t.id + '" aria-selected="' + (t.id === sel) + '"' + (t.premioListo ? ' class="ya"' : '') + '>' +
+        '<span>' + (CORTO[t.id] || t.nombre.toUpperCase()) + '</span><b>' + t.sellos + '/' + ultima.objetivo + '</b></button>';
+    }).join('');
+  }
+
+  document.getElementById('tabs').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-id]'); if (!b || !ultima) return;
+    sel = b.dataset.id; dibujar(false);
+  });
+
+  function pintar(t){
+    estado.hidden = true; document.getElementById('vista').hidden = false;
+    document.getElementById('codigo').textContent = t.codigo;
+    document.getElementById('nombre').textContent = t.nombre.toUpperCase();
+    ultima = t;
+    // si ha llegado un sello nuevo, se muestra ese tipo; si no, se mantiene el elegido
+    var subio = null;
+    t.tipos.forEach(function(x){ if (previos[x.id] != null && x.sellos > previos[x.id]) subio = x.id; });
+    if (subio) sel = subio;
+    if (!sel || !t.tipos.some(function(x){ return x.id === sel; })) {
+      // primera vez: el que tiene premio listo, si no el que más sellos lleva, si no mediodía
+      var mejor = t.tipos[0];
+      t.tipos.forEach(function(x){ if ((x.premioListo && !mejor.premioListo) || (x.premioListo === mejor.premioListo && x.sellos > mejor.sellos)) mejor = x; });
+      sel = mejor.id;
+    }
+    dibujar(!!subio);
+    if (subio && navigator.vibrate) navigator.vibrate([40, 60, 40]);
+    t.tipos.forEach(function(x){ previos[x.id] = x.sellos; });
   }
 
   async function cargar(){
@@ -118,7 +148,7 @@
       if (!r.ok) throw new Error(j.error || 'Error');
       pintar(j.tarjeta);
     } catch (e) {
-      if (anteriores < 0) estado.textContent = 'No hay conexión. Vuelve a intentarlo en un momento.';
+      if (!ultima) estado.textContent = 'No hay conexión. Vuelve a intentarlo en un momento.';
     }
   }
   cargar();

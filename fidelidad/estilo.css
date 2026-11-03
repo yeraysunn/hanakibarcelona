@@ -66,7 +66,16 @@ h1 em{font-style:italic;color:var(--oro)}
 .t-cont b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:34px;color:var(--txt-hi);line-height:1}
 .t-cont b span{font-size:18px;color:var(--muted)}
 
-.sellos{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 18px}
+/* pestañas de la tarjeta: un contador de sellos por tipo (mediodía / noche / menú) */
+.tabs-t{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px 0 0}
+.tabs-t button{position:relative;background:none;border:1px solid var(--linea);color:var(--txt);padding:10px 4px 9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;border-radius:0}
+.tabs-t button span{font-size:10px;font-weight:600;letter-spacing:.16em}
+.tabs-t button b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:20px;line-height:1;color:var(--txt-hi)}
+.tabs-t button[aria-selected="true"]{border-color:var(--oro);background:rgba(201,164,92,.10)}
+.tabs-t button[aria-selected="true"] span{color:var(--oro)}
+.tabs-t button.ya::after{content:"";position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--rojo-hi)}
+
+.sellos{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0 18px}
 .sello{position:relative;aspect-ratio:1;border-radius:50%;border:2px dashed rgba(201,164,92,.45);display:flex;align-items:center;justify-content:center;color:rgba(201,164,92,.5);font-family:'Cormorant Garamond',serif;font-size:20px}
 .sello.ult{border-style:solid;border-color:var(--oro);color:var(--oro);font-size:10px;font-family:'DM Sans',sans-serif;font-weight:600;letter-spacing:.14em;text-align:center;line-height:1.2}
 .sello img{position:absolute;inset:-3px;width:calc(100% + 6px);height:calc(100% + 6px);border-radius:50%;object-fit:cover;box-shadow:0 4px 14px rgba(0,0,0,.5)}
