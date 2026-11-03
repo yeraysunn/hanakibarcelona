@@ -1,9 +1,11 @@
 // POST /api/reservas/crear — reserva desde la web
 import { json, db, handle, body, HttpError, normalizarTelefono, enviarEmail, tabla, TODAS_HORAS, MAX_PERSONAS, DIAS_ANTELACION, hoyMadrid, horaMadrid, validarFecha, emailReserva } from './_comun.js';
+import { notificarTelegram } from './_telegram.js';
 
 const ent = (v, min, max) => Math.max(min, Math.min(max, parseInt(v, 10) || 0));
 
-export const onRequestPost = handle(async ({ request, env }) => {
+export const onRequestPost = handle(async (ctx) => {
+  const { request, env } = ctx;
   const DB = db(env);
   const d = await body(request);
   if (d.web) return json({ ok: true }); // trampa anti-bots
@@ -37,6 +39,8 @@ export const onRequestPost = handle(async ({ request, env }) => {
   const r = await DB.prepare(`INSERT INTO reservas (fecha, hora, nombre, telefono, email, adultos, ninos, bebes, trona, carrito, cumple, comentarios)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`)
     .bind(fecha, hora, nombre, telefono, email, adultos, ninos, bebes, d.trona ? 1 : 0, d.carrito ? 1 : 0, d.cumple ? 1 : 0, comentarios).first();
+
+  ctx.waitUntil(notificarTelegram(env, r)); // aviso al personal sin retrasar la respuesta
 
   if (email) {
     try {
