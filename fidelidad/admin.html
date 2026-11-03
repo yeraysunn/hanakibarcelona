@@ -36,7 +36,7 @@
 .mini{display:flex;gap:4px;margin-top:8px}
 .mini i{width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(201,164,92,.5)}
 .mini i.on{background:var(--rojo);border-color:var(--rojo-hi)}
-.acc{grid-column:1/-1;display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}
+.acc{grid-column:1/-1;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px}
 .acc .btn{padding:13px 8px;font-size:11px;letter-spacing:.14em}
 .chip{display:inline-block;background:var(--rojo);color:#fff;font-size:10px;font-weight:600;letter-spacing:.12em;padding:3px 7px;margin-left:6px;vertical-align:2px}
 .cnt{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--txt-hi);text-align:right;line-height:1}
@@ -47,6 +47,23 @@
 #cam .pie{padding:16px 16px max(16px,env(safe-area-inset-bottom));display:flex;gap:10px;flex-direction:column;background:#000}
 #toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;background:#141414;border:1px solid var(--oro);color:var(--txt-hi);padding:14px 18px;font-size:14px;max-width:calc(100% - 32px);box-shadow:0 20px 50px rgba(0,0,0,.6);text-align:center}
 #toast.ok{border-color:#3C9A5F}#toast.mal{border-color:var(--rojo-hi)}
+#ficha{position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.7);display:flex;align-items:flex-end;justify-content:center}
+#ficha .hoja{width:100%;max-width:560px;max-height:88vh;max-height:88dvh;overflow:auto;background:var(--bg2);border:1px solid var(--linea);border-bottom:none;padding:20px 18px max(20px,env(safe-area-inset-bottom))}
+@media(min-width:620px){#ficha{align-items:center}#ficha .hoja{border-bottom:1px solid var(--linea)}}
+#ficha .fcab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+#ficha h2{margin:0;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.1;color:var(--txt-hi)}
+#ficha .x{background:none;border:1px solid var(--linea);color:var(--txt-hi);width:40px;height:40px;font-size:20px;cursor:pointer;flex:none}
+.datos{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:14px;margin:0 0 18px;border-top:1px solid var(--linea);padding-top:14px}
+.datos dt{font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--oro2);padding-top:2px}
+.datos dd{margin:0;color:var(--txt-hi);word-break:break-word}
+.datos dd a{color:var(--txt-hi)}
+.hist-tit{font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--oro2);border-bottom:1px solid var(--linea);padding-bottom:8px;margin-bottom:6px;display:flex;justify-content:space-between}
+.hist{list-style:none;margin:0 0 20px;padding:0;font-size:14px}
+.hist li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid rgba(243,238,230,.06)}
+.hist .t-sello{color:#5FB37A}.hist .t-quitar{color:#E36B74}.hist .t-canje{color:var(--oro)}
+.hist time{color:var(--muted);font-variant-numeric:tabular-nums}
+.btn.borrar{background:none;border-color:rgba(209,26,42,.6);color:#F5C9CD}
+.btn.borrar:hover{background:var(--rojo);color:var(--txt-hi)}
 .vacio{border:1px dashed var(--linea);padding:28px;text-align:center;color:var(--muted);font-size:14px}
 </style>
 </head>
@@ -73,6 +90,15 @@
 <div id="cam" hidden>
   <video id="video" playsinline muted></video><div class="marco"></div>
   <div class="pie"><div id="cam-msg" class="nota" style="text-align:center">Apunta al QR de la tarjeta del cliente</div><button id="cerrar-cam" class="btn sec">CERRAR</button></div>
+</div>
+<div id="ficha" hidden>
+  <div class="hoja" role="dialog" aria-modal="true" aria-labelledby="f-nombre">
+    <div class="fcab"><div><div class="etq">Ficha del cliente</div><h2 id="f-nombre"></h2></div><button type="button" class="x" id="f-cerrar" aria-label="Cerrar">×</button></div>
+    <dl class="datos" id="f-datos"></dl>
+    <div class="hist-tit"><span>Historial de sellos</span><span id="f-nmov"></span></div>
+    <ul class="hist" id="f-hist"></ul>
+    <button type="button" class="btn borrar" id="f-borrar">BORRAR CLIENTE</button>
+  </div>
 </div>
 <div id="toast" hidden></div>
 
@@ -130,6 +156,7 @@
           (listo ? '<button class="btn oro" data-a="canjear">' + T('CANJEAR PREMIO') + '</button>' : '<button class="btn" data-a="sello">' + T('+1 SELLO') + '</button>') +
           '<button class="btn sec" data-a="quitar">−1</button>' +
           '<button class="btn sec" data-a="enlace">' + T('ENLACE') + '</button>' +
+          '<button class="btn sec" data-a="ficha">' + T('FICHA') + '</button>' +
         '</div></div>';
     }).join('');
   }
@@ -139,6 +166,7 @@
     var id = Number(b.closest('.soc').dataset.id), s = datos.find(function(x){ return x.id === id; });
     var a = b.dataset.a;
     if (a === 'enlace') return copiarEnlace(s);
+    if (a === 'ficha') return abrirFicha(id);
     if (a === 'quitar' && !confirm(T('¿Quitar un sello a {n}?', {n: s.nombre}))) return;
     if (a === 'canjear' && !confirm(T('¿Canjear el buffet gratis de {n}? La tarjeta vuelve a 0.', {n: s.nombre}))) return;
     accion(a, { id: id });
@@ -174,6 +202,45 @@
     }));
     var csv = '﻿' + filas.map(function(f){ return f.map(function(v){ return '"' + String(v).replace(/"/g, '""') + '"'; }).join(';'); }).join('\n');
     var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = 'socios-hanaki.csv'; a.click();
+  };
+
+
+  // ---------- ficha del cliente ----------
+  var fichaId = null;
+  function fechaLarga(s){ if (!s) return '–'; var d = new Date(s.replace(' ', 'T') + 'Z'); return d.toLocaleDateString(HK_LOCALE, {day:'numeric', month:'short', year:'numeric'}) + ' · ' + d.toLocaleTimeString(HK_LOCALE, {hour:'2-digit', minute:'2-digit'}); }
+  var TIPO = { sello: '+1 sello', quitar: '−1 sello', canje: 'Premio canjeado' };
+  async function abrirFicha(id){
+    try {
+      var j = await api('socio?id=' + id), s = j.socio, mov = j.movimientos || [];
+      fichaId = s.id;
+      $('f-nombre').textContent = s.nombre;
+      var fila = function(k, v){ return '<dt>' + T(k) + '</dt><dd>' + v + '</dd>'; };
+      $('f-datos').innerHTML =
+        fila('TELÉFONO', '<a href="tel:' + esc(s.telefono) + '">' + esc(s.telefono) + '</a>') +
+        fila('EMAIL', s.email ? '<a href="mailto:' + esc(s.email) + '">' + esc(s.email) + '</a>' : '–') +
+        fila('ALTA', fechaLarga(s.creado)) +
+        fila('CÓDIGO', esc(s.codigo)) +
+        fila('SELLOS', s.sellos + '/' + OBJ + ' · ' + T('{n} en total', {n: s.sellos_totales})) +
+        fila('PREMIOS', String(s.premios)) +
+        fila('PROMOS', s.acepta_promos ? T('Sí') : T('No'));
+      $('f-nmov').textContent = mov.length ? String(mov.length) : '';
+      $('f-hist').innerHTML = mov.length ? mov.map(function(m){
+        return '<li><span class="t-' + esc(m.tipo) + '">' + T(TIPO[m.tipo] || m.tipo) + '</span><time>' + fechaLarga(m.creado) + '</time></li>';
+      }).join('') : '<li><span style="color:var(--muted)">' + T('Todavía no tiene sellos.') + '</span></li>';
+      $('ficha').hidden = false;
+    } catch(e){ toast(e.message, 'mal'); }
+  }
+  function cerrarFicha(){ $('ficha').hidden = true; fichaId = null; }
+  $('f-cerrar').onclick = cerrarFicha;
+  $('ficha').addEventListener('click', function(e){ if (e.target === $('ficha')) cerrarFicha(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !$('ficha').hidden) cerrarFicha(); });
+  $('f-borrar').onclick = async function(){
+    var s = datos.find(function(x){ return x.id === fichaId; }), nombre = s ? s.nombre : $('f-nombre').textContent;
+    if (!confirm(T('¿Borrar a {n} y todo su historial? No se puede deshacer.', {n: nombre}))) return;
+    try {
+      await api('socio', { method: 'DELETE', body: JSON.stringify({ id: fichaId }) });
+      cerrarFicha(); toast(T('{n} borrado.', {n: nombre}), 'ok'); await cargar();
+    } catch(e){ toast(e.message, 'mal'); }
   };
 
   // ---------- escáner de QR ----------
