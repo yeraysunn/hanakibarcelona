@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin · Hanaki</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Admin Hanaki">
+<link rel="icon" type="image/png" href="/fidelidad/icono.png">
+<link rel="apple-touch-icon" href="/fidelidad/icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
+<link rel="stylesheet" href="/fidelidad/estilo.css">
+<style>
+body{display:flex;align-items:center;justify-content:center;padding:24px 16px;position:relative;overflow:hidden}
+body::before{content:"花木";position:fixed;right:-4vw;bottom:-6vh;font-family:'Noto Serif JP',serif;font-size:min(60vw,420px);line-height:1;color:rgba(243,238,230,.03);writing-mode:vertical-rl;pointer-events:none}
+.bienvenida{width:100%;max-width:380px;text-align:center;position:relative}
+.bienvenida img{height:54px;width:auto;margin-bottom:18px}
+.bienvenida h1{font-size:clamp(40px,11vw,54px);margin:8px 0 10px}
+.bienvenida .lead{margin-bottom:30px;color:var(--muted);text-align:center}
+.bienvenida form{text-align:left}
+.bienvenida .nota{text-align:center;margin-top:18px}
+#cargando{color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<main class="bienvenida">
+  <img src="/assets/hanaki-logo.png" alt="花木 Hanaki">
+  <div class="etq">Panel Hanaki</div>
+  <h1>Bienvenida <em>admin</em></h1>
+
+  <div id="cargando">Comprobando…</div>
+
+  <form id="login" hidden>
+    <p class="lead">Pon la contraseña para entrar a reservas y fidelización.</p>
+    <div id="l-err" class="err" hidden></div>
+    <div class="campo"><label for="pass">CONTRASEÑA</label><input id="pass" type="password" autocomplete="current-password" required></div>
+    <button class="btn" type="submit" id="entrar">ENTRAR</button>
+    <p class="nota">Este dispositivo se queda conectado 30 días.</p>
+  </form>
+</main>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var DESTINOS = { reservas: '/reservas/admin.html', fidelizacion: '/fidelidad/admin.html' };
+  var volver = new URLSearchParams(location.search).get('volver');
+  function entrar(){ location.replace(DESTINOS[volver] || DESTINOS.reservas); }
+  function pedirPass(){ $('cargando').hidden = true; $('login').hidden = false; $('pass').focus(); }
+
+  // Si ya hay sesión en este dispositivo, entra directo sin pedir contraseña
+  fetch('/api/fidelidad/admin/login', { cache: 'no-store' })
+    .then(function(r){ return r.json(); })
+    .then(function(j){ if (j.ok) entrar(); else pedirPass(); })
+    .catch(pedirPass);
+
+  $('login').addEventListener('submit', async function(e){
+    e.preventDefault(); $('l-err').hidden = true; $('entrar').disabled = true;
+    try {
+      var r = await fetch('/api/fidelidad/admin/login', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify({ password: $('pass').value }) });
+      var j = await r.json().catch(function(){ return {}; });
+      if (!r.ok) throw new Error(j.error || 'No se pudo entrar.');
+      entrar();
+    } catch(ex){
+      $('l-err').textContent = ex.message; $('l-err').hidden = false; $('entrar').disabled = false; $('pass').select();
+    }
+  });
+})();
+</script>
+</body>
+</html>

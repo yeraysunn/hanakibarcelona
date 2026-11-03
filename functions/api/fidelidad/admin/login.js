@@ -1,5 +1,8 @@
-// POST /api/fidelidad/admin/login  {password}   ·   DELETE = cerrar sesión
-import { json, handle, body, HttpError, passwordCorrecta, cookieSesion, cookieCerrar } from '../_lib.js';
+// POST /api/fidelidad/admin/login  {password}   ·   GET = comprobar sesión   ·   DELETE = cerrar sesión
+import { json, handle, body, HttpError, passwordCorrecta, cookieSesion, cookieCerrar, sesionValida } from '../_lib.js';
+
+// GET = ¿hay sesión abierta? (la usa la pantalla de bienvenida /admin/)
+export const onRequestGet = handle(async ({ request, env }) => json({ ok: await sesionValida(request, env) }));
 
 export const onRequestPost = handle(async ({ request, env }) => {
   const { password } = await body(request);

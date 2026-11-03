@@ -2,7 +2,7 @@
 
 - **Registro (clientes):** `https://hanakisushi.com/fidelidad/`
 - **Tarjeta del cliente:** `https://hanakisushi.com/fidelidad/tarjeta.html?t=…` (se guarda en la pantalla de inicio del móvil)
-- **Panel del personal:** `https://hanakisushi.com/fidelidad/admin.html` (con contraseña)
+- **Panel del personal:** `https://hanakisushi.com/admin/` — pantalla «Bienvenida admin» con la contraseña (la sesión dura 30 días en cada dispositivo). Dentro, pestañas *Reservas* y *Fidelización*.
 
 8 sellos = 1 buffet gratis. Para cambiarlo: `SELLOS_PREMIO` en `functions/api/fidelidad/_lib.js` y `objetivo` en `fidelidad/config.js`.
 
