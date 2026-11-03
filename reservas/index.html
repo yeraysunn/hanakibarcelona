@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reservar mesa · Hanaki Sushi Barcelona</title>
+<meta name="description" content="Reserva tu mesa en Hanaki Sushi Barcelona, buffet libre japonés en Les Corts.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" type="image/png" href="../assets/hanaki-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
+<link rel="stylesheet" href="../fidelidad/estilo.css">
+<style>
+.horas{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.horas button{background:var(--bg2);border:1px solid var(--linea);color:var(--txt-hi);padding:12px 0;cursor:pointer;font-size:15px}
+.horas button[aria-pressed="true"]{background:var(--rojo);border-color:var(--rojo)}
+.horas button:disabled{opacity:.3;cursor:not-allowed;text-decoration:line-through}
+.turno{font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--oro2);margin:12px 0 8px}
+.pers{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--linea)}
+.pers b{display:block;color:var(--txt-hi);font-weight:500;font-size:15px}
+.pers small{font-size:12.5px;color:var(--muted)}
+.step{display:flex;align-items:center;gap:14px}
+.step button{width:44px;height:44px;border:1px solid rgba(243,238,230,.3);background:none;color:var(--txt-hi);font-size:20px;cursor:pointer}
+.step button:disabled{opacity:.3}
+.step output{min-width:22px;text-align:center;font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--txt-hi)}
+.extras{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 16px}
+.extras label{display:flex;align-items:center;gap:8px;border:1px solid var(--linea);padding:10px 12px;font-size:14px;cursor:pointer}
+.extras input{accent-color:var(--rojo);width:17px;height:17px}
+.campo textarea{background:var(--bg2);border:1px solid var(--linea);color:var(--txt-hi);padding:12px 14px;font:inherit;font-size:16px;min-height:80px;resize:vertical}
+.campo input[type=date]{color-scheme:dark}
+.ok-box{border:1px solid rgba(201,164,92,.5);padding:22px;margin-top:8px}
+.ok-box dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:16px 0 0;font-size:15px}
+.ok-box dt{color:var(--oro2)}.ok-box dd{margin:0;color:var(--txt-hi)}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="cab"><a href="../"><img src="../assets/hanaki-logo.png" alt="花木"><span>HANAKI</span></a></header>
+
+  <section id="form-wrap">
+    <div class="etq">Reservas</div>
+    <h1>Reserva <em>tu mesa</em></h1>
+    <p class="lead">Buffet libre japonés en Les Corts. Te confirmamos la reserva por email.</p>
+
+    <form id="f" novalidate>
+      <div id="err" class="err" role="alert" hidden></div>
+
+      <div class="campo"><label for="fecha">DÍA</label><input id="fecha" type="date" required></div>
+
+      <div class="campo" style="margin-bottom:8px"><label>HORA</label>
+        <div class="turno">MEDIODÍA</div><div class="horas" id="h-mediodia"></div>
+        <div class="turno">NOCHE</div><div class="horas" id="h-noche"></div>
+      </div>
+
+      <div class="campo" style="margin-top:14px"><label>PERSONAS</label>
+        <div class="pers"><div><b>Adultos</b><small>9 años o más</small></div><div class="step"><button type="button" data-p="adultos" data-d="-1" aria-label="Menos adultos">−</button><output id="o-adultos">2</output><button type="button" data-p="adultos" data-d="1" aria-label="Más adultos">+</button></div></div>
+        <div class="pers"><div><b>Niños</b><small>De 3 a 8 años</small></div><div class="step"><button type="button" data-p="ninos" data-d="-1" aria-label="Menos niños">−</button><output id="o-ninos">0</output><button type="button" data-p="ninos" data-d="1" aria-label="Más niños">+</button></div></div>
+        <div class="pers"><div><b>Bebés</b><small>Menores de 3 años</small></div><div class="step"><button type="button" data-p="bebes" data-d="-1" aria-label="Menos bebés">−</button><output id="o-bebes">0</output><button type="button" data-p="bebes" data-d="1" aria-label="Más bebés">+</button></div></div>
+      </div>
+
+      <div class="extras">
+        <label><input type="checkbox" name="cumple">Cumpleaños</label>
+        <label><input type="checkbox" name="trona">Necesito trona</label>
+        <label><input type="checkbox" name="carrito">Carrito de bebé</label>
+      </div>
+
+      <div class="campo"><label for="nombre">NOMBRE</label><input id="nombre" name="nombre" autocomplete="name" required maxlength="60"></div>
+      <div class="campo"><label for="telefono">TELÉFONO</label><input id="telefono" name="telefono" type="tel" inputmode="tel" autocomplete="tel" required placeholder="600 000 000"></div>
+      <div class="campo"><label for="email">EMAIL <span style="font-weight:400;letter-spacing:0;color:var(--muted)">(para recibir la confirmación)</span></label><input id="email" name="email" type="email" inputmode="email" autocomplete="email"></div>
+      <div class="campo"><label for="comentarios">COMENTARIOS <span style="font-weight:400;letter-spacing:0;color:var(--muted)">(opcional)</span></label><textarea id="comentarios" name="comentarios" maxlength="400" placeholder="Alergias, preferencias de mesa…"></textarea></div>
+      <input class="trampa" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="check"><input type="checkbox" name="privacidad" required><span>He leído y acepto la <a href="../Hanaki%20Legal.dc.html#privacidad" target="_blank">política de privacidad</a>.</span></label>
+      <button class="btn" type="submit" id="enviar">RESERVAR <span aria-hidden="true">→</span></button>
+      <p class="nota" style="margin-top:14px">Grupos de más de 20 personas: llámanos al <a href="tel:+34931942261">931 94 22 61</a>.</p>
+    </form>
+  </section>
+
+  <section id="hecho" hidden>
+    <div class="etq">¡Reserva enviada!</div>
+    <h1>Gracias, <em id="h-nombre"></em></h1>
+    <p class="lead" id="h-texto"></p>
+    <div class="ok-box"><dl><dt>Día</dt><dd id="h-dia"></dd><dt>Hora</dt><dd id="h-hora"></dd><dt>Personas</dt><dd id="h-pers"></dd></dl></div>
+    <p class="nota" style="margin-top:18px">¿Necesitas cambiar algo? Llámanos al <a href="tel:+34931942261">931 94 22 61</a>.</p>
+    <a class="btn sec" href="../" style="margin-top:20px">VOLVER A LA WEB</a>
+  </section>
+</main>
+<script>
+(function(){
+  var HORAS = { mediodia: ['12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30'], noche: ['20:00','20:30','21:00','21:30','22:00','22:30'] };
+  var DIAS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'], MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  var st = { hora: null, adultos: 2, ninos: 0, bebes: 0 };
+  var $ = function(id){ return document.getElementById(id); };
+  var f = $('f'), fecha = $('fecha');
+
+  function ymd(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+  var hoy = new Date(), max = new Date(); max.setDate(max.getDate() + 60);
+  fecha.min = ymd(hoy); fecha.max = ymd(max); fecha.value = ymd(hoy);
+
+  function pintarHoras(){
+    var esHoy = fecha.value === ymd(new Date());
+    var ahora = String(new Date().getHours()).padStart(2,'0') + ':' + String(new Date().getMinutes()).padStart(2,'0');
+    ['mediodia','noche'].forEach(function(t){
+      $('h-' + t).innerHTML = HORAS[t].map(function(h){
+        var pasada = esHoy && h <= ahora;
+        if (pasada && st.hora === h) st.hora = null;
+        return '<button type="button" data-h="' + h + '" aria-pressed="' + (st.hora === h) + '"' + (pasada ? ' disabled' : '') + '>' + h + '</button>';
+      }).join('');
+    });
+  }
+  pintarHoras();
+  fecha.addEventListener('change', pintarHoras);
+  document.querySelector('.campo').parentNode.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-h]'); if (!b || b.disabled) return;
+    st.hora = b.dataset.h; pintarHoras();
+  });
+
+  function pintarPers(){
+    ['adultos','ninos','bebes'].forEach(function(k){ $('o-' + k).textContent = st[k]; });
+    document.querySelectorAll('button[data-p]').forEach(function(b){
+      var k = b.dataset.p, d = +b.dataset.d, v = st[k] + d, total = st.adultos + st.ninos + st.bebes + d;
+      b.disabled = v < 0 || (d > 0 && total > 20);
+    });
+  }
+  pintarPers();
+  document.querySelectorAll('button[data-p]').forEach(function(b){ b.addEventListener('click', function(){ st[b.dataset.p] += +b.dataset.d; pintarPers(); }); });
+
+  var err = $('err'), btn = $('enviar');
+  function fallo(m){ err.textContent = m; err.hidden = false; err.scrollIntoView({ block:'center', behavior:'smooth' }); }
+  function largo(fe){ var p = fe.split('-').map(Number), d = new Date(p[0], p[1]-1, p[2]); return DIAS[d.getDay()] + ' ' + p[2] + ' de ' + MESES[p[1]-1]; }
+  function pers(){ var a = [st.adultos + ' adulto' + (st.adultos === 1 ? '' : 's')]; if (st.ninos) a.push(st.ninos + ' niño' + (st.ninos === 1 ? '' : 's')); if (st.bebes) a.push(st.bebes + ' bebé' + (st.bebes === 1 ? '' : 's')); return a.join(', '); }
+
+  f.addEventListener('submit', async function(e){
+    e.preventDefault(); err.hidden = true;
+    if (!fecha.value) return fallo('Elige un día.');
+    if (!st.hora) return fallo('Elige una hora.');
+    if (st.adultos + st.ninos < 1) return fallo('Indica cuántas personas venís.');
+    if (!f.nombre.value.trim()) return fallo('Escribe tu nombre.');
+    if (!f.telefono.value.trim()) return fallo('Escribe tu teléfono.');
+    if (!f.privacidad.checked) return fallo('Tienes que aceptar la política de privacidad.');
+    var d = { fecha: fecha.value, hora: st.hora, adultos: st.adultos, ninos: st.ninos, bebes: st.bebes,
+      nombre: f.nombre.value, telefono: f.telefono.value, email: f.email.value, comentarios: f.comentarios.value,
+      cumple: f.cumple.checked, trona: f.trona.checked, carrito: f.carrito.checked, privacidad: true, web: f.web.value };
+    btn.disabled = true; btn.textContent = 'ENVIANDO…';
+    try {
+      var r = await fetch('/api/reservas/crear', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(d) });
+      var j = await r.json().catch(function(){ return {}; });
+      if (!r.ok) throw new Error(j.error || 'No se pudo enviar la reserva. Llámanos al 931 94 22 61.');
+      $('h-nombre').textContent = d.nombre.trim().split(' ')[0];
+      $('h-texto').textContent = d.email.trim() ? 'Hemos recibido tu reserva. Te enviaremos la confirmación a ' + d.email.trim() + '.' : 'Hemos recibido tu reserva. El restaurante la revisará en breve.';
+      $('h-dia').textContent = largo(d.fecha); $('h-hora').textContent = d.hora; $('h-pers').textContent = pers();
+      $('form-wrap').hidden = true; $('hecho').hidden = false; scrollTo(0, 0);
+    } catch (ex) { fallo(ex.message); btn.disabled = false; btn.innerHTML = 'RESERVAR <span aria-hidden="true">→</span>'; }
+  });
+})();
+</script>
+</body>
+</html>

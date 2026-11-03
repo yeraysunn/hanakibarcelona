@@ -118,3 +118,21 @@ export async function buscarSocio(DB, { id, token, codigo }) {
   if (codigo) return DB.prepare('SELECT * FROM socios WHERE codigo = ?').bind(String(codigo).toUpperCase().trim()).first();
   return null;
 }
+
+// ---------- emails (Resend) ----------
+// Devuelve true si se envió, false si no hay clave configurada. Lanza HttpError si Resend falla.
+export async function enviarEmail(env, { para, asunto, html, texto, de, idem }) {
+  if (!env.RESEND_API_KEY) return false;
+  const enviar = () => fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json', ...(idem ? { 'idempotency-key': idem } : {}) },
+    body: JSON.stringify({ from: de || env.EMAIL_FROM || 'Hanaki Sushi <tarjeta@hanakisushi.com>', to: [para], subject: asunto, html, text: texto }),
+  });
+  let r;
+  try { r = await enviar(); } catch { r = null; }
+  if (!r || r.status >= 500 || r.status === 429) { await new Promise((ok) => setTimeout(ok, 1200)); r = await enviar(); }
+  if (!r.ok) { console.error('Resend', r.status, await r.text()); throw new HttpError(502, 'No se pudo enviar el email.'); }
+  return true;
+}
+
+export const escapar = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));

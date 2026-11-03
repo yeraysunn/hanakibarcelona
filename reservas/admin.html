@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reservas · Panel Hanaki</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Reservas Hanaki">
+<link rel="icon" type="image/png" href="../fidelidad/icono.png">
+<link rel="apple-touch-icon" href="../fidelidad/icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
+<link rel="stylesheet" href="../fidelidad/estilo.css">
+<style>
+.wrap{max-width:760px}
+.tabs{display:flex;gap:8px;margin-bottom:20px}
+.tabs a{flex:1;text-align:center;padding:12px;border:1px solid var(--linea);color:var(--txt);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:.2em}
+.tabs a.on{border-color:var(--oro);color:var(--oro)}
+.dia{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.dia button{width:48px;height:48px;border:1px solid var(--linea);background:var(--bg2);color:var(--txt-hi);font-size:18px;cursor:pointer}
+.dia input{flex:1;min-width:0;height:48px;box-sizing:border-box;background:var(--bg2);border:1px solid var(--linea);color:var(--txt-hi);padding:0 12px;color-scheme:dark}
+.dia .hoy{width:auto;padding:0 14px;font-size:11px;font-weight:600;letter-spacing:.16em}
+.titdia{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--txt-hi);margin:4px 0 4px}
+.resumen{font-size:14px;color:var(--muted);margin-bottom:18px}
+.aviso{border:1px solid rgba(209,26,42,.55);background:rgba(179,18,31,.12);padding:12px 14px;font-size:14px;margin-bottom:18px;line-height:1.6}
+.aviso button{background:none;border:none;color:var(--oro);text-decoration:underline;cursor:pointer;font:inherit;padding:0 2px}
+.turno{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;font-weight:600;letter-spacing:.24em;color:var(--oro2);margin:22px 0 10px;border-bottom:1px solid var(--linea);padding-bottom:8px}
+.turno span{letter-spacing:.06em;font-weight:500;color:var(--txt)}
+.res{border:1px solid var(--linea);background:var(--bg2);padding:14px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr;gap:6px 16px}
+.res.cancelada,.res.no_vino{opacity:.5}
+.res .h{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:var(--txt-hi);grid-row:span 2}
+.res h3{margin:0;font-size:16px;font-weight:600;color:var(--txt-hi);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.res p{margin:0;font-size:13.5px;color:var(--txt);line-height:1.5}
+.res p a{color:var(--txt-hi)}
+.chip{font-size:10px;font-weight:600;letter-spacing:.12em;padding:3px 7px;border:1px solid currentColor}
+.e-pendiente{color:#E9B949}.e-confirmada{color:#5FB37A}.e-cancelada{color:#E36B74}.e-llego{color:#7FB2F0}.e-no_vino{color:#A9A39A}
+.tag{font-size:11px;padding:2px 7px;background:#2a2622;color:var(--oro);letter-spacing:.06em}
+.acc{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.acc .btn{width:auto;flex:1 1 120px;padding:12px 8px;font-size:10.5px;letter-spacing:.14em}
+.vacio{border:1px dashed var(--linea);padding:28px;text-align:center;color:var(--muted);font-size:14px}
+#toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;background:#141414;border:1px solid var(--oro);color:var(--txt-hi);padding:14px 18px;font-size:14px;max-width:calc(100% - 32px);text-align:center}
+#login{max-width:380px;margin:10vh auto 0}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="cab"><a href="../"><img src="../assets/hanaki-logo.png" alt="花木"><span>HANAKI</span></a><button id="salir" class="btn sec" style="width:auto;padding:10px 14px;font-size:10px" hidden>SALIR</button></header>
+
+  <form id="login" hidden>
+    <div class="etq">Panel del personal</div>
+    <h1 style="font-size:34px">Reservas <em>Hanaki</em></h1>
+    <div id="l-err" class="err" hidden></div>
+    <div class="campo"><label for="pass">CONTRASEÑA</label><input id="pass" type="password" autocomplete="current-password" required></div>
+    <button class="btn" type="submit">ENTRAR</button>
+  </form>
+
+  <section id="panel" hidden>
+    <nav class="tabs"><a href="./admin.html" class="on" aria-current="page">RESERVAS</a><a href="../fidelidad/admin.html">TARJETAS</a></nav>
+    <div class="dia">
+      <button type="button" id="ant" aria-label="Día anterior">‹</button>
+      <input type="date" id="fecha" aria-label="Día">
+      <button type="button" id="sig" aria-label="Día siguiente">›</button>
+      <button type="button" id="hoy" class="hoy">HOY</button>
+    </div>
+    <div class="titdia" id="titdia"></div>
+    <div class="resumen" id="resumen"></div>
+    <div id="avisos"></div>
+    <div id="lista"></div>
+  </section>
+</main>
+<div id="toast" hidden></div>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var DIAS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'], MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  var ESTADO = { pendiente: 'PENDIENTE', confirmada: 'CONFIRMADA', cancelada: 'CANCELADA', llego: 'HA LLEGADO', no_vino: 'NO VINO' };
+  var fechaSel = null, datos = [], hoy = null, conocidas = null;
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  var tt; function toast(m){ var t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(tt); tt = setTimeout(function(){ t.hidden = true; }, 3200); }
+  function largo(fe){ var p = fe.split('-').map(Number), d = new Date(p[0], p[1]-1, p[2]); return DIAS[d.getDay()] + ' ' + p[2] + ' de ' + MESES[p[1]-1]; }
+  function mover(fe, n){ var p = fe.split('-').map(Number), d = new Date(p[0], p[1]-1, p[2] + n); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+
+  async function api(ruta, opt){
+    var r = await fetch(ruta, Object.assign({ headers:{'content-type':'application/json'}, cache:'no-store' }, opt || {}));
+    var j = await r.json().catch(function(){ return {}; });
+    if (r.status === 401) { mostrarLogin(); throw new Error(j.error || 'Sesión caducada'); }
+    if (!r.ok) throw new Error(j.error || 'Error');
+    return j;
+  }
+  function mostrarLogin(){ $('panel').hidden = true; $('salir').hidden = true; $('login').hidden = false; $('pass').focus(); }
+  $('login').addEventListener('submit', async function(e){
+    e.preventDefault(); $('l-err').hidden = true;
+    try { await api('/api/fidelidad/admin/login', { method:'POST', body: JSON.stringify({ password: $('pass').value }) }); $('pass').value = ''; cargar(); }
+    catch(ex){ $('l-err').textContent = ex.message; $('l-err').hidden = false; }
+  });
+  $('salir').onclick = async function(){ try { await fetch('/api/fidelidad/admin/login', { method:'DELETE' }); } catch(e){} mostrarLogin(); };
+
+  async function cargar(){
+    var j = await api('/api/reservas/admin/lista' + (fechaSel ? '?fecha=' + fechaSel : ''));
+    $('login').hidden = true; $('panel').hidden = false; $('salir').hidden = false;
+    hoy = j.hoy; fechaSel = j.fecha; datos = j.reservas;
+    // aviso de reservas nuevas mientras el panel está abierto
+    var ids = datos.map(function(r){ return r.id; });
+    if (conocidas && conocidas.fecha === fechaSel) { var nuevas = ids.filter(function(id){ return conocidas.ids.indexOf(id) < 0; }); if (nuevas.length) { toast('Nueva reserva (' + nuevas.length + ')'); if (navigator.vibrate) navigator.vibrate([80,60,80]); } }
+    conocidas = { fecha: fechaSel, ids: ids };
+    pintar(j.pendientes);
+  }
+
+  function pintar(pendientes){
+    $('fecha').value = fechaSel;
+    var tl = largo(fechaSel); $('titdia').textContent = (fechaSel === hoy ? 'Hoy · ' : fechaSel === mover(hoy, 1) ? 'Mañana · ' : '') + tl.charAt(0).toUpperCase() + tl.slice(1);
+    var activas = datos.filter(function(r){ return r.estado !== 'cancelada' && r.estado !== 'no_vino'; });
+    var pers = function(lst){ return lst.reduce(function(s, r){ return s + r.adultos + r.ninos + r.bebes; }, 0); };
+    $('resumen').textContent = activas.length + ' reserva' + (activas.length === 1 ? '' : 's') + ' · ' + pers(activas) + ' personas';
+    var otras = (pendientes || []).filter(function(p){ return p.fecha !== fechaSel; });
+    $('avisos').innerHTML = otras.length ? '<div class="aviso">Pendientes de confirmar en otros días: ' + otras.map(function(p){ return '<button type="button" data-ir="' + p.fecha + '">' + largo(p.fecha) + ' (' + p.n + ')</button>'; }).join(', ') + '</div>' : '';
+    if (!datos.length) { $('lista').innerHTML = '<div class="vacio">No hay reservas este día.</div>'; return; }
+    var grupos = [['MEDIODÍA', datos.filter(function(r){ return r.hora < '17:00'; })], ['NOCHE', datos.filter(function(r){ return r.hora >= '17:00'; })]];
+    $('lista').innerHTML = grupos.filter(function(g){ return g[1].length; }).map(function(g){
+      var act = g[1].filter(function(r){ return r.estado !== 'cancelada' && r.estado !== 'no_vino'; });
+      return '<div class="turno">' + g[0] + '<span>' + pers(act) + ' personas</span></div>' + g[1].map(tarjeta).join('');
+    }).join('');
+  }
+
+  function tarjeta(r){
+    var p = [r.adultos + ' adulto' + (r.adultos === 1 ? '' : 's')]; if (r.ninos) p.push(r.ninos + ' niño' + (r.ninos === 1 ? '' : 's')); if (r.bebes) p.push(r.bebes + ' bebé' + (r.bebes === 1 ? '' : 's'));
+    var tags = (r.cumple ? '<span class="tag">CUMPLEAÑOS</span>' : '') + (r.trona ? '<span class="tag">TRONA</span>' : '') + (r.carrito ? '<span class="tag">CARRITO</span>' : '');
+    var b = function(est, txt, cls){ return '<button type="button" class="btn ' + (cls || 'sec') + '" data-id="' + r.id + '" data-e="' + est + '">' + txt + '</button>'; };
+    var acc = r.estado === 'pendiente' ? b('confirmada', 'CONFIRMAR', '') + b('cancelada', 'CANCELAR')
+      : r.estado === 'confirmada' ? b('llego', 'HA LLEGADO', 'oro') + b('no_vino', 'NO VINO') + b('cancelada', 'CANCELAR')
+      : b(r.estado === 'cancelada' ? 'pendiente' : 'confirmada', 'DESHACER');
+    return '<div class="res ' + r.estado + '"><div class="h">' + r.hora + '</div>' +
+      '<h3>' + esc(r.nombre) + ' <span class="chip e-' + r.estado + '">' + ESTADO[r.estado] + '</span>' + tags + '</h3>' +
+      '<p><b style="color:var(--txt-hi)">' + (r.adultos + r.ninos + r.bebes) + ' pers.</b> · ' + p.join(', ') + ' · <a href="tel:' + esc(r.telefono) + '">' + esc(r.telefono) + '</a>' + (r.email ? ' · ' + esc(r.email) : '') + '</p>' +
+      (r.comentarios ? '<p style="grid-column:1/-1;color:var(--txt-hi);font-style:italic">«' + esc(r.comentarios) + '»</p>' : '') +
+      '<div class="acc">' + acc + '</div></div>';
+  }
+
+  $('lista').addEventListener('click', async function(e){
+    var b = e.target.closest('button[data-e]'); if (!b) return;
+    var r = datos.find(function(x){ return x.id === +b.dataset.id; }), est = b.dataset.e;
+    if (est === 'cancelada' && !confirm('¿Cancelar la reserva de ' + r.nombre + '?' + (r.email ? ' Se le enviará un email.' : ''))) return;
+    b.disabled = true;
+    try {
+      var j = await api('/api/reservas/admin/estado', { method:'POST', body: JSON.stringify({ id: r.id, estado: est }) });
+      toast(ESTADO[est] + ' · ' + r.nombre + (j.email === true ? ' · email enviado' : j.email === 'error' ? ' · no se pudo enviar el email' : ''));
+      cargar();
+    } catch(ex){ toast(ex.message); b.disabled = false; }
+  });
+  $('avisos').addEventListener('click', function(e){ var b = e.target.closest('[data-ir]'); if (b) { fechaSel = b.dataset.ir; cargar(); } });
+  $('fecha').addEventListener('change', function(){ if ($('fecha').value) { fechaSel = $('fecha').value; cargar(); } });
+  $('ant').onclick = function(){ fechaSel = mover(fechaSel, -1); cargar(); };
+  $('sig').onclick = function(){ fechaSel = mover(fechaSel, 1); cargar(); };
+  $('hoy').onclick = function(){ fechaSel = null; cargar(); };
+  setInterval(function(){ if (!document.hidden && !$('panel').hidden) cargar().catch(function(){}); }, 30000);
+  cargar().catch(function(){});
+})();
+</script>
+</body>
+</html>
