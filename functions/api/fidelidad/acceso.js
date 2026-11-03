@@ -24,7 +24,7 @@ async function tabla(DB) {
     creado TEXT NOT NULL DEFAULT (datetime('now')))`).run();
 }
 
-async function enviarEmail(env, para, nombre, codigo) {
+async function enviarEmail(env, para, nombre, codigo, idem) {
   if (!env.RESEND_API_KEY) throw new HttpError(500, 'El envío de emails aún no está configurado (falta RESEND_API_KEY).');
   const html = `<!doctype html><html><body style="margin:0;background:#0A0A0A;font-family:Helvetica,Arial,sans-serif">
   <div style="max-width:460px;margin:0 auto;padding:36px 24px;color:#BDB7AE">
@@ -35,9 +35,9 @@ async function enviarEmail(env, para, nombre, codigo) {
     <p style="font-size:13px;line-height:1.6;margin:18px 0 0;color:#8F887E">Caduca en ${MINUTOS_VALIDEZ} minutos. Si no lo has pedido tú, ignora este email.</p>
     <p style="font-size:12px;color:#6B6B6B;margin-top:32px">Hanaki Sushi · Carrer de Joan Güell, 212 · Barcelona</p>
   </div></body></html>`;
-  const r = await fetch('https://api.resend.com/emails', {
+  const enviar = () => fetch('https://api.resend.com/emails', {
     method: 'POST',
-    headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json' },
+    headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json', 'idempotency-key': idem },
     body: JSON.stringify({
       from: env.EMAIL_FROM || 'Hanaki Sushi <tarjeta@hanakisushi.com>',
       to: [para],
@@ -46,6 +46,10 @@ async function enviarEmail(env, para, nombre, codigo) {
       text: `Hola ${nombre}, tu código para abrir tu tarjeta Hanaki es ${codigo}. Caduca en ${MINUTOS_VALIDEZ} minutos.`,
     }),
   });
+  // Un reintento solo si falla la red, Resend da 5xx o pide esperar (429); la idempotency-key evita duplicados
+  let r;
+  try { r = await enviar(); } catch { r = null; }
+  if (!r || r.status >= 500 || r.status === 429) { await new Promise((ok) => setTimeout(ok, 1200)); r = await enviar(); }
   if (!r.ok) {
     console.error('Resend', r.status, await r.text());
     throw new HttpError(502, 'No se pudo enviar el email. Inténtalo en unos minutos.');
@@ -81,9 +85,9 @@ export const onRequestPost = handle(async ({ request, env }) => {
     const { n } = await DB.prepare(`SELECT COUNT(*) n FROM accesos WHERE socio_id = ? AND creado > datetime('now','-1 hour')`).bind(socio.id).first();
     if (n >= MAX_CODIGOS_HORA) throw new HttpError(429, 'Ya te hemos enviado varios códigos. Espera un rato o pide ayuda al personal.');
     const codigo = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, '0');
-    await DB.prepare(`INSERT INTO accesos (socio_id, codigo_hash, expira) VALUES (?, ?, datetime('now', '+${MINUTOS_VALIDEZ} minutes'))`)
+    const ins = await DB.prepare(`INSERT INTO accesos (socio_id, codigo_hash, expira) VALUES (?, ?, datetime('now', '+${MINUTOS_VALIDEZ} minutes'))`)
       .bind(socio.id, await sha(socio.id + ':' + codigo)).run();
-    await enviarEmail(env, socio.email, socio.nombre, codigo);
+    await enviarEmail(env, socio.email, socio.nombre, codigo, `hanaki-acceso-${ins.meta.last_row_id}`);
   } else {
     await new Promise((r) => setTimeout(r, 700));
   }
