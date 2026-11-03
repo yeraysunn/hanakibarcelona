@@ -1,0 +1,91 @@
+/* Tarjeta de fidelidad Hanaki — estilos compartidos */
+:root{
+  --bg:#0A0A0A;--bg2:#141414;--txt:#BDB7AE;--txt-hi:#F2EEE8;--muted:#8F887E;
+  --rojo:#B3121F;--rojo-hi:#D11A2A;--vino:#7A1C1C;--oro:#C9A45C;--oro2:#B89A72;
+  --linea:rgba(243,238,230,.14);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh}
+a{color:var(--txt-hi)}
+button,input,select{font-family:inherit;font-size:16px}
+:focus-visible{outline:2px solid var(--rojo-hi);outline-offset:3px}
+.serif{font-family:'Cormorant Garamond',serif}
+.jp{font-family:'Noto Serif JP',serif}
+.etq{font-size:11px;font-weight:600;letter-spacing:.28em;color:var(--oro2);text-transform:uppercase}
+
+.wrap{max-width:460px;margin:0 auto;padding:28px 16px 48px}
+.cab{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}
+.cab a{display:flex;align-items:center;gap:10px;text-decoration:none}
+.cab img{height:34px;width:auto}
+.cab span{font-family:'Cormorant Garamond',serif;font-size:20px;letter-spacing:.32em;color:var(--txt-hi)}
+
+h1{font-family:'Cormorant Garamond',serif;font-weight:400;color:var(--txt-hi);font-size:clamp(34px,9vw,44px);line-height:1.05;margin:10px 0 12px}
+h1 em{font-style:italic;color:var(--oro)}
+.lead{font-size:15px;line-height:1.65;margin:0 0 24px}
+
+/* ---------- formulario ---------- */
+.campo{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
+.campo label{font-size:12px;font-weight:600;letter-spacing:.16em;color:var(--txt-hi)}
+.campo input{background:var(--bg2);border:1px solid var(--linea);color:var(--txt-hi);padding:14px 14px;border-radius:0;outline:none;width:100%}
+.campo input:focus{border-color:var(--oro)}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;line-height:1.5;margin:4px 0 14px;cursor:pointer}
+.check input{accent-color:var(--rojo);width:18px;height:18px;margin-top:2px;flex:none}
+.trampa{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 18px;border:1px solid var(--rojo);background:var(--rojo);color:var(--txt-hi);font-size:12px;font-weight:600;letter-spacing:.22em;cursor:pointer;text-decoration:none;transition:background .2s,border-color .2s}
+.btn:hover{background:var(--rojo-hi);border-color:var(--rojo-hi)}
+.btn:disabled{opacity:.55;cursor:wait}
+.btn.sec{background:none;border-color:rgba(243,238,230,.35)}
+.btn.sec:hover{border-color:var(--oro);color:var(--oro)}
+.btn.oro{background:var(--oro);border-color:var(--oro);color:#0A0A0A}
+.err{background:rgba(179,18,31,.14);border:1px solid rgba(209,26,42,.5);color:#F5C9CD;padding:12px 14px;font-size:14px;line-height:1.5;margin-bottom:16px}
+.nota{font-size:12.5px;line-height:1.6;color:var(--muted)}
+
+/* ---------- pasos (cómo funciona) ---------- */
+.pasos{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 26px}
+.paso{border:1px solid var(--linea);padding:14px 10px;text-align:center}
+.paso b{display:block;font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;color:var(--oro);line-height:1}
+.paso small{display:block;font-size:12px;line-height:1.4;margin-top:6px}
+
+/* ---------- la tarjeta ---------- */
+.tarjeta{position:relative;overflow:hidden;border:1px solid rgba(201,164,92,.45);background:
+  radial-gradient(120% 80% at 100% 0%,rgba(179,18,31,.28),transparent 60%),
+  radial-gradient(90% 70% at 0% 100%,rgba(201,164,92,.10),transparent 60%),
+  #0F0D0C;padding:22px 20px 20px;box-shadow:0 30px 70px rgba(0,0,0,.6)}
+.tarjeta::before{content:"花木";position:absolute;right:-14px;bottom:-30px;font-family:'Noto Serif JP',serif;font-size:150px;line-height:1;color:rgba(243,238,230,.035);pointer-events:none;writing-mode:vertical-rl}
+.t-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.t-marca{display:flex;align-items:center;gap:10px}
+.t-marca img{height:30px;width:auto}
+.t-marca div{line-height:1.15}
+.t-marca b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:19px;letter-spacing:.3em;color:var(--txt-hi)}
+.t-marca small{font-size:10px;letter-spacing:.24em;color:var(--oro2)}
+.t-cont{text-align:right}
+.t-cont small{display:block;font-size:10px;letter-spacing:.24em;color:var(--oro2)}
+.t-cont b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:34px;color:var(--txt-hi);line-height:1}
+.t-cont b span{font-size:18px;color:var(--muted)}
+
+.sellos{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 18px}
+.sello{position:relative;aspect-ratio:1;border-radius:50%;border:2px dashed rgba(201,164,92,.45);display:flex;align-items:center;justify-content:center;color:rgba(201,164,92,.5);font-family:'Cormorant Garamond',serif;font-size:20px}
+.sello.ult{border-style:solid;border-color:var(--oro);color:var(--oro);font-size:10px;font-family:'DM Sans',sans-serif;font-weight:600;letter-spacing:.14em;text-align:center;line-height:1.2}
+.sello img{position:absolute;inset:-3px;width:calc(100% + 6px);height:calc(100% + 6px);border-radius:50%;object-fit:cover;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.sello.nuevo img{animation:estampar .55s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes estampar{0%{transform:scale(2.2) rotate(-25deg);opacity:0}60%{opacity:1}100%{transform:scale(1) rotate(var(--rot,0deg))}}
+
+.premio{display:flex;align-items:baseline;justify-content:space-between;gap:10px;border-top:1px solid var(--linea);padding-top:14px}
+.premio small{font-size:10px;letter-spacing:.24em;color:var(--oro2)}
+.premio b{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:22px;color:var(--txt-hi)}
+.listo{margin-top:14px;background:linear-gradient(90deg,var(--rojo),var(--vino));color:var(--txt-hi);padding:12px 14px;text-align:center;font-size:14px;line-height:1.45}
+.listo b{display:block;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500}
+
+.qr{margin:18px auto 0;background:#fff;padding:12px 12px 8px;width:max-content;text-align:center}
+.qr canvas,.qr img{display:block;width:170px;height:170px;image-rendering:pixelated}
+.qr span{display:block;font-size:12px;font-weight:600;letter-spacing:.3em;color:#0A0A0A;margin-top:6px}
+.t-nombre{text-align:center;margin-top:12px;font-size:13px;letter-spacing:.12em;color:var(--txt-hi)}
+
+.guardar{margin-top:22px;border:1px solid var(--linea);padding:16px;font-size:13.5px;line-height:1.6}
+.guardar b{color:var(--txt-hi)}
+
+.cargando{text-align:center;padding:60px 0;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.sello.nuevo img{animation:none}}

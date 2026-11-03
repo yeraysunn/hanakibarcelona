@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Panel de sellos · Hanaki</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sellos Hanaki">
+<link rel="icon" type="image/png" href="icono.png">
+<link rel="apple-touch-icon" href="icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
+<link rel="stylesheet" href="estilo.css">
+<script src="config.js"></script>
+<style>
+.wrap{max-width:760px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 0 18px}
+@media(min-width:620px){.stats{grid-template-columns:repeat(4,1fr)}}
+.st{border:1px solid var(--linea);background:var(--bg2);padding:14px}
+.st b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:34px;line-height:1;color:var(--txt-hi)}
+.st small{display:block;font-size:11px;letter-spacing:.14em;margin-top:6px;color:var(--oro2)}
+.st em{font-style:normal;font-size:12px;color:var(--muted)}
+.barra{display:flex;gap:10px;margin-bottom:14px}
+.barra input{flex:1;min-width:0;background:var(--bg2);border:1px solid var(--linea);color:var(--txt-hi);padding:13px 14px;outline:none}
+.barra input:focus{border-color:var(--oro)}
+.lista{display:flex;flex-direction:column;gap:8px}
+.soc{border:1px solid var(--linea);background:var(--bg2);padding:14px;display:grid;grid-template-columns:1fr auto;gap:10px 14px;align-items:center}
+.soc.sel{border-color:var(--oro)}
+.soc h3{margin:0;font-size:16px;font-weight:600;color:var(--txt-hi)}
+.soc p{margin:3px 0 0;font-size:12.5px;color:var(--muted)}
+.mini{display:flex;gap:4px;margin-top:8px}
+.mini i{width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(201,164,92,.5)}
+.mini i.on{background:var(--rojo);border-color:var(--rojo-hi)}
+.acc{grid-column:1/-1;display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}
+.acc .btn{padding:13px 8px;font-size:11px;letter-spacing:.14em}
+.chip{display:inline-block;background:var(--rojo);color:#fff;font-size:10px;font-weight:600;letter-spacing:.12em;padding:3px 7px;margin-left:6px;vertical-align:2px}
+.cnt{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--txt-hi);text-align:right;line-height:1}
+.cnt span{font-size:16px;color:var(--muted)}
+#cam{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column}
+#cam video{flex:1;width:100%;object-fit:cover;min-height:0}
+#cam .marco{position:absolute;left:50%;top:42%;width:min(70vw,300px);aspect-ratio:1;transform:translate(-50%,-50%);border:3px solid var(--oro);box-shadow:0 0 0 2000px rgba(0,0,0,.45);pointer-events:none}
+#cam .pie{padding:16px 16px max(16px,env(safe-area-inset-bottom));display:flex;gap:10px;flex-direction:column;background:#000}
+#toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;background:#141414;border:1px solid var(--oro);color:var(--txt-hi);padding:14px 18px;font-size:14px;max-width:calc(100% - 32px);box-shadow:0 20px 50px rgba(0,0,0,.6);text-align:center}
+#toast.ok{border-color:#3C9A5F}#toast.mal{border-color:var(--rojo-hi)}
+#login{max-width:380px;margin:10vh auto 0}
+.vacio{border:1px dashed var(--linea);padding:28px;text-align:center;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="cab"><a href="./"><img src="../assets/hanaki-logo.png" alt="花木"><span>HANAKI</span></a><button id="salir" class="btn sec" style="width:auto;padding:10px 14px;font-size:10px" hidden>SALIR</button></header>
+
+  <!-- Login -->
+  <form id="login" hidden>
+    <div class="etq">Panel del personal</div>
+    <h1 style="font-size:34px">Sellos <em>Hanaki</em></h1>
+    <div id="l-err" class="err" hidden></div>
+    <div class="campo"><label for="pass">CONTRASEÑA</label><input id="pass" type="password" autocomplete="current-password" required></div>
+    <button class="btn" type="submit">ENTRAR</button>
+  </form>
+
+  <!-- Panel -->
+  <section id="panel" hidden>
+    <div class="stats">
+      <div class="st"><b id="s-socios">–</b><small>SOCIOS</small><em id="s-nuevos"></em></div>
+      <div class="st"><b id="s-hoy">–</b><small>SELLOS HOY</small><em id="s-total"></em></div>
+      <div class="st"><b id="s-pend">–</b><small>PREMIOS LISTOS</small><em>por canjear</em></div>
+      <div class="st"><b id="s-canj">–</b><small>CANJEADOS</small><em id="s-canjhoy"></em></div>
+    </div>
+
+    <button id="escanear" class="btn" style="margin-bottom:12px;padding:18px">ESCANEAR TARJETA <span aria-hidden="true">⌖</span></button>
+    <div class="barra"><input id="buscar" type="search" placeholder="Buscar por nombre, teléfono o código" autocomplete="off"><button id="exportar" class="btn sec" style="width:auto;padding:0 14px;font-size:10px" title="Descargar CSV">CSV</button></div>
+    <div id="lista" class="lista"></div>
+  </section>
+</main>
+
+<div id="cam" hidden>
+  <video id="video" playsinline muted></video><div class="marco"></div>
+  <div class="pie"><div id="cam-msg" class="nota" style="text-align:center">Apunta al QR de la tarjeta del cliente</div><button id="cerrar-cam" class="btn sec">CERRAR</button></div>
+</div>
+<div id="toast" hidden></div>
+
+<script>
+(function(){
+  var OBJ = (window.HK_FID || {}).objetivo || 8;
+  var $ = function(id){ return document.getElementById(id); };
+  var datos = [], seleccionado = null;
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  var tt; function toast(m, tipo){ var t = $('toast'); t.textContent = m; t.className = tipo || ''; t.hidden = false; clearTimeout(tt); tt = setTimeout(function(){ t.hidden = true; }, 3200); }
+
+  async function api(ruta, opt){
+    var r = await fetch('/api/fidelidad/admin/' + ruta, Object.assign({ headers: {'content-type':'application/json'}, cache:'no-store' }, opt || {}));
+    var j = await r.json().catch(function(){ return {}; });
+    if (r.status === 401 && ruta !== 'login') { mostrarLogin(); throw new Error(j.error || 'Sesión caducada'); }
+    if (!r.ok) { var e = new Error(j.error || j.aviso || 'Error'); e.status = r.status; e.data = j; throw e; }
+    return j;
+  }
+
+  function mostrarLogin(){ $('panel').hidden = true; $('salir').hidden = true; $('login').hidden = false; $('pass').focus(); }
+  $('login').addEventListener('submit', async function(e){
+    e.preventDefault(); $('l-err').hidden = true;
+    try { await api('login', { method:'POST', body: JSON.stringify({ password: $('pass').value }) }); $('pass').value = ''; iniciar(); }
+    catch(ex){ $('l-err').textContent = ex.message; $('l-err').hidden = false; }
+  });
+  $('salir').onclick = async function(){ try { await api('login', { method:'DELETE' }); } catch(e){} mostrarLogin(); };
+
+  async function iniciar(){
+    try { await cargar(); $('login').hidden = true; $('panel').hidden = false; $('salir').hidden = false; }
+    catch(e){ if (e.status && e.status !== 401) toast(e.message, 'mal'); }
+  }
+
+  var qBusca = '';
+  async function cargar(){
+    var j = await api('socios' + (qBusca ? '?q=' + encodeURIComponent(qBusca) : ''));
+    OBJ = j.objetivo || OBJ; datos = j.socios;
+    var s = j.stats;
+    $('s-socios').textContent = s.socios; $('s-nuevos').textContent = '+' + s.nuevosSemana + ' esta semana';
+    $('s-hoy').textContent = s.sellosHoy; $('s-total').textContent = s.sellosTotales + ' en total';
+    $('s-pend').textContent = s.premiosPendientes;
+    $('s-canj').textContent = s.premiosCanjeados; $('s-canjhoy').textContent = s.canjesHoy + ' hoy';
+    pintar();
+  }
+
+  function fecha(s){ if (!s) return 'nunca'; var d = new Date(s.replace(' ', 'T') + 'Z'); return d.toLocaleDateString('es-ES', {day:'numeric', month:'short'}) + ' ' + d.toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'}); }
+
+  function pintar(){
+    if (!datos.length) { $('lista').innerHTML = '<div class="vacio">' + (qBusca ? 'Nadie coincide con «' + esc(qBusca) + '».' : 'Todavía no hay socios. Comparte el enlace <b>hanakisushi.com/fidelidad</b>.') + '</div>'; return; }
+    $('lista').innerHTML = datos.map(function(s){
+      var puntos = ''; for (var i = 0; i < OBJ; i++) puntos += '<i class="' + (i < s.sellos ? 'on' : '') + '"></i>';
+      var listo = s.sellos >= OBJ;
+      return '<div class="soc' + (seleccionado === s.id ? ' sel' : '') + '" data-id="' + s.id + '">' +
+        '<div><h3>' + esc(s.nombre) + (listo ? '<span class="chip">PREMIO LISTO</span>' : '') + '</h3>' +
+        '<p>' + esc(s.telefono) + ' · ' + esc(s.codigo) + ' · último sello: ' + fecha(s.ultimo_sello) + (s.premios ? ' · ' + s.premios + ' premio' + (s.premios > 1 ? 's' : '') : '') + '</p>' +
+        '<div class="mini">' + puntos + '</div></div>' +
+        '<div class="cnt">' + s.sellos + '<span>/' + OBJ + '</span></div>' +
+        '<div class="acc">' +
+          (listo ? '<button class="btn oro" data-a="canjear">CANJEAR PREMIO</button>' : '<button class="btn" data-a="sello">+1 SELLO</button>') +
+          '<button class="btn sec" data-a="quitar">−1</button>' +
+          '<button class="btn sec" data-a="enlace">ENLACE</button>' +
+        '</div></div>';
+    }).join('');
+  }
+
+  $('lista').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-a]'); if (!b) return;
+    var id = Number(b.closest('.soc').dataset.id), s = datos.find(function(x){ return x.id === id; });
+    var a = b.dataset.a;
+    if (a === 'enlace') return copiarEnlace(s);
+    if (a === 'quitar' && !confirm('¿Quitar un sello a ' + s.nombre + '?')) return;
+    if (a === 'canjear' && !confirm('¿Canjear el buffet gratis de ' + s.nombre + '? La tarjeta vuelve a 0.')) return;
+    accion(a, { id: id });
+  });
+
+  async function accion(a, ref, forzar){
+    try {
+      var j = await api('accion', { method:'POST', body: JSON.stringify(Object.assign({ accion: a, forzar: !!forzar }, ref)) });
+      var s = j.socio; seleccionado = s.id;
+      if (a === 'sello') toast('✓ Sello para ' + s.nombre + ' · ' + s.sellos + '/' + OBJ + (s.sellos >= OBJ ? ' — ¡PREMIO CONSEGUIDO!' : ''), 'ok');
+      else if (a === 'canjear') toast('✓ Premio canjeado. ' + s.nombre + ' empieza de nuevo.', 'ok');
+      else toast('Sello quitado. ' + s.nombre + ' · ' + s.sellos + '/' + OBJ);
+      if (navigator.vibrate) navigator.vibrate(60);
+      await cargar();
+    } catch(e){
+      if (e.status === 409 && e.data && e.data.aviso) { if (confirm(e.data.aviso)) return accion(a, ref, true); return; }
+      toast(e.message, 'mal');
+    }
+  }
+
+  function copiarEnlace(s){
+    var url = location.origin + '/fidelidad/tarjeta.html?t=' + s.token;
+    var txt = 'Hola ' + s.nombre + ', esta es tu tarjeta de fidelidad de Hanaki: ' + url;
+    if (navigator.share) return navigator.share({ title: 'Tarjeta Hanaki', text: txt }).catch(function(){});
+    navigator.clipboard.writeText(url).then(function(){ toast('Enlace copiado. Envíaselo por WhatsApp.', 'ok'); }, function(){ prompt('Enlace de la tarjeta:', url); });
+  }
+
+  var tb; $('buscar').addEventListener('input', function(){ clearTimeout(tb); tb = setTimeout(function(){ qBusca = $('buscar').value.trim(); cargar().catch(function(){}); }, 250); });
+
+  $('exportar').onclick = function(){
+    var filas = [['nombre','telefono','email','codigo','sellos','sellos_totales','premios','acepta_promos','alta','ultimo_sello']].concat(datos.map(function(s){
+      return [s.nombre, s.telefono, s.email || '', s.codigo, s.sellos, s.sellos_totales, s.premios, s.acepta_promos ? 'si' : 'no', s.creado, s.ultimo_sello || ''];
+    }));
+    var csv = '﻿' + filas.map(function(f){ return f.map(function(v){ return '"' + String(v).replace(/"/g, '""') + '"'; }).join(';'); }).join('\n');
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = 'socios-hanaki.csv'; a.click();
+  };
+
+  // ---------- escáner de QR ----------
+  var stream, bucle, detector, jsqrListo;
+  $('escanear').onclick = async function(){
+    $('cam').hidden = false; $('cam-msg').textContent = 'Apunta al QR de la tarjeta del cliente';
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+      var v = $('video'); v.srcObject = stream; await v.play();
+      if ('BarcodeDetector' in window) { try { detector = new BarcodeDetector({ formats: ['qr_code'] }); } catch(e){ detector = null; } }
+      if (!detector && !jsqrListo) await cargarJsQR();
+      leer();
+    } catch(e){ $('cam-msg').textContent = 'No se pudo abrir la cámara. Busca al cliente por nombre, teléfono o código.'; }
+  };
+  function cargarJsQR(){ return new Promise(function(ok, ko){ var s = document.createElement('script'); s.src = 'vendor/jsQR.js'; s.onload = function(){ jsqrListo = true; ok(); }; s.onerror = ko; document.head.appendChild(s); }); }
+  var lienzo = document.createElement('canvas'), ctx = lienzo.getContext('2d', { willReadFrequently: true });
+  async function leer(){
+    var v = $('video'); if (!stream) return;
+    var texto = null;
+    try {
+      if (detector) { var r = await detector.detect(v); if (r[0]) texto = r[0].rawValue; }
+      else if (v.videoWidth) {
+        var w = 480, h = Math.round(v.videoHeight * w / v.videoWidth); lienzo.width = w; lienzo.height = h;
+        ctx.drawImage(v, 0, 0, w, h); var c = jsQR(ctx.getImageData(0, 0, w, h).data, w, h, { inversionAttempts: 'dontInvert' }); if (c) texto = c.data;
+      }
+    } catch(e){}
+    if (texto) return encontrado(texto);
+    bucle = requestAnimationFrame(leer);
+  }
+  function cerrarCam(){ cancelAnimationFrame(bucle); if (stream) stream.getTracks().forEach(function(t){ t.stop(); }); stream = null; $('cam').hidden = true; }
+  $('cerrar-cam').onclick = cerrarCam;
+
+  async function encontrado(texto){
+    var token = null;
+    try { token = new URL(texto).searchParams.get('t'); } catch(e){ if (/^[a-f0-9]{32}$/.test(texto)) token = texto; }
+    if (!token) { $('cam-msg').textContent = 'Ese QR no es una tarjeta Hanaki.'; bucle = requestAnimationFrame(leer); return; }
+    cerrarCam();
+    try {
+      var j = await api('socio?token=' + encodeURIComponent(token)), s = j.socio;
+      seleccionado = s.id; $('buscar').value = ''; qBusca = '';
+      if (s.sellos >= OBJ) { if (confirm(s.nombre + ' tiene el BUFFET GRATIS listo. ¿Canjearlo ahora?')) return accion('canjear', { token: token }); return cargar(); }
+      if (confirm('¿Poner un sello a ' + s.nombre + '? (' + s.sellos + '/' + OBJ + ')')) await accion('sello', { token: token });
+      else await cargar();
+    } catch(e){ toast(e.message, 'mal'); }
+  }
+
+  iniciar();
+})();
+</script>
+</body>
+</html>

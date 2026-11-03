@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tarjeta de fidelidad · Hanaki Sushi Barcelona</title>
+<meta name="description" content="Hazte socio de Hanaki Sushi Barcelona: a la 8ª visita al buffet, la siguiente es gratis.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" type="image/png" href="../assets/hanaki-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
+<link rel="stylesheet" href="estilo.css">
+<script src="config.js"></script>
+</head>
+<body>
+<main class="wrap">
+  <header class="cab"><a href="../"><img src="../assets/hanaki-logo.png" alt="花木"><span>HANAKI</span></a></header>
+
+  <div class="etq">Tarjeta de fidelidad</div>
+  <h1>8 visitas,<br>la siguiente <em>invitamos nosotros</em>.</h1>
+  <p class="lead">Regístrate gratis en 30 segundos. Cada vez que vengas al buffet te ponemos un sello en tu tarjeta del móvil. Con 8 sellos, tu próximo buffet es gratis.</p>
+
+  <div class="pasos">
+    <div class="paso"><b>1</b><small>Te registras aquí</small></div>
+    <div class="paso"><b>2</b><small>Enseñas tu QR al pagar</small></div>
+    <div class="paso"><b>8</b><small>Sellos = buffet gratis</small></div>
+  </div>
+
+  <div id="ya" hidden style="margin-bottom:22px"><a class="btn oro" id="ya-link" href="tarjeta.html">VER MI TARJETA <span aria-hidden="true">→</span></a></div>
+
+  <form id="f" novalidate>
+    <div id="err" class="err" role="alert" hidden></div>
+    <div class="campo"><label for="nombre">NOMBRE</label><input id="nombre" name="nombre" autocomplete="given-name" required maxlength="60"></div>
+    <div class="campo"><label for="telefono">TELÉFONO MÓVIL</label><input id="telefono" name="telefono" type="tel" inputmode="tel" autocomplete="tel" required placeholder="600 000 000"></div>
+    <div class="campo"><label for="email">EMAIL <span style="font-weight:400;letter-spacing:0;color:var(--muted)">(opcional)</span></label><input id="email" name="email" type="email" inputmode="email" autocomplete="email"></div>
+    <input class="trampa" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <label class="check"><input type="checkbox" name="privacidad" required><span>He leído y acepto la <a href="../Hanaki%20Legal.dc.html#privacidad" target="_blank">política de privacidad</a>.</span></label>
+    <label class="check"><input type="checkbox" name="promos"><span>Quiero recibir promociones de Hanaki (opcional).</span></label>
+    <button class="btn" type="submit" id="enviar">CREAR MI TARJETA <span aria-hidden="true">→</span></button>
+    <p class="nota" style="margin-top:14px">Un sello por visita al buffet, a nombre del titular. El premio es un buffet libre (bebidas no incluidas) y no se puede cambiar por dinero.</p>
+  </form>
+</main>
+<script>
+(function(){
+  var guardado; try { guardado = localStorage.getItem('hk-fid-token'); } catch(e){}
+  if (guardado) { document.getElementById('ya').hidden = false; document.getElementById('ya-link').href = 'tarjeta.html?t=' + guardado; }
+
+  var f = document.getElementById('f'), err = document.getElementById('err'), btn = document.getElementById('enviar');
+  f.addEventListener('submit', async function(e){
+    e.preventDefault(); err.hidden = true;
+    var d = { nombre: f.nombre.value, telefono: f.telefono.value, email: f.email.value, web: f.web.value,
+              privacidad: f.privacidad.checked, promos: f.promos.checked };
+    if (!d.nombre.trim()) return fallo('Escribe tu nombre.');
+    if (!d.telefono.trim()) return fallo('Escribe tu teléfono.');
+    if (!d.privacidad) return fallo('Tienes que aceptar la política de privacidad.');
+    btn.disabled = true; btn.textContent = 'CREANDO…';
+    try {
+      var r = await fetch('/api/fidelidad/registro', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(d) });
+      var j = await r.json().catch(function(){ return {}; });
+      if (!r.ok) throw new Error(j.error || 'No se pudo crear la tarjeta.');
+      try { localStorage.setItem('hk-fid-token', j.token); } catch(e){}
+      location.href = 'tarjeta.html?t=' + j.token + '&nueva=1';
+    } catch (ex) { fallo(ex.message); btn.disabled = false; btn.innerHTML = 'CREAR MI TARJETA <span aria-hidden="true">→</span>'; }
+  });
+  function fallo(m){ err.textContent = m; err.hidden = false; err.scrollIntoView({block:'center', behavior:'smooth'}); }
+})();
+</script>
+</body>
+</html>

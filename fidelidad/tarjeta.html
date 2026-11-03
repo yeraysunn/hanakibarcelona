@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mi tarjeta · Hanaki</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hanaki">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icono.png">
+<link rel="apple-touch-icon" href="icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
+<link rel="stylesheet" href="estilo.css">
+<script src="config.js"></script>
+<script src="vendor/qrcode.js"></script>
+</head>
+<body>
+<main class="wrap" style="padding-top:max(28px,env(safe-area-inset-top))">
+  <header class="cab"><a href="../"><img src="../assets/hanaki-logo.png" alt="花木"><span>HANAKI</span></a></header>
+
+  <div id="estado" class="cargando">Cargando tu tarjeta…</div>
+
+  <section id="vista" hidden>
+    <div id="bienvenida" hidden style="margin-bottom:18px">
+      <div class="etq">¡Ya eres socio!</div>
+      <h1 style="font-size:32px;margin-bottom:6px">Bienvenido a <em>Hanaki</em></h1>
+      <p class="lead" style="margin:0">Guarda esta tarjeta en tu móvil (instrucciones abajo) y enséñala cada vez que vengas.</p>
+    </div>
+
+    <article class="tarjeta" aria-label="Tarjeta de fidelidad">
+      <div class="t-cab">
+        <div class="t-marca"><img src="../assets/hanaki-logo.png" alt=""><div><b>HANAKI</b><small>SUSHI · BARCELONA</small></div></div>
+        <div class="t-cont"><small>SELLOS</small><b id="cont">0<span>/8</span></b></div>
+      </div>
+      <div class="sellos" id="sellos"></div>
+      <div class="premio"><small>PREMIO</small><b id="premio-txt">Buffet gratis</b></div>
+      <div class="listo" id="listo" hidden><b>¡Tu buffet gratis está listo!</b>Enseña esta tarjeta al personal para canjearlo.</div>
+      <div class="qr"><div id="qr"></div><span id="codigo">······</span></div>
+      <div class="t-nombre" id="nombre"></div>
+    </article>
+
+    <div class="guardar" id="guardar">
+      <b>Guárdala en tu móvil:</b>
+      <div id="g-ios" hidden>En Safari, pulsa <b>Compartir</b> <span aria-hidden="true">⎋</span> y luego <b>«Añadir a pantalla de inicio»</b>. Te quedará como una app.</div>
+      <div id="g-and" hidden>Pulsa <b>⋮</b> arriba a la derecha y luego <b>«Añadir a pantalla de inicio»</b>. <button type="button" id="instalar" class="btn sec" style="margin-top:12px" hidden>AÑADIR A INICIO</button></div>
+      <div id="g-otro" hidden>Añade esta página a favoritos o a la pantalla de inicio de tu móvil.</div>
+      <p class="nota" style="margin:10px 0 0">Si pierdes el enlace, pide al personal que te recupere la tarjeta con tu teléfono.</p>
+    </div>
+  </section>
+</main>
+<script>
+(function(){
+  var C = window.HK_FID;
+  var q = new URLSearchParams(location.search);
+  var token = q.get('t');
+  try { if (token) localStorage.setItem('hk-fid-token', token); else token = localStorage.getItem('hk-fid-token'); } catch(e){}
+  var estado = document.getElementById('estado');
+  if (!token) { estado.innerHTML = 'No encontramos tu tarjeta en este móvil.<br><br><a class="btn" href="./">CREAR MI TARJETA</a>'; return; }
+  if (!q.get('t')) history.replaceState(null, '', 'tarjeta.html?t=' + token);
+
+  if (q.get('nueva')) { document.getElementById('bienvenida').hidden = false; history.replaceState(null, '', 'tarjeta.html?t=' + token); }
+
+  // Instrucciones para guardar según el móvil
+  var ua = navigator.userAgent, standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  if (standalone) document.getElementById('guardar').hidden = true;
+  else if (/iPhone|iPad|iPod/.test(ua)) document.getElementById('g-ios').hidden = false;
+  else if (/Android/.test(ua)) document.getElementById('g-and').hidden = false;
+  else document.getElementById('g-otro').hidden = false;
+  var promptInstalar;
+  addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); promptInstalar = e; document.getElementById('instalar').hidden = false; });
+  document.getElementById('instalar').onclick = function(){ if (promptInstalar) promptInstalar.prompt(); };
+
+  // QR: contiene el enlace a la tarjeta (el personal lo escanea desde el panel)
+  var qr = qrcode(0, 'M');
+  qr.addData(location.origin + '/fidelidad/tarjeta.html?t=' + token);
+  qr.make();
+  document.getElementById('qr').innerHTML = qr.createImgTag(5, 0);
+  document.querySelector('#qr img').alt = 'Código QR de tu tarjeta';
+
+  document.getElementById('premio-txt').textContent = C.premio;
+  var anteriores = -1;
+
+  function pintar(t){
+    estado.hidden = true; document.getElementById('vista').hidden = false;
+    document.getElementById('cont').innerHTML = t.sellos + '<span>/' + t.objetivo + '</span>';
+    document.getElementById('codigo').textContent = t.codigo;
+    document.getElementById('nombre').textContent = t.nombre.toUpperCase();
+    document.getElementById('listo').hidden = !t.premioListo;
+    var box = document.getElementById('sellos'), html = '';
+    for (var i = 0; i < t.objetivo; i++) {
+      var lleno = i < t.sellos, ult = i === t.objetivo - 1;
+      var nuevo = lleno && anteriores >= 0 && i >= anteriores;
+      var rot = ((i * 37) % 21) - 10; // giro distinto en cada sello, como un sello real
+      html += '<div class="sello' + (ult && !lleno ? ' ult' : '') + (nuevo ? ' nuevo' : '') + '">' +
+        (lleno ? '<img src="' + C.sello + '" alt="Sello ' + (i + 1) + '" style="--rot:' + rot + 'deg;transform:rotate(' + rot + 'deg)">'
+               : (ult ? 'GRATIS' : (i + 1))) + '</div>';
+    }
+    box.innerHTML = html;
+    if (anteriores >= 0 && t.sellos > anteriores && navigator.vibrate) navigator.vibrate([40, 60, 40]);
+    anteriores = t.sellos;
+  }
+
+  async function cargar(){
+    try {
+      var r = await fetch('/api/fidelidad/tarjeta?t=' + encodeURIComponent(token), { cache: 'no-store' });
+      var j = await r.json().catch(function(){ return {}; });
+      if (r.status === 404) { try { localStorage.removeItem('hk-fid-token'); } catch(e){} estado.innerHTML = 'Esta tarjeta no existe.<br><br><a class="btn" href="./">CREAR UNA TARJETA</a>'; estado.hidden = false; document.getElementById('vista').hidden = true; return; }
+      if (!r.ok) throw new Error(j.error || 'Error');
+      pintar(j.tarjeta);
+    } catch (e) {
+      if (anteriores < 0) estado.textContent = 'No hay conexión. Vuelve a intentarlo en un momento.';
+    }
+  }
+  cargar();
+  // Se actualiza sola mientras está abierta (así ve el sello en cuanto se lo ponen)
+  setInterval(function(){ if (!document.hidden) cargar(); }, 6000);
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden) cargar(); });
+})();
+</script>
+</body>
+</html>
