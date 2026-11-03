@@ -60,7 +60,7 @@
   var token = q.get('t');
   try { if (token) localStorage.setItem('hk-fid-token', token); else token = localStorage.getItem('hk-fid-token'); } catch(e){}
   var estado = document.getElementById('estado');
-  if (!token) { estado.innerHTML = 'No encontramos tu tarjeta en este móvil.<br><br><a class="btn" href="./">CREAR MI TARJETA</a>'; return; }
+  if (!token) { estado.innerHTML = 'No encontramos tu tarjeta en este móvil.<br><br><a class="btn oro" href="./?ver=1">VER MI TARJETA</a><br><a class="btn" href="./">CREAR MI TARJETA</a>'; return; }
   if (!q.get('t')) history.replaceState(null, '', 'tarjeta.html?t=' + token);
 
   if (q.get('nueva')) { document.getElementById('bienvenida').hidden = false; history.replaceState(null, '', 'tarjeta.html?t=' + token); }

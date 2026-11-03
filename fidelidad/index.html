@@ -26,7 +26,18 @@
     <div class="paso"><b>8</b><small>Sellos = buffet gratis</small></div>
   </div>
 
-  <div id="ya" hidden style="margin-bottom:22px"><a class="btn oro" id="ya-link" href="tarjeta.html">VER MI TARJETA <span aria-hidden="true">→</span></a></div>
+  <div style="margin-bottom:26px">
+    <a class="btn oro" id="ver-btn" href="#ver">¿YA TIENES TARJETA? VER MI TARJETA <span aria-hidden="true">→</span></a>
+    <form id="ver" hidden novalidate style="margin-top:14px;border:1px solid rgba(201,164,92,.45);padding:16px">
+      <p class="nota" style="margin:0 0 14px;color:var(--txt)">Escribe el teléfono y el nombre con los que te registraste.</p>
+      <div id="v-err" class="err" role="alert" hidden></div>
+      <div class="campo"><label for="v-tel">TELÉFONO MÓVIL</label><input id="v-tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="600 000 000"></div>
+      <div class="campo"><label for="v-nom">NOMBRE</label><input id="v-nom" autocomplete="given-name"></div>
+      <button class="btn" type="submit" id="v-btn">ABRIR MI TARJETA <span aria-hidden="true">→</span></button>
+    </form>
+  </div>
+
+  <div class="etq" style="margin-bottom:6px">¿Aún no la tienes?</div>
 
   <form id="f" novalidate>
     <div id="err" class="err" role="alert" hidden></div>
@@ -42,8 +53,23 @@
 </main>
 <script>
 (function(){
+  // "Ver mi tarjeta": si ya se abrió en este móvil va directa; si no, se busca por teléfono + nombre
   var guardado; try { guardado = localStorage.getItem('hk-fid-token'); } catch(e){}
-  if (guardado) { document.getElementById('ya').hidden = false; document.getElementById('ya-link').href = 'tarjeta.html?t=' + guardado; }
+  var verBtn = document.getElementById('ver-btn'), ver = document.getElementById('ver'), vErr = document.getElementById('v-err'), vBtn = document.getElementById('v-btn');
+  if (guardado) verBtn.href = 'tarjeta.html?t=' + guardado;
+  function abrirVer(){ ver.hidden = false; verBtn.hidden = true; document.getElementById('v-tel').focus(); }
+  verBtn.addEventListener('click', function(e){ if (!guardado) { e.preventDefault(); abrirVer(); } });
+  if (/[?&]ver=1/.test(location.search) || location.hash === '#ver') { if (guardado) location.replace('tarjeta.html?t=' + guardado); else abrirVer(); }
+  ver.addEventListener('submit', async function(e){
+    e.preventDefault(); vErr.hidden = true; vBtn.disabled = true; vBtn.textContent = 'BUSCANDO…';
+    try {
+      var r = await fetch('/api/fidelidad/recuperar', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ telefono: document.getElementById('v-tel').value, nombre: document.getElementById('v-nom').value }) });
+      var j = await r.json().catch(function(){ return {}; });
+      if (!r.ok) throw new Error(j.error || 'No se pudo abrir la tarjeta.');
+      try { localStorage.setItem('hk-fid-token', j.token); } catch(e){}
+      location.href = 'tarjeta.html?t=' + j.token;
+    } catch (ex) { vErr.textContent = ex.message; vErr.hidden = false; vBtn.disabled = false; vBtn.innerHTML = 'ABRIR MI TARJETA <span aria-hidden="true">→</span>'; }
+  });
 
   var f = document.getElementById('f'), err = document.getElementById('err'), btn = document.getElementById('enviar');
   f.addEventListener('submit', async function(e){
@@ -57,7 +83,7 @@
     try {
       var r = await fetch('/api/fidelidad/registro', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(d) });
       var j = await r.json().catch(function(){ return {}; });
-      if (!r.ok) throw new Error(j.error || 'No se pudo crear la tarjeta.');
+      if (!r.ok) throw new Error(r.status === 409 ? 'Este teléfono ya tiene una tarjeta. Pulsa «Ver mi tarjeta» arriba para abrirla.' : (j.error || 'No se pudo crear la tarjeta.'));
       try { localStorage.setItem('hk-fid-token', j.token); } catch(e){}
       location.href = 'tarjeta.html?t=' + j.token + '&nueva=1';
     } catch (ex) { fallo(ex.message); btn.disabled = false; btn.innerHTML = 'CREAR MI TARJETA <span aria-hidden="true">→</span>'; }
