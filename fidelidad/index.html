@@ -29,11 +29,13 @@
   <div style="margin-bottom:26px">
     <a class="btn oro" id="ver-btn" href="#ver">¿YA TIENES TARJETA? VER MI TARJETA <span aria-hidden="true">→</span></a>
     <form id="ver" hidden novalidate style="margin-top:14px;border:1px solid rgba(201,164,92,.45);padding:16px">
-      <p class="nota" style="margin:0 0 14px;color:var(--txt)">Escribe el teléfono y el nombre con los que te registraste.</p>
+      <p class="nota" id="v-info" style="margin:0 0 14px;color:var(--txt)">Escribe el email con el que te registraste y te enviaremos un código para abrir tu tarjeta.</p>
       <div id="v-err" class="err" role="alert" hidden></div>
-      <div class="campo"><label for="v-tel">TELÉFONO MÓVIL</label><input id="v-tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="600 000 000"></div>
-      <div class="campo"><label for="v-nom">NOMBRE</label><input id="v-nom" autocomplete="given-name"></div>
-      <button class="btn" type="submit" id="v-btn">ABRIR MI TARJETA <span aria-hidden="true">→</span></button>
+      <div class="campo"><label for="v-email">EMAIL</label><input id="v-email" type="email" inputmode="email" autocomplete="email"></div>
+      <div class="campo" id="v-cod-campo" hidden><label for="v-cod">CÓDIGO DE 6 CIFRAS</label><input id="v-cod" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" style="font-size:22px;letter-spacing:.4em"></div>
+      <button class="btn" type="submit" id="v-btn">ENVIARME EL CÓDIGO <span aria-hidden="true">→</span></button>
+      <button type="button" id="v-otra" class="nota" hidden style="background:none;border:none;padding:12px 0 0;cursor:pointer;text-decoration:underline">¿No te ha llegado? Pedir otro código</button>
+      <p class="nota" style="margin:12px 0 0">¿Te registraste sin email o ya no lo usas? Pide al personal que te reenvíe tu tarjeta.</p>
     </form>
   </div>
 
@@ -43,7 +45,7 @@
     <div id="err" class="err" role="alert" hidden></div>
     <div class="campo"><label for="nombre">NOMBRE</label><input id="nombre" name="nombre" autocomplete="given-name" required maxlength="60"></div>
     <div class="campo"><label for="telefono">TELÉFONO MÓVIL</label><input id="telefono" name="telefono" type="tel" inputmode="tel" autocomplete="tel" required placeholder="600 000 000"></div>
-    <div class="campo"><label for="email">EMAIL <span style="font-weight:400;letter-spacing:0;color:var(--muted)">(opcional)</span></label><input id="email" name="email" type="email" inputmode="email" autocomplete="email"></div>
+    <div class="campo"><label for="email">EMAIL <span style="font-weight:400;letter-spacing:0;color:var(--muted)">(para recuperar tu tarjeta)</span></label><input id="email" name="email" type="email" inputmode="email" autocomplete="email" required></div>
     <input class="trampa" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
     <label class="check"><input type="checkbox" name="privacidad" required><span>He leído y acepto la <a href="../Hanaki%20Legal.dc.html#privacidad" target="_blank">política de privacidad</a>.</span></label>
     <label class="check"><input type="checkbox" name="promos"><span>Quiero recibir promociones de Hanaki (opcional).</span></label>
@@ -57,19 +59,34 @@
   var guardado; try { guardado = localStorage.getItem('hk-fid-token'); } catch(e){}
   var verBtn = document.getElementById('ver-btn'), ver = document.getElementById('ver'), vErr = document.getElementById('v-err'), vBtn = document.getElementById('v-btn');
   if (guardado) verBtn.href = 'tarjeta.html?t=' + guardado;
-  function abrirVer(){ ver.hidden = false; verBtn.hidden = true; document.getElementById('v-tel').focus(); }
+  function abrirVer(){ ver.hidden = false; verBtn.hidden = true; document.getElementById('v-email').focus(); }
   verBtn.addEventListener('click', function(e){ if (!guardado) { e.preventDefault(); abrirVer(); } });
   if (/[?&]ver=1/.test(location.search) || location.hash === '#ver') { if (guardado) location.replace('tarjeta.html?t=' + guardado); else abrirVer(); }
+  var fase = 1, vEmail = document.getElementById('v-email'), vCod = document.getElementById('v-cod');
+  function boton(t){ vBtn.disabled = false; vBtn.innerHTML = t + ' <span aria-hidden="true">→</span>'; }
+  async function pedir(datos){
+    var r = await fetch('/api/fidelidad/acceso', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(datos) });
+    var j = await r.json().catch(function(){ return {}; });
+    if (!r.ok) throw new Error(j.error || 'Algo ha fallado. Inténtalo de nuevo.');
+    return j;
+  }
+  async function enviarCodigo(){
+    var j = await pedir({ email: vEmail.value });
+    fase = 2; document.getElementById('v-info').textContent = j.mensaje;
+    document.getElementById('v-cod-campo').hidden = false; document.getElementById('v-otra').hidden = false;
+    vEmail.readOnly = true; vCod.value = ''; vCod.focus(); boton('ABRIR MI TARJETA');
+  }
   ver.addEventListener('submit', async function(e){
-    e.preventDefault(); vErr.hidden = true; vBtn.disabled = true; vBtn.textContent = 'BUSCANDO…';
+    e.preventDefault(); vErr.hidden = true; vBtn.disabled = true; vBtn.textContent = fase === 1 ? 'ENVIANDO…' : 'COMPROBANDO…';
     try {
-      var r = await fetch('/api/fidelidad/recuperar', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ telefono: document.getElementById('v-tel').value, nombre: document.getElementById('v-nom').value }) });
-      var j = await r.json().catch(function(){ return {}; });
-      if (!r.ok) throw new Error(j.error || 'No se pudo abrir la tarjeta.');
+      if (fase === 1) return await enviarCodigo();
+      var j = await pedir({ email: vEmail.value, codigo: vCod.value });
       try { localStorage.setItem('hk-fid-token', j.token); } catch(e){}
       location.href = 'tarjeta.html?t=' + j.token;
-    } catch (ex) { vErr.textContent = ex.message; vErr.hidden = false; vBtn.disabled = false; vBtn.innerHTML = 'ABRIR MI TARJETA <span aria-hidden="true">→</span>'; }
+    } catch (ex) { vErr.textContent = ex.message; vErr.hidden = false; boton(fase === 1 ? 'ENVIARME EL CÓDIGO' : 'ABRIR MI TARJETA'); }
   });
+  vCod.addEventListener('input', function(){ vCod.value = vCod.value.replace(/\D/g, '').slice(0, 6); if (vCod.value.length === 6) ver.requestSubmit(); });
+  document.getElementById('v-otra').onclick = async function(){ vErr.hidden = true; try { await enviarCodigo(); } catch(ex){ vErr.textContent = ex.message; vErr.hidden = false; } };
 
   var f = document.getElementById('f'), err = document.getElementById('err'), btn = document.getElementById('enviar');
   f.addEventListener('submit', async function(e){
@@ -78,12 +95,13 @@
               privacidad: f.privacidad.checked, promos: f.promos.checked };
     if (!d.nombre.trim()) return fallo('Escribe tu nombre.');
     if (!d.telefono.trim()) return fallo('Escribe tu teléfono.');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email.trim())) return fallo('Escribe un email válido (lo necesitas para recuperar tu tarjeta).');
     if (!d.privacidad) return fallo('Tienes que aceptar la política de privacidad.');
     btn.disabled = true; btn.textContent = 'CREANDO…';
     try {
       var r = await fetch('/api/fidelidad/registro', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(d) });
       var j = await r.json().catch(function(){ return {}; });
-      if (!r.ok) throw new Error(r.status === 409 ? 'Este teléfono ya tiene una tarjeta. Pulsa «Ver mi tarjeta» arriba para abrirla.' : (j.error || 'No se pudo crear la tarjeta.'));
+      if (!r.ok) throw new Error(j.error || 'No se pudo crear la tarjeta.');
       try { localStorage.setItem('hk-fid-token', j.token); } catch(e){}
       location.href = 'tarjeta.html?t=' + j.token + '&nueva=1';
     } catch (ex) { fallo(ex.message); btn.disabled = false; btn.innerHTML = 'CREAR MI TARJETA <span aria-hidden="true">→</span>'; }

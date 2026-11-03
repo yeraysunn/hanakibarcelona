@@ -13,11 +13,13 @@ export const onRequestPost = handle(async ({ request, env }) => {
 
   if (nombre.length < 2) throw new HttpError(400, 'Escribe tu nombre.');
   if (!telefono) throw new HttpError(400, 'El teléfono no es válido.');
-  if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new HttpError(400, 'El email no es válido.');
+  if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new HttpError(400, 'Escribe un email válido (lo necesitas para recuperar tu tarjeta).');
   if (!d.privacidad) throw new HttpError(400, 'Tienes que aceptar la política de privacidad.');
 
   const existe = await DB.prepare('SELECT id FROM socios WHERE telefono = ?').bind(telefono).first();
-  if (existe) throw new HttpError(409, 'Este teléfono ya tiene una tarjeta. Pide al personal que te la recupere.');
+  if (existe) throw new HttpError(409, 'Este teléfono ya tiene una tarjeta. Pulsa «Ver mi tarjeta» para abrirla.');
+  const mismoEmail = await DB.prepare('SELECT id FROM socios WHERE email = ?').bind(email).first();
+  if (mismoEmail) throw new HttpError(409, 'Este email ya tiene una tarjeta. Pulsa «Ver mi tarjeta» para abrirla.');
 
   for (let intento = 0; intento < 5; intento++) {
     const token = nuevoToken();

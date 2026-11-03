@@ -14,7 +14,13 @@
 4. **Contraseña del panel:** Settings → Variables and Secrets → *Add* → tipo *Secret*, nombre `ADMIN_PASSWORD`, valor: la contraseña que usará el personal.
 5. **Volver a desplegar:** Deployments → último despliegue → *Retry deployment* (los cambios de bindings solo se aplican en un despliegue nuevo).
 
-Todo entra en el plan gratuito de Cloudflare.
+6. **Emails para «Ver mi tarjeta»** (código de 6 cifras al email del cliente), con Resend (gratis hasta 3.000 emails/mes):
+   - Crea cuenta en resend.com → *Domains* → *Add domain* → `hanakisushi.com` → añade en Cloudflare DNS los registros que te indique y espera a que salga *Verified*.
+   - *API Keys* → *Create* (permiso *Sending access*) → copia la clave.
+   - En Pages: Variables and Secrets → *Secret* `RESEND_API_KEY` = la clave. Opcional: `EMAIL_FROM` = `Hanaki Sushi <tarjeta@hanakisushi.com>`.
+   - Vuelve a desplegar. La tabla `accesos` se crea sola.
+
+Todo entra en los planes gratuitos de Cloudflare y Resend.
 
 ## Uso en el local
 
