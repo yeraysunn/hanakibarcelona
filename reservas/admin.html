@@ -12,26 +12,26 @@
 <link rel="icon" type="image/png" href="../fidelidad/icono.png">
 <link rel="apple-touch-icon" href="../fidelidad/icono.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Saira+Extra+Condensed:wght@500;600;700&display=swap">
 <link rel="stylesheet" href="../fidelidad/estilo.css">
 <script src="/admin/i18n.js"></script>
 <script src="/admin/tabs.js"></script>
 <style>
-#idioma{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(243,238,230,.35);color:var(--txt-hi);padding:9px 12px;font-size:12px;font-weight:600;letter-spacing:.08em;cursor:pointer}#idioma:hover{border-color:var(--oro);color:var(--oro)}#idioma span{font:inherit;letter-spacing:inherit;color:inherit}
+#idioma{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(243,239,232,.35);color:var(--txt-hi);padding:9px 12px;font-size:12px;font-weight:600;letter-spacing:.08em;cursor:pointer}#idioma:hover{border-color:var(--oro);color:var(--oro)}#idioma span{font:inherit;letter-spacing:inherit;color:inherit}
 .wrap{max-width:760px}
 .dia{display:flex;align-items:center;gap:8px;margin-bottom:14px}
 .dia button{width:48px;height:48px;border:1px solid var(--linea);background:var(--bg2);color:var(--txt-hi);font-size:18px;cursor:pointer}
 .dia input{flex:1;min-width:0;height:48px;box-sizing:border-box;background:var(--bg2);border:1px solid var(--linea);color:var(--txt-hi);padding:0 12px;color-scheme:dark}
 .dia .hoy{width:auto;padding:0 14px;font-size:11px;font-weight:600;letter-spacing:.16em}
-.titdia{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--txt-hi);margin:4px 0 4px}
+.titdia{font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:30px;color:var(--txt-hi);margin:4px 0 4px}
 .resumen{font-size:14px;color:var(--muted);margin-bottom:18px}
-.aviso{border:1px solid rgba(209,26,42,.55);background:rgba(179,18,31,.12);padding:12px 14px;font-size:14px;margin-bottom:18px;line-height:1.6}
+.aviso{border:1px solid rgba(224,69,46,.55);background:rgba(224,69,46,.12);padding:12px 14px;font-size:14px;margin-bottom:18px;line-height:1.6}
 .aviso button{background:none;border:none;color:var(--oro);text-decoration:underline;cursor:pointer;font:inherit;padding:0 2px}
 .turno{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;font-weight:600;letter-spacing:.24em;color:var(--oro2);margin:22px 0 10px;border-bottom:1px solid var(--linea);padding-bottom:8px}
 .turno span{letter-spacing:.06em;font-weight:500;color:var(--txt)}
 .res{border:1px solid var(--linea);background:var(--bg2);padding:14px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr;gap:6px 16px}
 .res.cancelada,.res.no_vino{opacity:.5}
-.res .h{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:var(--txt-hi);grid-row:span 2}
+.res .h{font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:30px;line-height:1;color:var(--txt-hi);grid-row:span 2}
 .res h3{margin:0;font-size:16px;font-weight:600;color:var(--txt-hi);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .res p{margin:0;font-size:13.5px;color:var(--txt);line-height:1.5}
 .res p a{color:var(--txt-hi)}
@@ -46,7 +46,7 @@
 </head>
 <body>
 <main class="wrap">
-  <header class="cab"><a href="/admin/"><img src="../assets/hanaki-logo.png" alt="花木"><span>HANAKI</span></a><div style="display:flex;gap:8px"><button type="button" id="idioma"></button><button id="salir" class="btn sec" style="width:auto;padding:10px 14px;font-size:10px" hidden>SALIR</button></div></header>
+  <header class="cab"><a href="/admin/"><img src="../assets/logo.png" alt="花木"><span>HANAKI</span></a><div style="display:flex;gap:8px"><button type="button" id="idioma"></button><button id="salir" class="btn sec" style="width:auto;padding:10px 14px;font-size:10px" hidden>SALIR</button></div></header>
 
   <section id="panel" hidden>
     <nav class="tabs" data-on="reservas"></nav>

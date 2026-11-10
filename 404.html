@@ -1,35 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="/support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Página no encontrada · Hanaki Sushi Barcelona</title>
+<meta name="description" content="Página no encontrada.">
 <meta name="robots" content="noindex">
-<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-<link rel="icon" type="image/png" href="/assets/hanaki-logo.png">
-<script src="/site.js"></script>
-<script src="/i18n-bcn.js"></script>
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" type="image/png" href="/assets/logo.png"><link rel="apple-touch-icon" href="/assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&amp;family=DM+Sans:wght@400;500;600&amp;family=Noto+Serif+JP:wght@300&amp;display=swap">
-<style>body{margin:0;background:#0A0A0A;color:#BDB7AE;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}a{color:#F2EEE8;text-decoration:none}a:hover{color:#FFFFFF}:focus-visible{outline:2px solid #D11A2A;outline-offset:3px}</style>
-</helmet>
-<main style="min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 24px;gap:24px;position:relative;overflow:hidden">
-<div aria-hidden="true" lang="ja" style="position:absolute;font-family:'Noto Serif JP',serif;font-weight:300;font-size:clamp(220px,40vw,520px);line-height:1;color:rgba(179,18,31,.08);pointer-events:none">迷</div>
-<a href="/" aria-label="Hanaki Sushi Barcelona, inicio" style="font-size:13px;letter-spacing:.42em;color:#F2EEE8;position:relative">HANAKI</a>
-<div style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(96px,16vw,180px);line-height:.9;color:#F2EEE8;position:relative">404</div>
-<div style="width:40px;height:1px;background:#B3121F;position:relative"></div>
-<h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(28px,4vw,40px);color:#F2EEE8;position:relative">Página no encontrada</h1>
-<p style="margin:0;max-width:420px;font-size:15.5px;line-height:1.7;color:#BDB7AE;text-wrap:pretty;position:relative">Este plato no está en la carta. Vuelve al inicio o mira la carta completa.</p>
-<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:8px;position:relative">
-<a href="/" style="display:flex;align-items:center;min-height:48px;padding:0 24px;background:#B3121F;color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.18em" style-hover="background:#D11A2A">VOLVER AL INICIO</a>
-<a href="/carta" style="display:flex;align-items:center;min-height:48px;padding:0 24px;border:1px solid rgba(242,238,232,.35);color:#F2EEE8;font-size:12px;font-weight:600;letter-spacing:.18em" style-hover="border-color:#F2EEE8">VER LA CARTA</a>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Saira+Extra+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/estilo.css">
+<link rel="stylesheet" href="/paginas.css">
+<script src="/site.js"></script>
+<script src="/estadisticas.js" defer></script>
+</head>
+<body class="pg pg--404">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></symbol>
+  <symbol id="star" viewBox="0 0 24 24"><path d="M12 2l3 7 7.5.6-5.7 4.9 1.8 7.3L12 17.8 5.4 21.8l1.8-7.3L1.5 9.6 9 9z" fill="currentColor"/></symbol>
+</svg>
+
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="hdr" id="hdr">
+  <a class="brand" href="/" aria-label="Hanaki Sushi Barcelona, inicio">
+    <img class="brand__logo" src="/assets/logo.png" alt="花木" width="820" height="432">
+    <span class="brand__w">HANAKI</span>
+  </a>
+  <nav class="nav" aria-label="Principal">
+    <a href="/">Inicio</a>
+    <a href="/#precios">Precios</a>
+    <a href="/#galeria">Galería</a>
+    <a href="/#reservar">Reservas</a>
+    <a href="/ubicacion">Ubicación</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+  <div class="hdr__r">
+    <div class="langs" aria-label="Idioma"><button class="on">ES</button><button>CA</button><button>EN</button><button>FR</button></div>
+    <a class="btn btn--ghost btn--sm" href="/carta"><span>Carta</span></a>
+    <a class="btn btn--red btn--sm" href="/reservas/"><span>Reservar</span><svg><use href="#arrow"/></svg></a>
+    <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false"><i></i><i></i></button>
+  </div>
+</header>
+
+<div class="menu" id="menu" aria-hidden="true">
+  <nav class="menu__nav">
+    <a href="/"><em>01</em>Inicio</a>
+    <a href="/#precios"><em>02</em>Precios</a>
+    <a href="/carta"><em>03</em>La carta</a>
+    <a href="/#galeria"><em>04</em>Galería</a>
+    <a href="/reservas/"><em>05</em>Reservas</a>
+    <a href="/ubicacion"><em>06</em>Ubicación</a>
+    <a href="#contacto"><em>07</em>Contacto</a>
+  </nav>
+  <div class="menu__foot">
+    <a href="tel:+34931942261" class="menu__tel">931 94 22 61</a>
+    <p>Carrer de Joan Güell, 212 · Les Corts<br>Todos los días · 12:00–16:30 · 20:00–23:30</p>
+    <div class="langs"><button class="on">ES</button><button>CA</button><button>EN</button><button>FR</button></div>
+  </div>
 </div>
+
+<main class="e404">
+  <div class="wrap e404__in">
+    <p class="eyebrow" data-in><i></i>Página no encontrada</p>
+    <div class="e404__n" data-fit aria-hidden="true"><span class="ln"><span>404</span></span></div>
+    <h1 class="e404__t" data-in>Este plato no está en la carta<b>.</b></h1>
+    <p class="e404__p" data-in>Vuelve al inicio o mira la carta completa.</p>
+    <div class="e404__cta" data-in>
+      <a class="btn btn--red" href="/"><span>Volver al inicio</span><svg><use href="#arrow"/></svg></a>
+      <a class="btn btn--ghost" href="/carta"><span>Ver la carta</span><svg><use href="#arrow"/></svg></a>
+    </div>
+  </div>
 </main>
-</x-dc>
+
+<footer class="ftr" id="contacto">
+  <div class="wrap ftr__grid">
+    <div class="ftr__brand">
+      <img class="ftr__logo" src="/assets/logo.png" alt="花木" width="820" height="432" loading="lazy">
+      <p>Pequeños placeres,<br>grandes momentos.</p>
+    </div>
+    <div>
+      <h4>Horario</h4>
+      <ul class="week" id="week">
+        <li><span>Lunes</span><span>12:00–16:30 · 20:00–23:30</span></li>
+        <li><span>Martes</span><span>12:00–16:30 · 20:00–23:30</span></li>
+        <li><span>Miércoles</span><span>12:00–16:30 · 20:00–23:30</span></li>
+        <li><span>Jueves</span><span>12:00–16:30 · 20:00–23:30</span></li>
+        <li><span>Viernes</span><span>12:00–16:30 · 20:00–23:30</span></li>
+        <li><span>Sábado</span><span>12:00–16:30 · 20:00–23:30</span></li>
+        <li><span>Domingo</span><span>12:00–16:30 · 20:00–23:30</span></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Ubicación</h4>
+      <p>Carrer de Joan Güell, 212<br>Les Corts, 08028 Barcelona</p>
+      <a class="link" href="/ubicacion">Cómo llegar <svg><use href="#arrow"/></svg></a>
+    </div>
+    <div>
+      <h4>Contacto</h4>
+      <p><a href="tel:+34931942261">931 94 22 61</a></p>
+      <ul class="soc">
+        <li><a href="https://www.instagram.com/hanakisushi/" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://www.tiktok.com/@hanaki.sushi" target="_blank" rel="noopener">TikTok</a></li>
+        <li><a href="https://www.facebook.com/p/Sushi-Hanaki-100067956896925/" target="_blank" rel="noopener">Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ftr__big" data-fit aria-hidden="true"><span class="ln"><span>HANAKI</span></span></div>
+  <div class="wrap ftr__legal">
+    <span>© 2026 Hanaki Sushi Barcelona · Restaurante japonés</span>
+    <nav><a href="/legal#aviso-legal">Aviso legal</a><a href="/legal#privacidad">Privacidad</a><a href="/legal#terminos">Términos</a><a href="/legal#cookies">Cookies</a></nav>
+  </div>
+</footer>
+
+<div class="dock" id="dock">
+  <a href="tel:+34931942261"><span>Llamar</span></a>
+  <a class="dock__m" href="/reservas/"><span>Reservar online</span><svg><use href="#arrow"/></svg></a>
+</div>
+
+<script src="/sitio.js"></script>
 </body>
 </html>

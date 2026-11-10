@@ -14,16 +14,16 @@
 <link rel="icon" type="image/png" href="icono.png">
 <link rel="apple-touch-icon" href="icono.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Saira+Extra+Condensed:wght@500;600;700&display=swap">
 <link rel="stylesheet" href="estilo.css">
 <script src="config.js"></script>
 <script src="vendor/qrcode.js"></script>
 <style>
 .misres{margin-top:26px}
-.misres h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:28px;color:var(--txt-hi);margin:0 0 12px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
-.misres h2 a{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.18em;color:var(--oro);text-decoration:none}
+.misres h2{font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:28px;color:var(--txt-hi);margin:0 0 12px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.misres h2 a{font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.18em;color:var(--oro);text-decoration:none}
 .mr{display:grid;grid-template-columns:auto 1fr auto;gap:2px 14px;align-items:center;border:1px solid var(--linea);background:var(--bg2);padding:14px;margin-bottom:8px}
-.mr .h{font-family:'Cormorant Garamond',serif;font-size:28px;line-height:1;color:var(--txt-hi);grid-row:span 2}
+.mr .h{font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:28px;line-height:1;color:var(--txt-hi);grid-row:span 2}
 .mr b{color:var(--txt-hi);font-size:15px;font-weight:600}
 .mr small{font-size:13px;color:var(--txt);grid-column:2}
 .mr .chip{grid-column:3;grid-row:1/span 2;font-size:10px;font-weight:600;letter-spacing:.12em;padding:4px 8px;border:1px solid currentColor;white-space:nowrap}
@@ -37,7 +37,7 @@
 </head>
 <body>
 <main class="wrap" style="padding-top:max(28px,env(safe-area-inset-top))">
-  <header class="cab"><a href="../"><img src="../assets/hanaki-logo.png" alt="花木"><span>HANAKI</span></a></header>
+  <header class="cab"><a href="../"><img src="../assets/logo.png" alt="花木"><span>HANAKI</span></a></header>
 
   <div id="estado" class="cargando">Cargando tu tarjeta…</div>
 
@@ -50,7 +50,7 @@
 
     <article class="tarjeta" aria-label="Tarjeta de fidelidad">
       <div class="t-cab">
-        <div class="t-marca"><img src="../assets/hanaki-logo.png" alt=""><div><b>HANAKI</b><small>SUSHI · BARCELONA</small></div></div>
+        <div class="t-marca"><img src="../assets/logo.png" alt=""><div><b>HANAKI</b><small>SUSHI · BARCELONA</small></div></div>
         <div class="t-cont"><small>SELLOS</small><b id="cont">0<span>/8</span></b></div>
       </div>
       <div class="tabs-t" id="tabs" role="tablist" aria-label="Tipo de sello"></div>

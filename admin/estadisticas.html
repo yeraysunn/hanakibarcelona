@@ -12,12 +12,12 @@
 <link rel="icon" type="image/png" href="/fidelidad/icono.png">
 <link rel="apple-touch-icon" href="/fidelidad/icono.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Saira+Extra+Condensed:wght@500;600;700&display=swap">
 <link rel="stylesheet" href="/fidelidad/estilo.css">
 <script src="/admin/i18n.js"></script>
 <script src="/admin/tabs.js"></script>
 <style>
-#idioma{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(243,238,230,.35);color:var(--txt-hi);padding:9px 12px;font-size:12px;font-weight:600;letter-spacing:.08em;cursor:pointer}#idioma:hover{border-color:var(--oro);color:var(--oro)}#idioma span{font:inherit;letter-spacing:inherit;color:inherit}
+#idioma{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(243,239,232,.35);color:var(--txt-hi);padding:9px 12px;font-size:12px;font-weight:600;letter-spacing:.08em;cursor:pointer}#idioma:hover{border-color:var(--oro);color:var(--oro)}#idioma span{font:inherit;letter-spacing:inherit;color:inherit}
 .wrap{max-width:860px}
 .rango{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
 .rango button{background:none;border:1px solid var(--linea);color:var(--txt);padding:11px 8px;font-size:11px;font-weight:600;letter-spacing:.16em;cursor:pointer}
@@ -26,11 +26,11 @@
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--linea);border:1px solid var(--linea);margin-bottom:28px}
 .kpi{background:var(--bg2);padding:16px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
 .kpi small{font-size:10.5px;font-weight:600;letter-spacing:.18em;color:var(--oro2)}
-.kpi b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:38px;line-height:1;color:var(--txt-hi);font-variant-numeric:tabular-nums}
+.kpi b{font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:38px;line-height:1;color:var(--txt-hi);font-variant-numeric:tabular-nums}
 .kpi span{font-size:12.5px;color:var(--muted)}
 .kpi .sube{color:#5FB37A}.kpi .baja{color:#E36B74}
 @media (max-width:640px){.kpis{grid-template-columns:1fr 1fr}}
-h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:26px;color:var(--txt-hi);margin:0 0 4px}
+h2{font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:26px;color:var(--txt-hi);margin:0 0 4px}
 .sub{font-size:13px;color:var(--muted);margin:0 0 14px}
 .bloque{margin-bottom:34px}
 .graf{position:relative;height:180px;display:flex;align-items:flex-end;gap:2px;border-bottom:1px solid var(--linea);padding-top:20px}
@@ -47,7 +47,7 @@ h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:26px;color:v
 .rk{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:14px}
 .rk span{color:var(--txt-hi);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rk b{font-weight:500;color:var(--txt);font-variant-numeric:tabular-nums}
-.rk .barra{grid-column:1/-1;height:6px;background:rgba(243,238,230,.06);border-radius:3px;overflow:hidden}
+.rk .barra{grid-column:1/-1;height:6px;background:rgba(243,239,232,.06);border-radius:3px;overflow:hidden}
 .rk .barra i{display:block;height:100%;background:var(--oro);border-radius:3px}
 .vacio{border:1px dashed var(--linea);padding:20px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6}
 .nota-priv{font-size:12.5px;line-height:1.6;color:var(--muted);border-top:1px solid var(--linea);padding-top:16px}
@@ -55,7 +55,7 @@ h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:26px;color:v
 </head>
 <body>
 <main class="wrap">
-  <header class="cab"><a href="/admin/"><img src="/assets/hanaki-logo.png" alt="花木"><span>HANAKI</span></a><div style="display:flex;gap:8px"><button type="button" id="idioma"></button><button id="salir" class="btn sec" style="width:auto;padding:10px 14px;font-size:10px" hidden>SALIR</button></div></header>
+  <header class="cab"><a href="/admin/"><img src="/assets/logo.png" alt="花木"><span>HANAKI</span></a><div style="display:flex;gap:8px"><button type="button" id="idioma"></button><button id="salir" class="btn sec" style="width:auto;padding:10px 14px;font-size:10px" hidden>SALIR</button></div></header>
 
   <div id="cargando" class="cargando">Cargando estadísticas…</div>
   <section id="panel" hidden>
