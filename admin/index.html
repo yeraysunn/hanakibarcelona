@@ -39,7 +39,7 @@ body::before{content:"花木";position:fixed;right:-4vw;bottom:-6vh;font-family:
   <div id="cargando">Comprobando…</div>
 
   <form id="login" hidden>
-    <p class="lead">Pon la contraseña para entrar a reservas y fidelización.</p>
+    <p class="lead">Pon la contraseña para entrar a reservas, fidelización, carta y estadísticas.</p>
     <div id="l-err" class="err" hidden></div>
     <div class="campo"><label for="pass">CONTRASEÑA</label><input id="pass" type="password" autocomplete="current-password" required></div>
     <button class="btn" type="submit" id="entrar">ENTRAR</button>
@@ -49,7 +49,7 @@ body::before{content:"花木";position:fixed;right:-4vw;bottom:-6vh;font-family:
 <script>
 (function(){
   var $ = function(id){ return document.getElementById(id); };
-  var DESTINOS = { reservas: '/reservas/admin.html', fidelizacion: '/fidelidad/admin.html' };
+  var DESTINOS = { reservas: '/reservas/admin.html', fidelizacion: '/fidelidad/admin.html', carta: '/admin/carta.html', estadisticas: '/admin/estadisticas.html' };
   var volver = new URLSearchParams(location.search).get('volver');
   function entrar(){ location.replace(DESTINOS[volver] || DESTINOS.reservas); }
   function pedirPass(){ $('cargando').hidden = true; $('login').hidden = false; $('pass').focus(); }

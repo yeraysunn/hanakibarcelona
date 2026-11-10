@@ -33,6 +33,7 @@
 .ok-box dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:16px 0 0;font-size:15px}
 .ok-box dt{color:var(--oro2)}.ok-box dd{margin:0;color:var(--txt-hi)}
 </style>
+<script src="/estadisticas.js" defer></script>
 </head>
 <body>
 <main class="wrap">
@@ -70,7 +71,7 @@
       <div class="campo"><label for="email">EMAIL <span style="font-weight:400;letter-spacing:0;color:var(--muted)">(para recibir la confirmación)</span></label><input id="email" name="email" type="email" inputmode="email" autocomplete="email"></div>
       <div class="campo"><label for="comentarios">COMENTARIOS <span style="font-weight:400;letter-spacing:0;color:var(--muted)">(opcional)</span></label><textarea id="comentarios" name="comentarios" maxlength="400" placeholder="Alergias, preferencias de mesa…"></textarea></div>
       <input class="trampa" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <label class="check"><input type="checkbox" name="privacidad" required><span>He leído y acepto la <a href="../Hanaki%20Legal.dc.html#privacidad" target="_blank">política de privacidad</a>.</span></label>
+      <label class="check"><input type="checkbox" name="privacidad" required><span>He leído y acepto la <a href="/legal#privacidad" target="_blank">política de privacidad</a>.</span></label>
       <button class="btn" type="submit" id="enviar">RESERVAR <span aria-hidden="true">→</span></button>
       <p class="nota" style="margin-top:14px">Grupos de más de 20 personas: llámanos al <a href="tel:+34931942261">931 94 22 61</a>.</p>
     </form>
@@ -82,7 +83,12 @@
     <p class="lead" id="h-texto"></p>
     <div class="ok-box"><dl><dt>Día</dt><dd id="h-dia"></dd><dt>Hora</dt><dd id="h-hora"></dd><dt>Personas</dt><dd id="h-pers"></dd></dl></div>
     <p class="nota" style="margin-top:18px">¿Necesitas cambiar algo? Llámanos al <a href="tel:+34931942261">931 94 22 61</a>.</p>
-    <a class="btn sec" href="../" style="margin-top:20px">VOLVER A LA WEB</a>
+    <a class="btn oro" id="h-tarjeta" href="/fidelidad/tarjeta.html" style="margin-top:20px" hidden>VER MI TARJETA Y MIS RESERVAS</a>
+    <div id="h-socio" hidden style="margin-top:22px;border:1px solid var(--linea);background:var(--bg2);padding:16px;font-size:14px;line-height:1.6">
+      <b style="color:var(--txt-hi)">Crea tu tarjeta Hanaki</b><br>Consigue un buffet gratis cada 8 visitas y ten tus reservas siempre a mano en el móvil.
+      <a class="btn" href="/fidelidad/" style="margin-top:12px">CREAR MI TARJETA</a>
+    </div>
+    <a class="btn sec" href="../" style="margin-top:12px">VOLVER A LA WEB</a>
   </section>
 </main>
 <script>
@@ -130,6 +136,17 @@
   function largo(fe){ var p = fe.split('-').map(Number), d = new Date(p[0], p[1]-1, p[2]); return DIAS[d.getDay()] + ' ' + p[2] + ' de ' + MESES[p[1]-1]; }
   function pers(){ var a = [st.adultos + ' adulto' + (st.adultos === 1 ? '' : 's')]; if (st.ninos) a.push(st.ninos + ' niño' + (st.ninos === 1 ? '' : 's')); if (st.bebes) a.push(st.bebes + ' bebé' + (st.bebes === 1 ? '' : 's')); return a.join(', '); }
 
+  // Si tiene la tarjeta Hanaki en este móvil: rellena sus datos y la reserva aparecerá en su tarjeta
+  var tok = null; try { tok = localStorage.getItem('hk-fid-token'); } catch (e) {}
+  if (tok && /^[a-f0-9]{32}$/.test(tok)) {
+    fetch('/api/fidelidad/reservas?t=' + tok, { cache: 'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
+      if (!j) { tok = null; return; }
+      if (!f.nombre.value) f.nombre.value = j.socio.nombre || '';
+      if (!f.telefono.value) f.telefono.value = j.socio.telefono || '';
+      if (!f.email.value) f.email.value = j.socio.email || '';
+    }).catch(function(){});
+  } else tok = null;
+
   f.addEventListener('submit', async function(e){
     e.preventDefault(); err.hidden = true;
     if (!fecha.value) return fallo('Elige un día.');
@@ -149,6 +166,8 @@
       $('h-nombre').textContent = d.nombre.trim().split(' ')[0];
       $('h-texto').textContent = d.email.trim() ? 'Hemos recibido tu reserva. Te enviaremos la confirmación a ' + d.email.trim() + '.' : 'Hemos recibido tu reserva. El restaurante la revisará en breve.';
       $('h-dia').textContent = largo(d.fecha); $('h-hora').textContent = d.hora; $('h-pers').textContent = pers();
+      if (tok) { $('h-tarjeta').href = '/fidelidad/tarjeta.html?t=' + tok; $('h-tarjeta').hidden = false; } else $('h-socio').hidden = false;
+      if (window.HK_STATS) HK_STATS.evento('reserva');
       $('form-wrap').hidden = true; $('hecho').hidden = false; scrollTo(0, 0);
     } catch (ex) { fallo(ex.message); btn.disabled = false; btn.innerHTML = 'RESERVAR <span aria-hidden="true">→</span>'; }
   });

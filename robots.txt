@@ -1,5 +1,10 @@
 User-agent: *
 Allow: /
 Disallow: /Hanaki%20Barcelona%20Numeros.dc.html
+Disallow: /admin/
+Disallow: /api/
+Disallow: /reservas/admin
+Disallow: /fidelidad/admin
+Disallow: /fidelidad/tarjeta
 
-Sitemap: https://yeraysun.com/sitemap.xml
+Sitemap: https://hanakisushi.com/sitemap.xml

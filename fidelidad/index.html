@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
 <link rel="stylesheet" href="estilo.css">
 <script src="config.js"></script>
+<script src="/estadisticas.js" defer></script>
 </head>
 <body>
 <main class="wrap">
@@ -47,7 +48,7 @@
     <div class="campo"><label for="telefono">TELÉFONO MÓVIL</label><input id="telefono" name="telefono" type="tel" inputmode="tel" autocomplete="tel" required placeholder="600 000 000"></div>
     <div class="campo"><label for="email">EMAIL <span style="font-weight:400;letter-spacing:0;color:var(--muted)">(para recuperar tu tarjeta)</span></label><input id="email" name="email" type="email" inputmode="email" autocomplete="email" required></div>
     <input class="trampa" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <label class="check"><input type="checkbox" name="privacidad" required><span>He leído y acepto la <a href="../Hanaki%20Legal.dc.html#privacidad" target="_blank">política de privacidad</a>.</span></label>
+    <label class="check"><input type="checkbox" name="privacidad" required><span>He leído y acepto la <a href="/legal#privacidad" target="_blank">política de privacidad</a>.</span></label>
     <label class="check"><input type="checkbox" name="promos"><span>Quiero recibir promociones de Hanaki (opcional).</span></label>
     <button class="btn" type="submit" id="enviar">CREAR MI TARJETA <span aria-hidden="true">→</span></button>
     <p class="nota" style="margin-top:14px">Un sello por visita al buffet, a nombre del titular. El premio es un buffet libre (bebidas no incluidas) y no se puede cambiar por dinero.</p>

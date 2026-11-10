@@ -36,7 +36,7 @@ class Component extends DCLogic {
   state = { data: [], q: '', miss: false };
   async componentDidMount() {
     try {
-      const t = await (await fetch('Hanaki%20Barcelona%20Carta.dc.html')).text();
+      const t = await (await fetch('/carta')).text();
       const g = k => { const m = t.match(new RegExp('static ' + k + ' = (.*);\\n')); return m ? JSON.parse(m[1]) : null; };
       const CATS = g('CATS') || [], NUMS = g('NUMS') || {}, AL = g('AL') || {}, PH = g('PH') || {};
       const AK = { G: 'Gluten', C: 'Crustáceos', H: 'Huevo', P: 'Pescado', Ca: 'Cacahuete', S: 'Soja', L: 'Lácteos', F: 'Frutos de cáscara', Ap: 'Apio', Mo: 'Mostaza', Se: 'Sésamo', Su: 'Sulfitos', M: 'Moluscos', Al: 'Altramuz' };

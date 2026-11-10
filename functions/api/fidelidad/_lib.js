@@ -121,7 +121,7 @@ export function tarjetaPublica(s) {
 const COOKIE = 'hk_fid_admin';
 const DURACION_SESION = 60 * 60 * 24 * 30; // 30 días
 
-async function firmar(texto, secreto) {
+export async function firmar(texto, secreto) {
   const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secreto), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   return hex(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(texto)));
 }
@@ -133,7 +133,7 @@ function iguales(a, b) {
   return d === 0;
 }
 
-function secretoAdmin(env) {
+export function secretoAdmin(env) {
   if (!env.ADMIN_PASSWORD) throw new HttpError(500, 'Falta la variable ADMIN_PASSWORD en Cloudflare Pages.');
   return 'hanaki-fidelidad:' + env.ADMIN_PASSWORD;
 }
@@ -167,12 +167,17 @@ export async function buscarSocio(DB, { id, token, codigo }) {
 
 // ---------- emails (Resend) ----------
 // Devuelve true si se envió, false si no hay clave configurada. Lanza HttpError si Resend falla.
-export async function enviarEmail(env, { para, asunto, html, texto, de, idem }) {
+// programado: fecha ISO para que Resend lo envíe más tarde · responder: reply-to · cabeceras: p. ej. List-Unsubscribe
+export async function enviarEmail(env, { para, asunto, html, texto, de, idem, programado, responder, cabeceras }) {
   if (!env.RESEND_API_KEY) return false;
+  const datos = { from: de || env.EMAIL_FROM || 'Hanaki Sushi <tarjeta@hanakisushi.com>', to: [para], subject: asunto, html, text: texto };
+  if (programado) datos.scheduled_at = programado;
+  if (responder) datos.reply_to = responder;
+  if (cabeceras) datos.headers = cabeceras;
   const enviar = () => fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json', ...(idem ? { 'idempotency-key': idem } : {}) },
-    body: JSON.stringify({ from: de || env.EMAIL_FROM || 'Hanaki Sushi <tarjeta@hanakisushi.com>', to: [para], subject: asunto, html, text: texto }),
+    body: JSON.stringify(datos),
   });
   let r;
   try { r = await enviar(); } catch { r = null; }

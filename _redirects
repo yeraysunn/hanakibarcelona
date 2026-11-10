@@ -1,2 +1,10 @@
 /reservar  /reservas/  301
 /reservar/  /reservas/  301
+
+# Direcciones antiguas → URLs limpias
+/Hanaki%20Barcelona%20v3.dc.html  /  301
+/Hanaki%20Barcelona%20Carta.dc.html  /carta  301
+/Hanaki%20Barcelona%20Ubicacion.dc.html  /ubicacion  301
+/Hanaki%20Legal.dc.html  /legal  301
+/Hanaki%20Barcelona%20Reservar.dc.html  /reservas/  301
+/404.dc.html  /  301

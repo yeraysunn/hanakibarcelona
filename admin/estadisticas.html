@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Estadísticas · Panel Hanaki</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Admin Hanaki">
+<link rel="icon" type="image/png" href="/fidelidad/icono.png">
+<link rel="apple-touch-icon" href="/fidelidad/icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
+<link rel="stylesheet" href="/fidelidad/estilo.css">
+<script src="/admin/i18n.js"></script>
+<script src="/admin/tabs.js"></script>
+<style>
+#idioma{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(243,238,230,.35);color:var(--txt-hi);padding:9px 12px;font-size:12px;font-weight:600;letter-spacing:.08em;cursor:pointer}#idioma:hover{border-color:var(--oro);color:var(--oro)}#idioma span{font:inherit;letter-spacing:inherit;color:inherit}
+.wrap{max-width:860px}
+.rango{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.rango button{background:none;border:1px solid var(--linea);color:var(--txt);padding:11px 8px;font-size:11px;font-weight:600;letter-spacing:.16em;cursor:pointer}
+.rango button[aria-pressed="true"]{border-color:var(--oro);color:var(--oro)}
+.periodo{font-size:13px;color:var(--muted);margin:0 0 18px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--linea);border:1px solid var(--linea);margin-bottom:28px}
+.kpi{background:var(--bg2);padding:16px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.kpi small{font-size:10.5px;font-weight:600;letter-spacing:.18em;color:var(--oro2)}
+.kpi b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:38px;line-height:1;color:var(--txt-hi);font-variant-numeric:tabular-nums}
+.kpi span{font-size:12.5px;color:var(--muted)}
+.kpi .sube{color:#5FB37A}.kpi .baja{color:#E36B74}
+@media (max-width:640px){.kpis{grid-template-columns:1fr 1fr}}
+h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:26px;color:var(--txt-hi);margin:0 0 4px}
+.sub{font-size:13px;color:var(--muted);margin:0 0 14px}
+.bloque{margin-bottom:34px}
+.graf{position:relative;height:180px;display:flex;align-items:flex-end;gap:2px;border-bottom:1px solid var(--linea);padding-top:20px}
+.graf .col{flex:1;min-width:0;height:100%;display:flex;align-items:flex-end;position:relative;cursor:default}
+.graf .col i{display:block;width:100%;background:var(--oro);border-radius:3px 3px 0 0;min-height:1px}
+.graf .col:hover i,.graf .col:focus i{background:var(--txt-hi)}
+.ejes{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:6px}
+.tip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#000;border:1px solid var(--linea);color:var(--txt-hi);font-size:12.5px;padding:7px 10px;white-space:nowrap;pointer-events:none;z-index:3;display:none}
+.graf .col:hover .tip,.graf .col:focus .tip{display:block}
+.max{position:absolute;top:0;left:0;font-size:11.5px;color:var(--muted)}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+.rank{display:flex;flex-direction:column;gap:10px}
+.rk{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:14px}
+.rk span{color:var(--txt-hi);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk b{font-weight:500;color:var(--txt);font-variant-numeric:tabular-nums}
+.rk .barra{grid-column:1/-1;height:6px;background:rgba(243,238,230,.06);border-radius:3px;overflow:hidden}
+.rk .barra i{display:block;height:100%;background:var(--oro);border-radius:3px}
+.vacio{border:1px dashed var(--linea);padding:20px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6}
+.nota-priv{font-size:12.5px;line-height:1.6;color:var(--muted);border-top:1px solid var(--linea);padding-top:16px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="cab"><a href="/admin/"><img src="/assets/hanaki-logo.png" alt="花木"><span>HANAKI</span></a><div style="display:flex;gap:8px"><button type="button" id="idioma"></button><button id="salir" class="btn sec" style="width:auto;padding:10px 14px;font-size:10px" hidden>SALIR</button></div></header>
+
+  <div id="cargando" class="cargando">Cargando estadísticas…</div>
+  <section id="panel" hidden>
+    <nav class="tabs" data-on="estadisticas"></nav>
+    <div class="rango" role="group" aria-label="Periodo"><button type="button" data-d="7">7 DÍAS</button><button type="button" data-d="30">30 DÍAS</button><button type="button" data-d="90">90 DÍAS</button></div>
+    <p class="periodo" id="periodo"></p>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="bloque">
+      <h2>Visitas por día</h2>
+      <p class="sub">Personas distintas que entran a la web cada día. Pasa el dedo o el ratón por una barra para ver el detalle.</p>
+      <div class="graf" id="graf" role="img"></div>
+      <div class="ejes" id="ejes"></div>
+    </div>
+
+    <div class="dos bloque">
+      <div><h2>De dónde vienen</h2><p class="sub">Entradas a la web según su origen.</p><div class="rank" id="origenes"></div></div>
+      <div><h2>Qué hacen</h2><p class="sub">Clics en los botones importantes.</p><div class="rank" id="eventos"></div></div>
+    </div>
+    <div class="dos bloque">
+      <div><h2>Páginas más vistas</h2><p class="sub">&nbsp;</p><div class="rank" id="paginas"></div></div>
+      <div><h2>Reservas online</h2><p class="sub">Reservas hechas desde la web en este periodo.</p><div class="rank" id="reservas"></div></div>
+    </div>
+
+    <p class="nota-priv">Estas estadísticas no usan cookies ni guardan la IP de nadie: cada visitante se cuenta solo dentro del mismo día y no se puede seguir de un día a otro. Por eso no hace falta pedir permiso en el aviso de cookies.</p>
+  </section>
+</main>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var dias = 30;
+  try { dias = +localStorage.getItem('hk_est_dias') || 30; } catch(e){}
+  var NOM_ORIGEN = { directo: 'Directo / app / QR', google: 'Google', instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook', bing: 'Bing', thefork: 'TheFork', eltenedor: 'TheFork', tripadvisor: 'Tripadvisor' };
+  var NOM_EVENTO = { llamar: 'Pulsan «Llamar»', whatsapp: 'Abren WhatsApp', como_llegar: 'Piden «Cómo llegar»', reservar: 'Van a reservar', reserva: 'Reservas enviadas', tarjeta: 'Van a la tarjeta', instagram: 'Van a Instagram' };
+  var NOM_PAGINA = { '/': 'Portada', '/carta': 'Carta', '/ubicacion': 'Ubicación', '/legal': 'Legal', '/reservas/': 'Reservar', '/fidelidad/': 'Tarjeta: alta', '/fidelidad/tarjeta': 'Tarjeta: ver mi tarjeta' };
+  var DSEM = ['dom','lun','mar','mié','jue','vie','sáb'];
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  var fmt = function(n){ return Number(n || 0).toLocaleString(window.HK_LOCALE || 'es-ES'); };
+  function fecha(f){ var p = f.split('-').map(Number); return new Date(p[0], p[1]-1, p[2]); }
+  function corto(f){ var d = fecha(f); return T(DSEM[d.getDay()]) + ' ' + d.getDate() + '/' + (d.getMonth()+1); }
+  function delta(a, b){
+    if (!b) return a ? '<span>' + T('sin datos antes') + '</span>' : '<span>&nbsp;</span>';
+    var p = Math.round((a - b) / b * 100);
+    return '<span class="' + (p >= 0 ? 'sube' : 'baja') + '">' + (p >= 0 ? '▲ +' : '▼ ') + p + '% </span><span>' + T('vs. periodo anterior') + '</span>';
+  }
+  function ranking(el, filas, vacio){
+    if (!filas.length) { el.innerHTML = '<div class="vacio">' + T(vacio) + '</div>'; return; }
+    var max = Math.max.apply(null, filas.map(function(f){ return f[1]; })) || 1;
+    el.innerHTML = filas.map(function(f){
+      return '<div class="rk"><span>' + esc(f[0]) + '</span><b>' + fmt(f[1]) + '</b><div class="barra"><i style="width:' + Math.max(2, f[1] / max * 100) + '%"></i></div></div>';
+    }).join('');
+  }
+
+  async function cargar(){
+    document.querySelectorAll('.rango button').forEach(function(b){ b.setAttribute('aria-pressed', +b.dataset.d === dias); });
+    var r = await fetch('/api/estadisticas/admin/resumen?dias=' + dias, { cache: 'no-store' });
+    var j = await r.json().catch(function(){ return {}; });
+    if (r.status === 401) { location.replace('/admin/?volver=estadisticas'); return; }
+    if (!r.ok) throw new Error(j.error || 'Error');
+    $('cargando').hidden = true; $('panel').hidden = false; $('salir').hidden = false;
+
+    $('periodo').textContent = T('Del {a} al {b}', { a: corto(j.desde), b: corto(j.hasta) });
+    var t = j.totales;
+    var conv = t.visitantes ? (t.reservas / t.visitantes * 100) : 0;
+    $('kpis').innerHTML = [
+      ['VISITANTES', fmt(t.visitantes), delta(t.visitantes, j.anterior.visitantes)],
+      ['PÁGINAS VISTAS', fmt(t.vistas), delta(t.vistas, j.anterior.vistas)],
+      ['RESERVAS ONLINE', fmt(t.reservas), delta(t.reservas, j.anterior.reservas)],
+      ['CONVERSIÓN', conv.toLocaleString(window.HK_LOCALE || 'es-ES', { maximumFractionDigits: 1 }) + '%', '<span>' + T('de visitantes que reservan') + '</span>'],
+      ['PERSONAS RESERVADAS', fmt(t.personas), '<span>' + T('en reservas online') + '</span>'],
+      ['TARJETAS NUEVAS', fmt(t.socios), '<span>' + T(t.sellos === 1 ? '{n} sello puesto' : '{n} sellos puestos', { n: fmt(t.sellos) }) + '</span>'],
+      ['RESEÑAS PEDIDAS', fmt(t.resenas), '<span>' + T('emails a Google') + '</span>'],
+      ['NO VINIERON', fmt(j.reservas.no_vinieron), '<span>' + T(j.reservas.canceladas === 1 ? '{n} cancelada' : '{n} canceladas', { n: fmt(j.reservas.canceladas) }) + '</span>'],
+    ].map(function(k){ return '<div class="kpi"><small>' + T(k[0]) + '</small><b>' + k[1] + '</b><div>' + k[2] + '</div></div>'; }).join('');
+
+    // Barras por día (se rellenan los días sin visitas)
+    var mapa = {}; j.porDia.forEach(function(d){ mapa[d.dia] = d; });
+    var lista = [], d0 = fecha(j.desde);
+    for (var i = 0; i < j.dias; i++) {
+      var d = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + i);
+      var k = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      lista.push({ dia: k, v: (mapa[k] || {}).visitantes || 0, p: (mapa[k] || {}).vistas || 0, finde: d.getDay() === 0 || d.getDay() === 6 });
+    }
+    var max = Math.max.apply(null, lista.map(function(x){ return x.v; })) || 1;
+    $('graf').setAttribute('aria-label', T('Visitantes por día. Máximo: {n}', { n: max }));
+    $('graf').innerHTML = '<span class="max">' + fmt(max) + '</span>' + lista.map(function(x){
+      return '<div class="col" tabindex="0"><i style="height:' + (x.v / max * 100) + '%"></i><span class="tip">' + corto(x.dia) + ' · ' + T('{v} visitantes, {p} páginas', { v: fmt(x.v), p: fmt(x.p) }) + '</span></div>';
+    }).join('');
+    $('ejes').innerHTML = '<span>' + corto(j.desde) + '</span><span>' + corto(j.hasta) + '</span>';
+
+    ranking($('origenes'), j.origenes.map(function(o){ return [T(NOM_ORIGEN[o.origen] || o.origen), o.n]; }), 'Aún no hay datos. Aparecerán en cuanto entre gente a la web.');
+    ranking($('eventos'), j.eventos.map(function(o){ return [T(NOM_EVENTO[o.tipo] || o.tipo), o.n]; }), 'Aún no hay clics registrados.');
+    ranking($('paginas'), j.paginas.map(function(o){ return [T(NOM_PAGINA[o.ruta] || o.ruta), o.n]; }), 'Aún no hay datos.');
+    ranking($('reservas'), [['Llegaron', j.reservas.llegaron], ['No vinieron', j.reservas.no_vinieron], ['Canceladas', j.reservas.canceladas]].filter(function(x){ return x[1]; }).map(function(x){ return [T(x[0]), x[1]]; }).concat(t.reservas ? [[T('Total recibidas'), t.reservas]] : []), 'Sin reservas online en este periodo.');
+  }
+
+  document.querySelector('.rango').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-d]'); if (!b) return;
+    dias = +b.dataset.d; try { localStorage.setItem('hk_est_dias', dias); } catch(x){}
+    cargar().catch(function(){});
+  });
+  $('salir').onclick = async function(){ try { await fetch('/api/fidelidad/admin/login', { method:'DELETE' }); } catch(e){} location.replace('/admin/'); };
+  cargar().catch(function(ex){ $('cargando').textContent = T(ex.message || 'Error'); });
+})();
+</script>
+</body>
+</html>

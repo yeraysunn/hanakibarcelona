@@ -1,8 +1,9 @@
 // POST /api/fidelidad/admin/accion  {accion: 'sello'|'quitar'|'canjear', tipo: 'mediodia'|'noche'|'menu', id|token|codigo, forzar?}
 // Cada tipo (buffet de mediodía, buffet de noche, menú) tiene su propio contador de sellos y su propio premio.
 import { json, dbListo, handle, body, HttpError, buscarSocio, SELLOS_PREMIO, MINUTOS_ENTRE_SELLOS, TIPOS, tipoDe } from '../_lib.js';
+import { programarResena } from '../../_resenas.js';
 
-export const onRequestPost = handle(async ({ request, env }) => {
+export const onRequestPost = handle(async ({ request, env, waitUntil }) => {
   const DB = await dbListo(env);
   const d = await body(request);
   const socio = await buscarSocio(DB, d);
@@ -37,5 +38,9 @@ export const onRequestPost = handle(async ({ request, env }) => {
   const [res] = await DB.batch([update, DB.prepare('INSERT INTO movimientos (socio_id, tipo, tipo_sello) VALUES (?, ?, ?)').bind(socio.id, movimiento, tipo)]);
   const actualizado = res.results[0];
   if (!actualizado) throw new HttpError(409, 'La tarjeta ha cambiado. Recarga e inténtalo otra vez.');
+  // Sello = ha comido hoy: al día siguiente le pedimos una reseña en Google (máx. una vez cada 90 días por email)
+  if (d.accion === 'sello' && actualizado.email) {
+    waitUntil(programarResena(env, DB, { email: actualizado.email, nombre: actualizado.nombre, origen: 'tarjeta', base: new URL(request.url).origin }));
+  }
   return json({ ok: true, tipo, socio: actualizado });
 });

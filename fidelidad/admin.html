@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
 <link rel="stylesheet" href="estilo.css">
 <script src="/admin/i18n.js"></script>
+<script src="/admin/tabs.js"></script>
 <script src="config.js"></script>
 <style>
 #idioma{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(243,238,230,.35);color:var(--txt-hi);padding:9px 12px;font-size:12px;font-weight:600;letter-spacing:.08em;cursor:pointer}#idioma:hover{border-color:var(--oro);color:var(--oro)}#idioma span{font:inherit;letter-spacing:inherit;color:inherit}
@@ -75,7 +76,7 @@
 
   <!-- Panel -->
   <section id="panel" hidden>
-    <nav class="tabs" style="display:flex;gap:8px;margin-bottom:20px"><a href="/reservas/admin.html" style="flex:1;text-align:center;padding:12px;border:1px solid var(--linea);color:var(--txt);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:.2em">RESERVAS</a><a href="/fidelidad/admin.html" aria-current="page" style="flex:1;text-align:center;padding:12px;border:1px solid var(--oro);color:var(--oro);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:.2em">FIDELIZACIÓN</a></nav>
+    <nav class="tabs" data-on="fidelizacion"></nav>
     <div class="stats">
       <div class="st"><b id="s-socios">–</b><small>SOCIOS</small><em id="s-nuevos"></em></div>
       <div class="st"><b id="s-hoy">–</b><small>SELLOS HOY</small><em id="s-total"></em></div>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Carta · Panel Hanaki</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Admin Hanaki">
+<link rel="icon" type="image/png" href="/fidelidad/icono.png">
+<link rel="apple-touch-icon" href="/fidelidad/icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Noto+Serif+JP:wght@400&display=swap">
+<link rel="stylesheet" href="/fidelidad/estilo.css">
+<script src="/admin/i18n.js"></script>
+<script src="/admin/tabs.js"></script>
+<style>
+#idioma{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(243,238,230,.35);color:var(--txt-hi);padding:9px 12px;font-size:12px;font-weight:600;letter-spacing:.08em;cursor:pointer}#idioma:hover{border-color:var(--oro);color:var(--oro)}#idioma span{font:inherit;letter-spacing:inherit;color:inherit}
+.wrap{max-width:760px}
+.intro{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 16px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.seg button,.chips button{background:none;border:1px solid var(--linea);color:var(--txt);padding:11px 8px;font-size:11px;font-weight:600;letter-spacing:.16em;cursor:pointer}
+.seg button[aria-pressed="true"],.chips button[aria-pressed="true"]{border-color:var(--oro);color:var(--oro)}
+.buscar{width:100%;height:48px;background:var(--bg2);border:1px solid var(--linea);color:var(--txt-hi);padding:0 14px;margin-bottom:10px}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:6px}
+.chips button{flex:none;letter-spacing:.06em;font-weight:500;font-size:12.5px;padding:8px 12px}
+.resumen{font-size:13px;color:var(--muted);margin:10px 0 14px}
+.grupo{font-size:11px;font-weight:600;letter-spacing:.24em;color:var(--oro2);margin:22px 0 8px;border-bottom:1px solid var(--linea);padding-bottom:8px}
+.it{border:1px solid var(--linea);background:var(--bg2);padding:12px 14px;margin-bottom:6px}
+.it.oculto{opacity:.5}
+.fila{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.nom{flex:1 1 180px;min-width:0}
+.nom b{color:var(--txt-hi);font-size:15px;font-weight:600}
+.nom small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+.nom .pr{color:var(--oro);font-weight:500;margin-left:6px}
+.chip{font-size:10px;font-weight:600;letter-spacing:.12em;padding:3px 7px;border:1px solid currentColor;margin-left:6px;vertical-align:2px}
+.c-ago{color:#E36B74}.c-ocu{color:#A9A39A}.c-mod{color:#7FB2F0}
+.acc{display:flex;gap:6px}
+.acc button{background:none;border:1px solid var(--linea);color:var(--txt-hi);padding:9px 10px;font-size:10.5px;font-weight:600;letter-spacing:.12em;cursor:pointer;white-space:nowrap}
+.acc button.on{background:#7A1C1C;border-color:#7A1C1C}
+.acc button:disabled{opacity:.5}
+.ed{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ed label{display:flex;flex-direction:column;gap:6px;font-size:10.5px;font-weight:600;letter-spacing:.16em;color:var(--oro2)}
+.ed label.ancho{grid-column:1/-1}
+.ed input{height:44px;background:var(--bg);border:1px solid var(--linea);color:var(--txt-hi);padding:0 12px}
+.ed .bts{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
+.ed .bts .btn{width:auto;flex:1 1 140px;padding:12px;font-size:10.5px}
+.vacio{border:1px dashed var(--linea);padding:28px;text-align:center;color:var(--muted);font-size:14px}
+#toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;background:#141414;border:1px solid var(--oro);color:var(--txt-hi);padding:14px 18px;font-size:14px;max-width:calc(100% - 32px);text-align:center}
+@media (max-width:480px){.acc{width:100%}.acc button{flex:1}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="cab"><a href="/admin/"><img src="/assets/hanaki-logo.png" alt="花木"><span>HANAKI</span></a><div style="display:flex;gap:8px"><button type="button" id="idioma"></button><button id="salir" class="btn sec" style="width:auto;padding:10px 14px;font-size:10px" hidden>SALIR</button></div></header>
+
+  <div id="cargando" class="cargando">Cargando la carta…</div>
+  <section id="panel" hidden>
+    <nav class="tabs" data-on="carta"></nav>
+    <p class="intro">Los cambios salen en <a href="/carta" target="_blank" rel="noopener">hanakisushi.com/carta</a> en menos de un minuto. «Agotado hoy» se quita solo mañana.</p>
+    <div class="seg"><button type="button" data-sec="p" aria-pressed="true">PLATOS</button><button type="button" data-sec="b" aria-pressed="false">BEBIDAS</button></div>
+    <input type="search" id="q" class="buscar" placeholder="Buscar plato o bebida" aria-label="Buscar plato o bebida">
+    <div class="chips" id="chips"></div>
+    <div class="resumen" id="resumen"></div>
+    <div id="lista"></div>
+  </section>
+</main>
+<div id="toast" hidden></div>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var base = { p: [], b: [] };       // carta original (sacada de /carta)
+  var cambios = {}, hoy = '';        // clave → datos guardados
+  var st = { sec: 'p', grupo: '', q: '', abierto: null };
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  var tt; function toast(m){ var t = $('toast'); t.textContent = T(m); t.hidden = false; clearTimeout(tt); tt = setTimeout(function(){ t.hidden = true; }, 3000); }
+  async function api(ruta, opt){
+    var r = await fetch(ruta, Object.assign({ headers:{'content-type':'application/json'}, cache:'no-store' }, opt || {}));
+    var j = await r.json().catch(function(){ return {}; });
+    if (r.status === 401) { location.replace('/admin/?volver=carta'); throw new Error(j.error || 'Sesión caducada'); }
+    if (!r.ok) throw new Error(j.error || 'Error');
+    return j;
+  }
+  $('salir').onclick = async function(){ try { await fetch('/api/fidelidad/admin/login', { method:'DELETE' }); } catch(e){} location.replace('/admin/'); };
+
+  // La carta base está escrita en carta.html (static CATS y static SHOW)
+  async function cargarBase(){
+    var html = await (await fetch('/carta', { cache: 'no-store' })).text();
+    var leer = function(k){ var m = html.match(new RegExp('static ' + k + ' = (.*);\\n')); return m ? JSON.parse(m[1]) : []; };
+    base.p = leer('CATS').map(function(c){ return { grupo: c.name, items: c.items.map(function(i){ return { clave: 'p|' + i[0], n: i[0], u: i[1] || '', pr: i[3] || '' }; }) }; });
+    base.b = leer('SHOW').map(function(g){ return { grupo: g[0], items: g[1].map(function(i){ return { clave: 'b|' + g[0] + '|' + i[0], n: i[0], u: null, pr: i[1] || '' }; }) }; });
+  }
+
+  async function cargar(){
+    var r = await Promise.all([api('/api/carta/admin/cambios'), cargarBase()]);
+    hoy = r[0].hoy; cambios = {};
+    r[0].cambios.forEach(function(c){ cambios[c.clave] = c.datos; });
+    $('cargando').hidden = true; $('panel').hidden = false; $('salir').hidden = false;
+    pintar();
+  }
+
+  function ver(it){
+    var o = cambios[it.clave] || {};
+    return { n: o.nombre || it.n, u: o.desc != null ? o.desc : it.u, pr: o.precio != null ? o.precio : it.pr,
+      ago: o.agotado === hoy, ocu: !!o.oculto, mod: !!(o.nombre || o.desc != null || o.precio != null) };
+  }
+
+  function pintar(){
+    var grupos = base[st.sec];
+    $('chips').innerHTML = ['<button type="button" data-g="" aria-pressed="' + (!st.grupo) + '">' + T('Todo') + '</button>',
+      '<button type="button" data-g="*" aria-pressed="' + (st.grupo === '*') + '">' + T('Con cambios') + '</button>']
+      .concat(grupos.map(function(g){ return '<button type="button" data-g="' + esc(g.grupo) + '" aria-pressed="' + (st.grupo === g.grupo) + '">' + esc(g.grupo) + '</button>'; })).join('');
+    var q = st.q.trim().toLowerCase(), total = 0, nAgo = 0, nOcu = 0;
+    grupos.forEach(function(g){ g.items.forEach(function(it){ var v = ver(it); if (v.ago) nAgo++; if (v.ocu) nOcu++; }); });
+    var html = grupos.filter(function(g){ return !st.grupo || st.grupo === '*' || st.grupo === g.grupo; }).map(function(g){
+      var its = g.items.filter(function(it){
+        var v = ver(it);
+        if (st.grupo === '*' && !(v.ago || v.ocu || v.mod)) return false;
+        return !q || (it.n + ' ' + v.n + ' ' + (v.u || '')).toLowerCase().indexOf(q) >= 0;
+      });
+      total += its.length;
+      return its.length ? '<div class="grupo">' + esc(g.grupo).toUpperCase() + '</div>' + its.map(fila).join('') : '';
+    }).join('');
+    $('resumen').textContent = T('Agotados hoy: {a} · Ocultos: {o}', { a: nAgo, o: nOcu });
+    $('lista').innerHTML = html || '<div class="vacio">' + T('No hay nada que coincida.') + '</div>';
+  }
+
+  function fila(it){
+    var v = ver(it), ab = st.abierto === it.clave, k = esc(it.clave);
+    var h = '<div class="it' + (v.ocu ? ' oculto' : '') + '" data-k="' + k + '"><div class="fila"><div class="nom"><b>' + esc(v.n) + '</b>' +
+      (v.pr ? '<span class="pr">' + esc(v.pr) + ' €</span>' : '') +
+      (v.ago ? '<span class="chip c-ago">' + T('AGOTADO HOY') + '</span>' : '') + (v.ocu ? '<span class="chip c-ocu">' + T('OCULTO') + '</span>' : '') + (v.mod ? '<span class="chip c-mod">' + T('EDITADO') + '</span>' : '') +
+      (v.u ? '<small>' + esc(v.u) + '</small>' : '') + '</div>' +
+      '<div class="acc"><button type="button" data-a="ago" class="' + (v.ago ? 'on' : '') + '">' + T(v.ago ? 'HAY DE NUEVO' : 'AGOTADO HOY') + '</button>' +
+      '<button type="button" data-a="ocu" class="' + (v.ocu ? 'on' : '') + '">' + T(v.ocu ? 'MOSTRAR' : 'OCULTAR') + '</button>' +
+      '<button type="button" data-a="ed">' + T(ab ? 'CERRAR' : 'EDITAR') + '</button></div></div>';
+    if (ab) {
+      h += '<form class="ed" data-k="' + k + '">' +
+        '<label class="ancho">' + T('NOMBRE') + '<input name="nombre" maxlength="60" value="' + esc(v.n) + '"></label>' +
+        (it.u !== null ? '<label>' + T('DESCRIPCIÓN') + '<input name="desc" maxlength="120" value="' + esc(v.u) + '" placeholder="' + esc(T('Ej.: 4 uds.')) + '"></label>' : '') +
+        '<label' + (it.u === null ? ' class="ancho"' : '') + '>' + T(st.sec === 'b' ? 'PRECIO (€)' : 'PRECIO APARTE (€)') + '<input name="precio" inputmode="decimal" value="' + esc(v.pr) + '" placeholder="' + esc(T(st.sec === 'b' ? '2,95' : 'Vacío = incluido')) + '"></label>' +
+        '<div class="bts"><button class="btn" type="submit">' + T('GUARDAR') + '</button>' + (v.mod ? '<button class="btn sec" type="button" data-a="orig">' + T('VOLVER AL ORIGINAL') + '</button>' : '') + '</div></form>';
+    }
+    return h + '</div>';
+  }
+
+  function buscarItem(clave){ var r = null; base[st.sec].forEach(function(g){ g.items.forEach(function(it){ if (it.clave === clave) r = it; }); }); return r; }
+
+  // Guarda los datos completos de un plato (lo que no cambia respecto al original no se guarda)
+  async function guardar(it, nuevo){
+    var o = Object.assign({}, cambios[it.clave] || {});
+    if (o.agotado && o.agotado !== hoy) delete o.agotado;
+    Object.keys(nuevo).forEach(function(k){ if (nuevo[k] === undefined) delete o[k]; else o[k] = nuevo[k]; });
+    var datos = {};
+    if (o.nombre && o.nombre !== it.n) datos.nombre = o.nombre;
+    if (o.desc != null && it.u !== null && o.desc !== it.u) datos.desc = o.desc;
+    if (o.precio != null && o.precio !== it.pr) { if (o.precio === '') datos.sinPrecio = true; else datos.precio = o.precio; }
+    if (o.oculto) datos.oculto = true;
+    if (o.agotado) datos.agotado = true;
+    var j = await api('/api/carta/admin/cambios', { method: 'POST', body: JSON.stringify({ clave: it.clave, datos: datos }) });
+    if (Object.keys(j.datos).length) cambios[it.clave] = j.datos; else delete cambios[it.clave];
+    pintar();
+  }
+
+  $('lista').addEventListener('click', async function(e){
+    var b = e.target.closest('button[data-a]'); if (!b) return;
+    var caja = b.closest('[data-k]'), it = buscarItem(caja.dataset.k); if (!it) return;
+    var v = ver(it), a = b.dataset.a;
+    if (a === 'ed') { st.abierto = st.abierto === it.clave ? null : it.clave; pintar(); return; }
+    b.disabled = true;
+    try {
+      if (a === 'ago') { await guardar(it, { agotado: v.ago ? undefined : hoy }); toast((v.ago ? 'Disponible de nuevo: ' : 'Agotado hoy: ') + v.n); }
+      if (a === 'ocu') { await guardar(it, { oculto: v.ocu ? undefined : true }); toast((v.ocu ? 'Visible: ' : 'Oculto: ') + v.n); }
+      if (a === 'orig') { st.abierto = null; await guardar(it, { nombre: undefined, desc: undefined, precio: undefined }); toast('Vuelve a estar como en la carta original.'); }
+    } catch (ex) { toast(ex.message); b.disabled = false; }
+  });
+  $('lista').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var f = e.target, it = buscarItem(f.dataset.k); if (!it) return;
+    var btn = f.querySelector('button[type=submit]'); btn.disabled = true;
+    try {
+      await guardar(it, { nombre: f.nombre.value.trim() || undefined, desc: f.desc ? f.desc.value.trim() : undefined, precio: f.precio.value.trim().replace(/\s*€$/, '') });
+      st.abierto = null; pintar(); toast('Guardado');
+    } catch (ex) { toast(ex.message); btn.disabled = false; }
+  });
+  document.querySelector('.seg').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-sec]'); if (!b) return;
+    st.sec = b.dataset.sec; st.grupo = ''; st.abierto = null;
+    document.querySelectorAll('.seg button').forEach(function(x){ x.setAttribute('aria-pressed', x === b); });
+    pintar();
+  });
+  $('chips').addEventListener('click', function(e){ var b = e.target.closest('button[data-g]'); if (b) { st.grupo = b.dataset.g; pintar(); } });
+  $('q').addEventListener('input', function(){ st.q = this.value; pintar(); });
+
+  cargar().catch(function(ex){ $('cargando').textContent = T(ex.message || 'Error'); });
+})();
+</script>
+</body>
+</html>

@@ -26,6 +26,9 @@
     'SALIR': '退出',
     'RESERVAS': '预订',
     'FIDELIZACIÓN': '会员卡',
+    'CARTA': '菜单',
+    'ESTADÍSTICAS': '统计',
+    'Pon la contraseña para entrar a reservas, fidelización, carta y estadísticas.': '请输入密码，进入预订、会员、菜单和统计。',
     // fidelización
     'Panel de sellos · Hanaki': '会员印章 · Hanaki',
     'SOCIOS': '会员',

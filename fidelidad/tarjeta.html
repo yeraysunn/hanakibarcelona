@@ -18,6 +18,22 @@
 <link rel="stylesheet" href="estilo.css">
 <script src="config.js"></script>
 <script src="vendor/qrcode.js"></script>
+<style>
+.misres{margin-top:26px}
+.misres h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:28px;color:var(--txt-hi);margin:0 0 12px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.misres h2 a{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.18em;color:var(--oro);text-decoration:none}
+.mr{display:grid;grid-template-columns:auto 1fr auto;gap:2px 14px;align-items:center;border:1px solid var(--linea);background:var(--bg2);padding:14px;margin-bottom:8px}
+.mr .h{font-family:'Cormorant Garamond',serif;font-size:28px;line-height:1;color:var(--txt-hi);grid-row:span 2}
+.mr b{color:var(--txt-hi);font-size:15px;font-weight:600}
+.mr small{font-size:13px;color:var(--txt);grid-column:2}
+.mr .chip{grid-column:3;grid-row:1/span 2;font-size:10px;font-weight:600;letter-spacing:.12em;padding:4px 8px;border:1px solid currentColor;white-space:nowrap}
+.mr.pasada{opacity:.6}
+.e-pendiente{color:#E9B949}.e-confirmada{color:#5FB37A}.e-cancelada{color:#E36B74}.e-llego{color:#7FB2F0}.e-no_vino{color:#A9A39A}
+.mr-vacio{border:1px dashed var(--linea);padding:20px;text-align:center;font-size:14px;line-height:1.6}
+.misres details{margin-top:14px}
+.misres summary{cursor:pointer;font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--muted);padding:8px 0}
+</style>
+<script src="/estadisticas.js" defer></script>
 </head>
 <body>
 <main class="wrap" style="padding-top:max(28px,env(safe-area-inset-top))">
@@ -44,6 +60,12 @@
       <div class="qr"><div id="qr"></div><span id="codigo">······</span></div>
       <div class="t-nombre" id="nombre"></div>
     </article>
+
+    <section class="misres" id="misres" hidden aria-labelledby="mr-t">
+      <h2 id="mr-t">Mis reservas <a href="/reservas/">+ RESERVAR</a></h2>
+      <div id="mr-prox"></div>
+      <details id="mr-ant-box" hidden><summary>RESERVAS ANTERIORES</summary><div id="mr-ant" style="margin-top:8px"></div></details>
+    </section>
 
     <div class="guardar" id="guardar">
       <b>Guárdala en tu móvil:</b>
@@ -152,6 +174,29 @@
     }
   }
   cargar();
+  // Reservas hechas con el mismo teléfono o email que la tarjeta
+  var ESTADO = { pendiente: 'PENDIENTE', confirmada: 'CONFIRMADA', cancelada: 'CANCELADA', llego: 'DISFRUTADA', no_vino: 'NO VINO' };
+  var DIAS = ['dom','lun','mar','mié','jue','vie','sáb'], MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  function fila(r, pasada){
+    var p = r.fecha.split('-').map(Number), d = new Date(p[0], p[1]-1, p[2]);
+    var n = r.adultos + r.ninos + r.bebes;
+    return '<div class="mr' + (pasada ? ' pasada' : '') + '"><div class="h">' + r.hora + '</div><b>' + DIAS[d.getDay()] + ' ' + p[2] + ' ' + MESES[p[1]-1] + '</b>' +
+      '<span class="chip e-' + r.estado + '">' + (ESTADO[r.estado] || r.estado) + '</span><small>' + n + (n === 1 ? ' persona' : ' personas') + '</small></div>';
+  }
+  async function cargarReservas(){
+    try {
+      var r = await fetch('/api/fidelidad/reservas?t=' + encodeURIComponent(token), { cache: 'no-store' });
+      if (!r.ok) return;
+      var j = await r.json();
+      document.getElementById('mr-prox').innerHTML = j.proximas.length ? j.proximas.map(function(x){ return fila(x, false); }).join('')
+        : '<div class="mr-vacio">No tienes reservas próximas.<br><a href="/reservas/" style="color:var(--oro)">Reserva tu mesa online</a> y la verás aquí.</div>';
+      document.getElementById('mr-ant').innerHTML = j.anteriores.map(function(x){ return fila(x, true); }).join('');
+      document.getElementById('mr-ant-box').hidden = !j.anteriores.length;
+      document.getElementById('misres').hidden = false;
+    } catch (e) {}
+  }
+  cargarReservas();
+  setInterval(function(){ if (!document.hidden) cargarReservas(); }, 60000);
   // Se actualiza sola mientras está abierta (así ve el sello en cuanto se lo ponen)
   setInterval(function(){ if (!document.hidden) cargar(); }, 6000);
   document.addEventListener('visibilitychange', function(){ if (!document.hidden) cargar(); });

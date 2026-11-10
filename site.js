@@ -32,7 +32,7 @@
     el = document.createElement('div');
     el.id = 'hk-ck'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Cookies');
     el.innerHTML = '<h2>Usamos cookies</h2>' +
-      '<p>Usamos cookies propias necesarias para que la web funcione y, con tu permiso, cookies de terceros (Google Maps, redes sociales) y de análisis. Más información en la <a href="Hanaki%20Legal.dc.html#cookies">política de cookies</a>.</p>' +
+      '<p>Usamos cookies propias necesarias para que la web funcione y, con tu permiso, cookies de terceros (Google Maps, redes sociales) y de análisis. Más información en la <a href="/legal#cookies">política de cookies</a>.</p>' +
       '<div class="o">' +
       '<label><input type="checkbox" checked disabled><span><b>Necesarias</b>Idioma, reseñas y tus preferencias de cookies. Siempre activas.</span></label>' +
       '<label><input type="checkbox" data-k="externas"' + (c.externas ? ' checked' : '') + '><span><b>Contenido de terceros</b>Mapa de Google, WhatsApp y redes sociales.</span></label>' +

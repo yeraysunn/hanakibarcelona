@@ -35,3 +35,22 @@ Todo entra en los planes gratuitos de Cloudflare y Resend.
 ## Privacidad
 
 Se guardan nombre, teléfono, email (opcional) y si acepta promociones. Conviene añadir a la política de privacidad que estos datos se usan para el programa de fidelidad. Para borrar un socio a petición suya: consola de D1 → `DELETE FROM socios WHERE telefono = '+34…';`
+
+## Reservas en la tarjeta
+
+En la tarjeta del cliente sale **«Mis reservas»**: las próximas y las de los últimos meses hechas con el mismo teléfono o email que la tarjeta (también las de antes de crearla). Si el cliente tiene la tarjeta en el móvil, el formulario de `/reservas/` se rellena solo con su nombre, teléfono y email.
+
+## Petición de reseña en Google
+
+Cuando el personal marca una reserva como **«Ha llegado»** o pone un **sello**, el cliente recibe al día siguiente (unas 20 h después) un email con el botón «Dejar mi reseña en Google». Como mucho, uno cada 90 días por email, y lleva un enlace para darse de baja. Todos reciben el mismo enlace a Google, porque Google no permite pedir reseñas solo a los clientes contentos.
+
+- `GOOGLE_RESENA_URL` (opcional, *Variables and Secrets*): el enlace de Google Business Profile → *Pedir reseñas* (tipo `https://g.page/r/XXXX/review`), que abre directamente la ventana de escribir reseña. Si no se pone, se usa la ficha de Google Maps.
+- `EMAIL_RESPUESTAS` (opcional): si el cliente responde al email, le llega a esta dirección.
+
+## Carta editable
+
+Panel → pestaña **CARTA** (`/admin/carta.html`): marcar un plato como **agotado hoy** (se quita solo al día siguiente), **ocultarlo**, o cambiar el nombre, la descripción y el precio. Para las bebidas, el precio y ocultarlas. Los cambios salen en `/carta` en menos de un minuto. La carta base sigue en `carta.html`. Para añadir platos nuevos o fotos hay que editar ese archivo.
+
+## Estadísticas
+
+Panel → pestaña **ESTADÍSTICAS** (`/admin/estadisticas.html`): visitantes por día, de dónde llegan (Google, Instagram, TikTok…), páginas más vistas, clics en Llamar / WhatsApp / Cómo llegar / Reservar y reservas online. No usa cookies ni guarda IPs (script `/estadisticas.js`, datos en la tabla `visitas`). Para saber qué publicación de Instagram trae gente, añade `?utm_source=instagram` al enlace de la bio.
