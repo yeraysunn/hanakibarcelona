@@ -127,19 +127,25 @@
     o.tr.style.transform = `translate3d(${o.x.toFixed(1)}px,0,0) skewX(${o.flat ? 0 : clamp(vel * -0.25, -9, 9).toFixed(2)}deg)`;
   });
 
-  /* ── Cómo funciona ── */
-  const figs = $$('[data-how-m]'), steps = $$('[data-how]'), howN = $('#howN');
-  let cur = 0;
+  /* ── Cómo funciona: la tablet y los dos vídeos del robot pasan solos; se puede elegir paso ── */
+  const figs = $$('[data-how-m]'), steps = $$('[data-how]'), howN = $('#howN'), HOW_MS = [4000, 5000, 5000];
+  let cur = 0, howT, howOn = false;
   const setHow = i => {
-    if (i === cur) return;
-    figs.forEach((f, j) => { f.classList.toggle('was', j === cur); f.classList.toggle('on', j === i); });
-    steps.forEach((s, j) => s.classList.toggle('on', j === i));
-    howN.textContent = '0' + (i + 1);
-    const v = figs[i].querySelector('video'); if (v) v.play().catch(() => {});
-    cur = i;
+    clearTimeout(howT);
+    figs.forEach((f, k) => {
+      f.classList.toggle('was', k === cur && k !== i); f.classList.toggle('on', k === i);
+      const v = f.querySelector('video'); if (!v) return;
+      if (k === i) { try { v.currentTime = 0; } catch (e) {} v.play().catch(() => {}); } else v.pause();
+    });
+    steps.forEach((s, k) => { s.classList.remove('on'); if (k === i) { s.offsetWidth; s.classList.add('on'); } });
+    howN.textContent = '0' + (i + 1); cur = i;
+    if (howOn && !RM) howT = setTimeout(() => setHow((i + 1) % figs.length), HOW_MS[i]);
   };
-  const howIO = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && setHow(+e.target.dataset.how)), { rootMargin: '-42% 0px -42% 0px' });
-  steps.forEach(s => howIO.observe(s));
+  steps.forEach((s, i) => s.addEventListener('click', () => setHow(i)));
+  new IntersectionObserver(es => es.forEach(e => {
+    howOn = e.isIntersecting;
+    if (howOn) setHow(cur); else { clearTimeout(howT); figs.forEach(f => { const v = f.querySelector('video'); v && v.pause(); }); }
+  }), { threshold: 0.3 }).observe($('#como'));
 
   /* ── Carta: carril horizontal ── */
   const sec = $('#carta'), rail = $('#rail'), track = $('#railTrack'), bar = $('#railBar');
