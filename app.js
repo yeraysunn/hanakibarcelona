@@ -69,7 +69,7 @@
   const start = () => {
     $$('[data-in],[data-clip],[data-rise],[data-fit]').forEach(el => el.closest('.hero') ? el.classList.add('is-in') : io.observe(el));
     const v = $('.hero video'); if (v) { v.addEventListener('playing', () => v.classList.add('is-on')); v.play().catch(() => {}); }
-    setTimeout(runStamps, RM ? 0 : 900);
+    setTimeout(runRuta, RM ? 0 : 900);
   };
 
   /* ── Intro ── */
@@ -189,11 +189,33 @@
   dots.forEach((d, i) => d.addEventListener('click', () => setRev(i)));
   setRev(0);
 
-  /* ── Tarjeta: los nigiris se van estampando ── */
-  function runStamps() {
-    const li = $$('#stamps li'), n = $('#stampN');
-    li.forEach((s, i) => setTimeout(() => { s.classList.add('on'); n.textContent = (i + 1) + ' / 8'; }, RM ? 0 : i * 210));
+  /* ── Tarjeta de puntos: el nigiri recorre el camino hasta cada premio de la tienda ── */
+  const miles = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  let rutaMax = 30000, rutaOn = false;
+  function runRuta() {
+    const ruta = $('#ruta'), n = $('#fidN'); if (!ruta || rutaOn) return; rutaOn = true;
+    const hitos = () => $$('#rutaH li').map(li => ({ li, x: parseFloat(li.style.getPropertyValue('--x')) / 100 }));
+    const poner = p => { ruta.style.setProperty('--p', p.toFixed(4)); n.textContent = miles(Math.floor(p * rutaMax / 1000 + 1e-6) * 1000); hitos().forEach(h => h.li.classList.toggle('on', p >= h.x - 0.001)); };
+    if (RM) { poner(1); return; }
+    const SUBE = 7000, ESPERA = 2200; let t0 = performance.now();
+    const paso = t => {
+      const dt = (t - t0) % (SUBE + ESPERA), p = Math.min(1, dt / SUBE);
+      poner(1 - Math.pow(1 - p, 1.6));
+      requestAnimationFrame(paso);
+    };
+    requestAnimationFrame(paso);
   }
+  // Los premios y sus puntos se leen de la tienda (se editan en el panel)
+  fetch('/api/fidelidad/premios').then(r => (r.ok ? r.json() : null)).then(j => {
+    if (!j) return;
+    const t = $('.fid__t'); if (t && j.regla) t.innerHTML = `Cada ${j.regla.euros} € sumas <b>${miles(j.regla.puntos)} puntos</b>`;
+    let ps = (j.premios || []).filter(p => p.puntos != null).sort((a, b) => a.puntos - b.puntos);
+    if (!ps.length) return;
+    if (ps.length > 3) ps = [ps[0], ps[Math.floor((ps.length - 1) / 2)], ps[ps.length - 1]];
+    rutaMax = ps[ps.length - 1].puntos;
+    $('#rutaH').innerHTML = ps.map(p => `<li style="--x:${(p.puntos / rutaMax * 100).toFixed(1)}%"><b>${miles(p.puntos)}</b><span>${esc(p.nombre)}</span></li>`).join('');
+  }).catch(() => {});
 
   /* ── Botones magnéticos y cursor ── */
   if (FINE && !RM) {

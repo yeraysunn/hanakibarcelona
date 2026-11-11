@@ -29,7 +29,7 @@ async function enviarEmail(env, para, nombre, codigo, idem) {
   const html = `<!doctype html><html><body style="margin:0;background:#0A0A0A;font-family:Helvetica,Arial,sans-serif">
   <div style="max-width:460px;margin:0 auto;padding:36px 24px;color:#BDB7AE">
     <div style="font-family:Georgia,serif;font-size:22px;letter-spacing:.3em;color:#F2EEE8">HANAKI</div>
-    <div style="font-size:11px;letter-spacing:.26em;color:#C9A45C;margin-top:4px">TARJETA DE FIDELIDAD</div>
+    <div style="font-size:11px;letter-spacing:.26em;color:#E0452E;margin-top:4px">TARJETA DE PUNTOS</div>
     <p style="font-size:15px;line-height:1.6;margin:28px 0 14px">Hola ${nombre.replace(/[<>&"]/g, '')}, este es tu código para abrir tu tarjeta:</p>
     <div style="font-family:Georgia,serif;font-size:40px;letter-spacing:.3em;color:#F2EEE8;background:#141414;border:1px solid #6b5a3a;padding:18px 0;text-align:center">${codigo}</div>
     <p style="font-size:13px;line-height:1.6;margin:18px 0 0;color:#8F887E">Caduca en ${MINUTOS_VALIDEZ} minutos. Si no lo has pedido tú, ignora este email.</p>

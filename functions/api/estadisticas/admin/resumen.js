@@ -32,7 +32,7 @@ export const onRequestGet = handle(async ({ request, env }) => {
       FROM reservas WHERE ${rango('creado')}`, desde, hasta).first(), null);
   const reservasAnt = await seguro(V(`SELECT COUNT(*) n FROM reservas WHERE ${rango('creado')}`, antDesde, antHasta).first(), null);
   const socios = await seguro(V(`SELECT COUNT(*) n FROM socios WHERE ${rango('creado')}`, desde, hasta).first(), null);
-  const sellos = await seguro(V(`SELECT COUNT(*) n FROM movimientos WHERE tipo = 'sello' AND ${rango('creado')}`, desde, hasta).first(), null);
+  const sellos = await seguro(V(`SELECT COUNT(*) n FROM movimientos WHERE tipo IN ('sello', 'compra') AND ${rango('creado')}`, desde, hasta).first(), null);
   const resenas = await seguro(V(`SELECT COUNT(*) n FROM resenas WHERE enviado IS NOT NULL AND ${rango('enviado')}`, desde, hasta).first(), null);
 
   const vistas = porDia.reduce((s, d) => s + d.vistas, 0);

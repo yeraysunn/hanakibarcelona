@@ -1,5 +1,5 @@
 // POST /api/fidelidad/registro — alta de un cliente nuevo
-import { json, dbListo, handle, body, HttpError, nuevoToken, nuevoCodigo, normalizarTelefono, tarjetaPublica } from './_lib.js';
+import { json, dbListo, handle, body, HttpError, nuevoToken, nuevoCodigo, normalizarTelefono, tarjetaPublica, listaPremios } from './_lib.js';
 
 export const onRequestPost = handle(async ({ request, env }) => {
   const DB = await dbListo(env);
@@ -26,9 +26,9 @@ export const onRequestPost = handle(async ({ request, env }) => {
     const codigo = nuevoCodigo();
     try {
       const socio = await DB.prepare(
-        'INSERT INTO socios (token, codigo, nombre, telefono, email, acepta_promos) VALUES (?, ?, ?, ?, ?, ?) RETURNING *'
+        'INSERT INTO socios (token, codigo, nombre, telefono, email, acepta_promos, puntos) VALUES (?, ?, ?, ?, ?, ?, 0) RETURNING *'
       ).bind(token, codigo, nombre, telefono, email, d.promos ? 1 : 0).first();
-      return json({ token, tarjeta: tarjetaPublica(socio) }, 201);
+      return json({ token, tarjeta: tarjetaPublica(socio, await listaPremios(DB)) }, 201);
     } catch (e) {
       if (!/UNIQUE/i.test(String(e.message))) throw e;
       if (/telefono/i.test(String(e.message))) throw new HttpError(409, 'Este teléfono ya tiene una tarjeta.');

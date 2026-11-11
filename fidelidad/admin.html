@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Panel de sellos · Hanaki</title>
+<title>Panel de puntos · Hanaki</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0A0A0A">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -68,6 +68,55 @@
 .ftipos .fila{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(243,239,232,.06);font-size:14px;color:var(--txt-hi)}
 .ftipos .fila .btn{width:auto;padding:9px 18px;font-size:12px;letter-spacing:.1em}
 .vacio{border:1px dashed var(--linea);padding:28px;text-align:center;color:var(--muted);font-size:14px}
+.pts{display:flex;align-items:baseline;gap:8px;margin-top:2px}
+.pts b{font:700 44px/.9 var(--num);color:var(--txt-hi);letter-spacing:.01em}
+.pts small{font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--oro2)}
+.soc .tipos{grid-template-columns:1.4fr 1fr}
+.tbtn{flex-direction:row;gap:8px;padding:14px 8px;min-height:54px}
+.tbtn:disabled{opacity:.35;cursor:not-allowed}
+#tienda{position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.7);display:flex;align-items:flex-end;justify-content:center}
+#tienda .hoja{width:100%;max-width:560px;max-height:88vh;max-height:88dvh;overflow:auto;background:var(--bg2);border:1px solid var(--linea);border-bottom:none;padding:20px 18px max(20px,env(safe-area-inset-bottom))}
+@media(min-width:620px){#tienda{align-items:center}#tienda .hoja{border-bottom:1px solid var(--linea)}}
+#tienda .fcab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+#tienda h2{margin:0;font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:30px;line-height:1.1;color:var(--txt-hi)}
+#tienda .x{background:none;border:1px solid var(--linea);color:var(--txt-hi);width:40px;height:40px;font-size:20px;cursor:pointer;flex:none}
+.sub-t{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--oro2);border-bottom:1px solid var(--linea);padding-bottom:8px;margin:18px 0 12px}
+.saldo{display:flex;align-items:baseline;justify-content:space-between;gap:12px;background:var(--bg);border-radius:16px;padding:14px 16px;margin-bottom:6px}
+.saldo small{font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--oro2)}
+.saldo b{font:700 44px/.9 var(--num);color:var(--rojo)}
+.imp{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:stretch}
+.imp .euro{position:relative}
+.imp input{width:100%;height:64px;background:var(--bg);border:1px solid var(--linea);border-radius:14px;color:var(--txt-hi);padding:0 44px 0 16px;font:700 34px/1 var(--num);outline:none}
+.imp input:focus{border-color:var(--txt-hi)}
+.imp .euro::after{content:"€";position:absolute;right:16px;top:50%;transform:translateY(-50%);font:700 26px/1 var(--num);color:var(--muted)}
+.imp .btn{width:auto;padding:0 22px}
+.gana{font-size:14px;color:var(--txt);margin:10px 0 0;min-height:20px}
+.gana b{color:var(--txt-hi)}
+.prem{display:grid;gap:8px}
+.prem button{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;text-align:left;width:100%;background:var(--bg);border:1px solid var(--linea);border-radius:14px;color:var(--txt-hi);padding:13px 16px;cursor:pointer;transition:border-color .25s,background .25s}
+.prem button b{font-size:15.5px;font-weight:600}
+.prem button small{grid-column:1;font-size:12.5px;color:var(--muted)}
+.prem button em{grid-column:2;grid-row:1/span 2;font:700 26px/1 var(--num);font-style:normal;color:var(--rojo);white-space:nowrap}
+.prem button:not(:disabled):hover{border-color:var(--rojo)}
+.prem button.ok{border-color:var(--rojo)}
+.prem button:disabled{opacity:.45;cursor:not-allowed}
+.aj{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.aj input{grid-column:1/-1;height:48px;background:var(--bg);border:1px solid var(--linea);border-radius:12px;color:var(--txt-hi);padding:0 14px;min-width:0}
+.aj .btn{padding:12px 8px;font-size:11px;letter-spacing:.14em;min-height:46px}
+.hist .p-mas{color:#5FB37A}.hist .p-menos{color:#E36B74}
+.hist li span small{display:block;font-size:12px;color:var(--muted)}
+.tp{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;border:1px solid var(--linea);border-radius:14px;padding:12px 14px;margin-bottom:8px}
+.tp.off{opacity:.5}
+.tp b{color:var(--txt-hi);font-size:15.5px;font-weight:600}
+.tp small{grid-column:1;font-size:12.5px;color:var(--muted)}
+.tp em{font:700 24px/1 var(--num);font-style:normal;color:var(--rojo);grid-column:2;grid-row:1/span 2;text-align:right;white-space:nowrap}
+.tp .ops{grid-column:1/-1;display:flex;gap:6px;margin-top:6px}
+.tp .ops button{background:none;border:1px solid var(--linea);border-radius:12px;color:var(--txt-hi);padding:9px 12px;font-size:10.5px;font-weight:600;letter-spacing:.12em;cursor:pointer}
+.tp .ops button:hover{border-color:var(--txt-hi)}
+#tp-form{display:grid;gap:0;margin-top:6px}
+#tp-form .dos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#tp-form .bts{display:flex;gap:8px}
+#tp-form .bts .btn{flex:1;padding:12px;font-size:11px;min-height:48px}
 </style>
 </head>
 <body>
@@ -79,13 +128,14 @@
     <nav class="tabs" data-on="fidelizacion"></nav>
     <div class="stats">
       <div class="st"><b id="s-socios">–</b><small>SOCIOS</small><em id="s-nuevos"></em></div>
-      <div class="st"><b id="s-hoy">–</b><small>SELLOS HOY</small><em id="s-total"></em></div>
-      <div class="st"><b id="s-pend">–</b><small>PREMIOS LISTOS</small><em>por canjear</em></div>
+      <div class="st"><b id="s-hoy">–</b><small>PUNTOS HOY</small><em id="s-imp"></em></div>
+      <div class="st"><b id="s-pend">–</b><small>PUEDEN CANJEAR</small><em>tienen puntos para un premio</em></div>
       <div class="st"><b id="s-canj">–</b><small>CANJEADOS</small><em id="s-canjhoy"></em></div>
     </div>
 
     <button id="escanear" class="btn" style="margin-bottom:12px;padding:18px">ESCANEAR TARJETA <span aria-hidden="true">⌖</span></button>
-    <div class="barra"><input id="buscar" type="search" placeholder="Buscar por nombre, teléfono o código" autocomplete="off"><button id="exportar" class="btn sec" style="width:auto;padding:0 14px;font-size:10px" title="Descargar CSV">CSV</button></div>
+    <div class="barra"><input id="buscar" type="search" placeholder="Buscar por nombre, teléfono o código" autocomplete="off"><button id="tienda-btn" class="btn sec" style="width:auto;padding:0 14px;font-size:10px">TIENDA</button><button id="exportar" class="btn sec" style="width:auto;padding:0 14px;font-size:10px" title="Descargar CSV">CSV</button></div>
+    <p class="nota" id="regla" style="margin:0 0 14px"></p>
     <div id="lista" class="lista"></div>
   </section>
 </main>
@@ -94,48 +144,74 @@
   <video id="video" playsinline muted></video><div class="marco"></div>
   <div class="pie"><div id="cam-msg" class="nota" style="text-align:center">Apunta al QR de la tarjeta del cliente</div><button id="cerrar-cam" class="btn sec">CERRAR</button></div>
 </div>
+
+<!-- Ficha del cliente -->
 <div id="ficha" hidden>
   <div class="hoja" role="dialog" aria-modal="true" aria-labelledby="f-nombre">
     <div class="fcab"><div><div class="etq">Ficha del cliente</div><h2 id="f-nombre"></h2></div><button type="button" class="x" id="f-cerrar" aria-label="Cerrar">×</button></div>
     <dl class="datos" id="f-datos"></dl>
-    <div class="hist-tit"><span>Corregir sellos</span></div>
-    <div class="ftipos" id="f-tipos"></div>
-    <div class="hist-tit"><span>Historial de sellos</span><span id="f-nmov"></span></div>
+    <div class="hist-tit"><span>Corregir puntos</span></div>
+    <div class="aj">
+      <input id="aj-puntos" type="text" inputmode="numeric" placeholder="Puntos (p. ej. 1000)" aria-label="Puntos">
+      <input id="aj-nota" type="text" maxlength="120" placeholder="Motivo (opcional)" aria-label="Motivo">
+      <button type="button" class="btn sec" id="aj-mas">SUMAR</button>
+      <button type="button" class="btn sec" id="aj-menos">RESTAR</button>
+    </div>
+    <div class="hist-tit"><span>Historial de puntos</span><span id="f-nmov"></span></div>
     <ul class="hist" id="f-hist"></ul>
     <button type="button" class="btn borrar" id="f-borrar">BORRAR CLIENTE</button>
   </div>
 </div>
+
+<!-- Sumar puntos / canjear (se abre al escanear o desde la lista) -->
 <div id="sellar" hidden>
   <div class="hoja" role="dialog" aria-modal="true" aria-labelledby="s-nombre">
-    <div class="fcab"><div><div class="etq">Sellar tarjeta</div><h2 id="s-nombre"></h2></div><button type="button" class="x" id="s-cerrar" aria-label="Cerrar">×</button></div>
-    <p class="nota" style="margin:0 0 14px">Elige qué ha tomado el cliente</p>
-    <div class="tipos" id="s-tipos"></div>
+    <div class="fcab"><div><div class="etq">Tarjeta de puntos</div><h2 id="s-nombre"></h2></div><button type="button" class="x" id="s-cerrar" aria-label="Cerrar">×</button></div>
+    <div class="saldo"><small>PUNTOS</small><b id="s-saldo">0</b></div>
+    <div class="sub-t">Sumar puntos</div>
+    <form class="imp" id="imp-form" novalidate>
+      <div class="euro"><input id="imp" type="text" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-label="Importe de la cuenta en euros"></div>
+      <button class="btn" type="submit" id="imp-btn">SUMAR</button>
+    </form>
+    <p class="gana" id="gana"></p>
+    <div class="sub-t">Canjear en la tienda</div>
+    <div class="prem" id="s-premios"></div>
+  </div>
+</div>
+
+<!-- Tienda de premios -->
+<div id="tienda" hidden>
+  <div class="hoja" role="dialog" aria-modal="true" aria-labelledby="t-tit">
+    <div class="fcab"><div><div class="etq">Premios</div><h2 id="t-tit">Tienda</h2></div><button type="button" class="x" id="t-cerrar" aria-label="Cerrar">×</button></div>
+    <p class="nota" style="margin:0 0 14px">Lo que los clientes pueden canjear con sus puntos. Sin puntos = sale como «Próximamente».</p>
+    <div id="t-lista"></div>
+    <div class="sub-t" id="tp-tit">Añadir premio</div>
+    <form id="tp-form" novalidate>
+      <div class="campo"><label for="tp-nombre">NOMBRE</label><input id="tp-nombre" maxlength="60" required></div>
+      <div class="dos">
+        <div class="campo"><label for="tp-puntos">PUNTOS</label><input id="tp-puntos" inputmode="numeric" placeholder="Próximamente"></div>
+        <div class="campo"><label for="tp-desc">DETALLE</label><input id="tp-desc" maxlength="120" placeholder="Opcional"></div>
+      </div>
+      <label class="check" style="margin-top:0"><input type="checkbox" id="tp-var"><span>Precio variable: los puntos se escriben al canjear (por ejemplo, cada gato lleva los suyos en la etiqueta).</span></label>
+      <div class="bts"><button class="btn" type="submit" id="tp-guardar">AÑADIR</button><button class="btn sec" type="button" id="tp-cancelar" hidden>CANCELAR</button></div>
+    </form>
   </div>
 </div>
 <div id="toast" hidden></div>
 
 <script>
 (function(){
-  var OBJ = (window.HK_FID || {}).objetivo || 8;
-  // Tres tipos de sello, cada uno con su contador y su premio (la lista real llega del servidor en cargar())
-  var TIPOS = [{ id: 'mediodia', nombre: 'Buffet mediodía' }, { id: 'noche', nombre: 'Buffet noche' }, { id: 'menu', nombre: 'Menú' }];
-  var CORTO = { mediodia: 'MEDIODÍA', noche: 'NOCHE', menu: 'MENÚ' };
-  function nombreTipo(id){ var t = TIPOS.find(function(x){ return x.id === id; }); return T(t ? t.nombre : id); }
-  function sellosDe(s, id){ return s['sellos_' + id] || 0; }
-  function hayListo(s){ return TIPOS.some(function(t){ return sellosDe(s, t.id) >= OBJ; }); }
-  // Un botón por tipo: +1 sello, o CANJEAR si ese contador ya está lleno
-  function botonesTipos(s){
-    return TIPOS.map(function(t){
-      var n = sellosDe(s, t.id), listo = n >= OBJ;
-      return '<button class="btn tbtn' + (listo ? ' oro' : '') + '" data-a="' + (listo ? 'canjear' : 'sello') + '" data-tipo="' + esc(t.id) + '">' +
-        '<b>' + T(CORTO[t.id] || t.nombre.toUpperCase()) + '</b><span>' + (listo ? T('CANJEAR') : '+1 · ' + n + '/' + OBJ) + '</span></button>';
-    }).join('');
-  }
   var $ = function(id){ return document.getElementById(id); };
-  var datos = [], seleccionado = null;
+  var datos = [], premios = [], regla = { euros: 10, puntos: 1000 }, seleccionado = null;
 
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
-  var tt; function toast(m, tipo){ var t = $('toast'); t.textContent = T(m); t.className = tipo || ''; t.hidden = false; clearTimeout(tt); tt = setTimeout(function(){ t.hidden = true; }, 3200); }
+  function num(n){ var x = Math.round(Number(n) || 0); return (x < 0 ? '−' : '') + String(Math.abs(x)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  function euros(n){ return (Math.round(Number(n) * 100) / 100).toFixed(2).replace('.', ',') + ' €'; }
+  function leerImporte(v){ var x = parseFloat(String(v).replace(/\s/g, '').replace(',', '.')); return isFinite(x) ? x : 0; }
+  function puntosDe(e){ return e > 0 ? Math.floor(e / regla.euros + 1e-9) * regla.puntos : 0; }
+  function activos(){ return premios.filter(function(p){ return p.activo; }); }
+  function minimo(){ var m = Infinity; activos().forEach(function(p){ if (!p.variable && p.puntos != null && p.puntos < m) m = p.puntos; }); return m; }
+  var tt; function toast(m, tipo){ var t = $('toast'); t.textContent = T(m); t.className = tipo || ''; t.hidden = false; clearTimeout(tt); tt = setTimeout(function(){ t.hidden = true; }, 3600); }
 
   async function api(ruta, opt){
     var r = await fetch('/api/fidelidad/admin/' + ruta, Object.assign({ headers: {'content-type':'application/json'}, cache:'no-store' }, opt || {}));
@@ -157,12 +233,13 @@
   var qBusca = '';
   async function cargar(){
     var j = await api('socios' + (qBusca ? '?q=' + encodeURIComponent(qBusca) : ''));
-    OBJ = j.objetivo || OBJ; datos = j.socios; if (j.tipos && j.tipos.length) TIPOS = j.tipos;
+    datos = j.socios; premios = j.premios || []; if (j.regla) regla = j.regla;
     var s = j.stats;
-    $('s-socios').textContent = s.socios; $('s-nuevos').textContent = T('+{n} esta semana', {n: s.nuevosSemana});
-    $('s-hoy').textContent = s.sellosHoy; $('s-total').textContent = T('{n} en total', {n: s.sellosTotales});
-    $('s-pend').textContent = s.premiosPendientes;
-    $('s-canj').textContent = s.premiosCanjeados; $('s-canjhoy').textContent = T('{n} hoy', {n: s.canjesHoy});
+    $('s-socios').textContent = num(s.socios); $('s-nuevos').textContent = T('+{n} esta semana', {n: s.nuevosSemana});
+    $('s-hoy').textContent = num(s.puntosHoy); $('s-imp').textContent = T('en {e} de cuentas', {e: euros(s.importeHoy)});
+    $('s-pend').textContent = num(s.puedenCanjear);
+    $('s-canj').textContent = num(s.premiosCanjeados); $('s-canjhoy').textContent = T('{n} hoy', {n: s.canjesHoy});
+    $('regla').textContent = T('Cada {e} € de la cuenta = {p} puntos.', {e: regla.euros, p: num(regla.puntos)});
     pintar();
   }
 
@@ -170,21 +247,17 @@
 
   function pintar(){
     if (!datos.length) { $('lista').innerHTML = '<div class="vacio">' + (qBusca ? T('Nadie coincide con «{q}».', {q: esc(qBusca)}) : T('Todavía no hay socios. Comparte el enlace <b>hanakisushi.com/fidelidad</b>.')) + '</div>'; return; }
+    var min = minimo();
     $('lista').innerHTML = datos.map(function(s){
+      var puede = s.puntos >= min;
       return '<div class="soc' + (seleccionado === s.id ? ' sel' : '') + '" data-id="' + s.id + '">' +
-        '<div><h3>' + esc(s.nombre) + (hayListo(s) ? '<span class="chip">' + T('PREMIO LISTO') + '</span>' : '') + '</h3>' +
-        '<p>' + esc(s.telefono) + ' · ' + esc(s.codigo) + ' · ' + T('último sello:') + ' ' + fecha(s.ultimo_sello) + (s.premios ? ' · ' + T(s.premios > 1 ? '{n} premios' : '{n} premio', {n: s.premios}) : '') + '</p></div>' +
-        '<div class="tipos">' + botonesTipos(s) + '</div>' +
+        '<div><h3>' + esc(s.nombre) + (puede ? '<span class="chip">' + T('PUEDE CANJEAR') + '</span>' : '') + '</h3>' +
+        '<p>' + esc(s.telefono) + ' · ' + esc(s.codigo) + ' · ' + T('última visita:') + ' ' + fecha(s.ultimo_sello) + '</p>' +
+        '<div class="pts"><b>' + num(s.puntos) + '</b><small>' + T('PUNTOS') + '</small></div></div>' +
+        '<div class="tipos"><button class="btn tbtn" data-a="puntos">' + T('+ PUNTOS') + '</button><button class="btn tbtn oro" data-a="canje"' + (puede ? '' : ' disabled') + '>' + T('CANJEAR') + '</button></div>' +
         '<div class="acc"><button class="btn sec" data-a="enlace">' + T('ENLACE') + '</button><button class="btn sec" data-a="ficha">' + T('FICHA') + '</button></div>' +
         '</div>';
     }).join('');
-  }
-
-  // Confirma si hace falta y ejecuta la acción de un botón de tipo (sello / canjear / quitar)
-  function pulsarTipo(a, s, tipo){
-    if (a === 'quitar' && !confirm(T('¿Quitar un sello de {t} a {n}?', {t: nombreTipo(tipo), n: s.nombre}))) return;
-    if (a === 'canjear' && !confirm(T('¿Canjear {t} de {n}? Ese contador vuelve a 0.', {t: nombreTipo(tipo), n: s.nombre}))) return;
-    accion(a, { id: s.id }, tipo);
   }
 
   $('lista').addEventListener('click', function(e){
@@ -193,27 +266,29 @@
     var a = b.dataset.a;
     if (a === 'enlace') return copiarEnlace(s);
     if (a === 'ficha') return abrirFicha(id);
-    pulsarTipo(a, s, b.dataset.tipo);
+    abrirPuntos(s, a === 'puntos');
   });
 
-  async function accion(a, ref, tipo, forzar){
+  // Ejecuta una acción sobre la tarjeta: compra (suma por importe), canjear (premio) o ajuste (corrección)
+  async function accion(a, ref, datosAccion, forzar){
     try {
-      var j = await api('accion', { method:'POST', body: JSON.stringify(Object.assign({ accion: a, tipo: tipo, forzar: !!forzar }, ref)) });
-      var s = j.socio, n = sellosDe(s, tipo), t = nombreTipo(tipo); seleccionado = s.id;
-      if (a === 'sello') toast(T('✓ Sello de {t} para {n} · {s}/{o}', {t: t, n: s.nombre, s: n, o: OBJ}) + (n >= OBJ ? T(' — ¡PREMIO CONSEGUIDO!') : ''), 'ok');
-      else if (a === 'canjear') toast(T('✓ Premio canjeado. {n} empieza de nuevo.', {n: s.nombre}), 'ok');
-      else toast(T('Sello de {t} quitado. {n} · {s}/{o}', {t: t, n: s.nombre, s: n, o: OBJ}));
+      var j = await api('accion', { method:'POST', body: JSON.stringify(Object.assign({ accion: a, forzar: !!forzar }, datosAccion, ref)) });
+      var s = j.socio; seleccionado = s.id;
+      if (a === 'compra') toast(T('✓ +{p} puntos para {n} · tiene {s}', {p: num(j.puntos), n: s.nombre, s: num(s.puntos)}), 'ok');
+      else if (a === 'canjear') toast(T('✓ Canjeado: {t}. A {n} le quedan {s} puntos.', {t: j.premio, n: s.nombre, s: num(s.puntos)}), 'ok');
+      else toast(T('Puntos corregidos. {n} tiene {s}.', {n: s.nombre, s: num(s.puntos)}), 'ok');
       if (navigator.vibrate) navigator.vibrate(60);
       await cargar();
+      return s;
     } catch(e){
-      if (e.status === 409 && e.data && e.data.aviso) { if (confirm(T(e.data.aviso))) return accion(a, ref, tipo, true); return; }
-      toast(e.message, 'mal');
+      if (e.status === 409 && e.data && e.data.aviso) { if (confirm(T(e.data.aviso))) return accion(a, ref, datosAccion, true); return null; }
+      toast(e.message, 'mal'); return null;
     }
   }
 
   function copiarEnlace(s){
     var url = location.origin + '/fidelidad/tarjeta.html?t=' + s.token;
-    var txt = 'Hola ' + s.nombre + ', esta es tu tarjeta de fidelidad de Hanaki: ' + url;
+    var txt = 'Hola ' + s.nombre + ', esta es tu tarjeta de puntos de Hanaki: ' + url;
     if (navigator.share) return navigator.share({ title: 'Tarjeta Hanaki', text: txt }).catch(function(){});
     navigator.clipboard.writeText(url).then(function(){ toast('Enlace copiado. Envíaselo por WhatsApp.', 'ok'); }, function(){ prompt(T('Enlace de la tarjeta:'), url); });
   }
@@ -221,18 +296,71 @@
   var tb; $('buscar').addEventListener('input', function(){ clearTimeout(tb); tb = setTimeout(function(){ qBusca = $('buscar').value.trim(); cargar().catch(function(){}); }, 250); });
 
   $('exportar').onclick = function(){
-    var filas = [['nombre','telefono','email','codigo','sellos_mediodia','sellos_noche','sellos_menu','sellos_totales','premios','acepta_promos','alta','ultimo_sello']].concat(datos.map(function(s){
-      return [s.nombre, s.telefono, s.email || '', s.codigo, s.sellos_mediodia || 0, s.sellos_noche || 0, s.sellos_menu || 0, s.sellos_totales, s.premios, s.acepta_promos ? 'si' : 'no', s.creado, s.ultimo_sello || ''];
+    var filas = [['nombre','telefono','email','codigo','puntos','puntos_ganados_total','premios_canjeados','acepta_promos','alta','ultima_visita']].concat(datos.map(function(s){
+      return [s.nombre, s.telefono, s.email || '', s.codigo, s.puntos || 0, s.puntos_totales || 0, s.premios, s.acepta_promos ? 'si' : 'no', s.creado, s.ultimo_sello || ''];
     }));
-    var csv = '﻿' + filas.map(function(f){ return f.map(function(v){ return '"' + String(v).replace(/"/g, '""') + '"'; }).join(';'); }).join('\n');
+    var csv = '\ufeff' + filas.map(function(f){ return f.map(function(v){ return '"' + String(v).replace(/"/g, '""') + '"'; }).join(';'); }).join('\n');
     var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = 'socios-hanaki.csv'; a.click();
   };
 
+  // ---------- sumar puntos / canjear ----------
+  var actual = null;
+  function pintarPremios(){
+    var s = actual, lista = activos();
+    $('s-saldo').textContent = num(s.puntos);
+    $('s-premios').innerHTML = lista.length ? lista.map(function(p){
+      if (p.variable) return '<button type="button" data-p="' + p.id + '"' + (s.puntos > 0 ? ' class="ok"' : ' disabled') + '><b>' + esc(p.nombre) + '</b><em>?</em><small>' + T('Pulsa y escribe los puntos de su etiqueta') + '</small></button>';
+      var sinPrecio = p.puntos == null, ok = !sinPrecio && s.puntos >= p.puntos;
+      return '<button type="button" data-p="' + p.id + '"' + (ok ? ' class="ok"' : ' disabled') + '><b>' + esc(p.nombre) + '</b><em>' + (sinPrecio ? '—' : num(p.puntos)) + '</em>' +
+        '<small>' + (sinPrecio ? T('Próximamente') : ok ? T('Pulsa para canjear') : T('Le faltan {n} puntos', {n: num(p.puntos - s.puntos)})) + '</small></button>';
+    }).join('') : '<div class="vacio">' + T('La tienda está vacía. Añade premios en TIENDA.') + '</div>';
+  }
+  function verGana(){
+    var e = leerImporte($('imp').value), p = puntosDe(e);
+    $('gana').innerHTML = !e ? T('Escribe el total de la cuenta.') : p ? T('Suma <b>{p} puntos</b> por {e}.', {p: num(p), e: euros(e)}) : T('Con menos de {e} € no se suman puntos.', {e: regla.euros});
+    $('imp-btn').disabled = !p;
+  }
+  function abrirPuntos(s, enfocar){
+    actual = s; $('s-nombre').textContent = s.nombre; $('imp').value = ''; verGana(); pintarPremios(); $('sellar').hidden = false;
+    if (enfocar) setTimeout(function(){ $('imp').focus(); }, 60);
+  }
+  function cerrarPuntos(){ $('sellar').hidden = true; actual = null; }
+  $('s-cerrar').onclick = cerrarPuntos;
+  $('sellar').addEventListener('click', function(e){ if (e.target === $('sellar')) cerrarPuntos(); });
+  $('imp').addEventListener('input', verGana);
+  $('imp-form').addEventListener('submit', async function(e){
+    e.preventDefault(); if (!actual) return;
+    var imp = leerImporte($('imp').value); if (!puntosDe(imp)) return;
+    $('imp-btn').disabled = true;
+    var s = await accion('compra', { id: actual.id }, { importe: imp });
+    if (s) cerrarPuntos(); else verGana();
+  });
+  $('s-premios').addEventListener('click', async function(e){
+    var b = e.target.closest('button[data-p]'); if (!b || b.disabled || !actual) return;
+    var p = premios.find(function(x){ return x.id === Number(b.dataset.p); }), s0 = actual;
+    var coste = p.puntos;
+    if (p.variable) {
+      var v = prompt(T('¿Cuántos puntos cuesta «{t}»? (lo pone en su etiqueta)', {t: p.nombre}), '');
+      if (v == null) return;
+      coste = parseInt(String(v).replace(/\D/g, ''), 10) || 0;
+      if (!coste) { toast('Escribe los puntos que marca la etiqueta.', 'mal'); return; }
+      if (coste > s0.puntos) { toast(T('A {n} le faltan {p} puntos.', {n: s0.nombre, p: num(coste - s0.puntos)}), 'mal'); return; }
+    }
+    if (!confirm(T('¿Canjear «{t}» de {n} por {p} puntos?', {t: p.nombre, n: s0.nombre, p: num(coste)}))) return;
+    var s = await accion('canjear', { id: s0.id }, { premio_id: p.id, puntos: coste });
+    if (s) cerrarPuntos();
+  });
 
   // ---------- ficha del cliente ----------
   var fichaId = null;
   function fechaLarga(s){ if (!s) return '–'; var d = new Date(s.replace(' ', 'T') + 'Z'); return d.toLocaleDateString(HK_LOCALE, {day:'numeric', month:'short', year:'numeric'}) + ' · ' + d.toLocaleTimeString(HK_LOCALE, {hour:'2-digit', minute:'2-digit'}); }
-  var TIPO = { sello: '+1 sello', quitar: '−1 sello', canje: 'Premio canjeado' };
+  var VIEJO = { sello: '+1 sello (sistema anterior)', quitar: '−1 sello (sistema anterior)', canje: 'Premio canjeado (sistema anterior)' };
+  function textoMov(m){
+    if (m.puntos == null) return { t: T(VIEJO[m.tipo] || m.tipo), d: '', c: '' };
+    var signo = m.puntos >= 0 ? '+' : '';
+    var d = m.tipo === 'compra' ? T('Cuenta de {e}', {e: euros(m.importe)}) : m.tipo === 'canje' ? T('Canje: {t}', {t: m.nota || ''}) : T(m.nota || 'Corrección manual');
+    return { t: signo + num(m.puntos) + ' ' + T('puntos'), d: d, c: m.puntos >= 0 ? 'p-mas' : 'p-menos' };
+  }
   async function abrirFicha(id){
     try {
       var j = await api('socio?id=' + id), s = j.socio, mov = j.movimientos || [];
@@ -240,35 +368,36 @@
       $('f-nombre').textContent = s.nombre;
       var fila = function(k, v){ return '<dt>' + T(k) + '</dt><dd>' + v + '</dd>'; };
       $('f-datos').innerHTML =
+        fila('PUNTOS', '<b>' + num(s.puntos || 0) + '</b>') +
+        fila('GANADOS', T('{n} en total', {n: num(s.puntos_totales || 0)})) +
+        fila('CANJES', String(s.premios)) +
         fila('TELÉFONO', '<a href="tel:' + esc(s.telefono) + '">' + esc(s.telefono) + '</a>') +
         fila('EMAIL', s.email ? '<a href="mailto:' + esc(s.email) + '">' + esc(s.email) + '</a>' : '–') +
         fila('ALTA', fechaLarga(s.creado)) +
         fila('CÓDIGO', esc(s.codigo)) +
-        fila('SELLOS', T('{n} en total', {n: s.sellos_totales})) +
-        fila('PREMIOS', String(s.premios)) +
         fila('PROMOS', s.acepta_promos ? T('Sí') : T('No'));
-      $('f-tipos').innerHTML = TIPOS.map(function(t){
-        var n = sellosDe(s, t.id);
-        return '<div class="fila"><span>' + esc(nombreTipo(t.id)) + ' · <b>' + n + '/' + OBJ + '</b></span><button type="button" class="btn sec" data-q="' + esc(t.id) + '"' + (n ? '' : ' disabled') + '>−1</button></div>';
-      }).join('');
+      $('aj-puntos').value = ''; $('aj-nota').value = '';
       $('f-nmov').textContent = mov.length ? String(mov.length) : '';
       $('f-hist').innerHTML = mov.length ? mov.map(function(m){
-        return '<li><span class="t-' + esc(m.tipo) + '">' + T(TIPO[m.tipo] || m.tipo) + (m.tipo_sello ? ' · ' + nombreTipo(m.tipo_sello) : '') + '</span><time>' + fechaLarga(m.creado) + '</time></li>';
-      }).join('') : '<li><span style="color:var(--muted)">' + T('Todavía no tiene sellos.') + '</span></li>';
+        var x = textoMov(m);
+        return '<li><span class="' + x.c + '">' + esc(x.t) + (x.d ? '<small>' + esc(x.d) + '</small>' : '') + '</span><time>' + fechaLarga(m.creado) + '</time></li>';
+      }).join('') : '<li><span style="color:var(--muted)">' + T('Todavía no tiene puntos.') + '</span></li>';
       $('ficha').hidden = false;
     } catch(e){ toast(e.message, 'mal'); }
   }
   function cerrarFicha(){ $('ficha').hidden = true; fichaId = null; }
   $('f-cerrar').onclick = cerrarFicha;
   $('ficha').addEventListener('click', function(e){ if (e.target === $('ficha')) cerrarFicha(); });
-  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !$('ficha').hidden) cerrarFicha(); });
-  $('f-tipos').addEventListener('click', async function(e){
-    var b = e.target.closest('button[data-q]'); if (!b || fichaId == null) return;
-    var id = fichaId, s = datos.find(function(x){ return x.id === id; }) || { nombre: $('f-nombre').textContent };
-    if (!confirm(T('¿Quitar un sello de {t} a {n}?', {t: nombreTipo(b.dataset.q), n: s.nombre}))) return;
-    await accion('quitar', { id: id }, b.dataset.q);
-    abrirFicha(id);
-  });
+  async function ajustar(signo){
+    var n = Math.abs(parseInt(String($('aj-puntos').value).replace(/\D/g, ''), 10)) || 0, id = fichaId;
+    if (!n) { toast('Escribe cuántos puntos sumar o restar.', 'mal'); $('aj-puntos').focus(); return; }
+    var nombre = $('f-nombre').textContent;
+    if (!confirm(T(signo > 0 ? '¿Sumar {p} puntos a {n}?' : '¿Restar {p} puntos a {n}?', {p: num(n), n: nombre}))) return;
+    var s = await accion('ajuste', { id: id }, { puntos: signo * n, nota: $('aj-nota').value });
+    if (s) abrirFicha(id);
+  }
+  $('aj-mas').onclick = function(){ ajustar(1); };
+  $('aj-menos').onclick = function(){ ajustar(-1); };
   $('f-borrar').onclick = async function(){
     var s = datos.find(function(x){ return x.id === fichaId; }), nombre = s ? s.nombre : $('f-nombre').textContent;
     if (!confirm(T('¿Borrar a {n} y todo su historial? No se puede deshacer.', {n: nombre}))) return;
@@ -277,6 +406,53 @@
       cerrarFicha(); toast(T('{n} borrado.', {n: nombre}), 'ok'); await cargar();
     } catch(e){ toast(e.message, 'mal'); }
   };
+
+  // ---------- tienda de premios ----------
+  var editando = null;
+  function pintarTienda(){
+    $('t-lista').innerHTML = premios.length ? premios.map(function(p){
+      return '<div class="tp' + (p.activo ? '' : ' off') + '" data-id="' + p.id + '"><b>' + esc(p.nombre) + '</b><em>' + (p.variable ? T('Variable') : p.puntos == null ? T('Próximamente') : num(p.puntos)) + '</em>' +
+        '<small>' + esc(p.descripcion || '') + (p.activo ? '' : (p.descripcion ? ' · ' : '') + T('Oculto')) + '</small>' +
+        '<div class="ops"><button type="button" data-o="editar">' + T('EDITAR') + '</button><button type="button" data-o="ver">' + T(p.activo ? 'OCULTAR' : 'MOSTRAR') + '</button><button type="button" data-o="borrar">' + T('BORRAR') + '</button></div></div>';
+    }).join('') : '<div class="vacio">' + T('La tienda está vacía.') + '</div>';
+  }
+  function formTienda(p){
+    editando = p ? p.id : null;
+    $('tp-tit').textContent = T(p ? 'Editar premio' : 'Añadir premio');
+    $('tp-nombre').value = p ? p.nombre : ''; $('tp-puntos').value = p && p.puntos != null ? num(p.puntos) : ''; $('tp-desc').value = p ? (p.descripcion || '') : '';
+    $('tp-var').checked = !!(p && p.variable); $('tp-puntos').disabled = $('tp-var').checked;
+    $('tp-guardar').textContent = T(p ? 'GUARDAR' : 'AÑADIR'); $('tp-cancelar').hidden = !p;
+  }
+  async function guardarPremio(d){
+    try { var j = await api('premios', { method: 'POST', body: JSON.stringify(d) }); premios = j.premios; pintarTienda(); pintar(); return true; }
+    catch(e){ toast(e.message, 'mal'); return false; }
+  }
+  $('tienda-btn').onclick = function(){ formTienda(null); pintarTienda(); $('tienda').hidden = false; };
+  function cerrarTienda(){ $('tienda').hidden = true; }
+  $('t-cerrar').onclick = cerrarTienda;
+  $('tienda').addEventListener('click', function(e){ if (e.target === $('tienda')) cerrarTienda(); });
+  $('tp-cancelar').onclick = function(){ formTienda(null); };
+  $('tp-var').addEventListener('change', function(){ $('tp-puntos').disabled = this.checked; if (this.checked) $('tp-puntos').value = ''; });
+  $('tp-form').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var viejo = premios.find(function(x){ return x.id === editando; });
+    var ok = await guardarPremio({ id: editando, nombre: $('tp-nombre').value, puntos: $('tp-puntos').value, descripcion: $('tp-desc').value, variable: $('tp-var').checked, activo: viejo ? !!viejo.activo : true });
+    if (ok) { toast(editando ? 'Premio guardado.' : 'Premio añadido a la tienda.', 'ok'); formTienda(null); }
+  });
+  $('t-lista').addEventListener('click', async function(e){
+    var b = e.target.closest('button[data-o]'); if (!b) return;
+    var p = premios.find(function(x){ return x.id === Number(b.closest('.tp').dataset.id); }), o = b.dataset.o;
+    if (o === 'editar') { formTienda(p); $('tp-nombre').focus(); return; }
+    if (o === 'ver') { await guardarPremio({ id: p.id, nombre: p.nombre, puntos: p.puntos == null ? '' : p.puntos, descripcion: p.descripcion || '', variable: !!p.variable, activo: !p.activo }); return; }
+    if (!confirm(T('¿Borrar «{t}» de la tienda?', {t: p.nombre}))) return;
+    try { var j = await api('premios', { method: 'DELETE', body: JSON.stringify({ id: p.id }) }); premios = j.premios; pintarTienda(); pintar(); if (editando === p.id) formTienda(null); }
+    catch(ex){ toast(ex.message, 'mal'); }
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key !== 'Escape') return;
+    if (!$('ficha').hidden) cerrarFicha(); else if (!$('sellar').hidden) cerrarPuntos(); else if (!$('tienda').hidden) cerrarTienda();
+  });
 
   // ---------- escáner de QR ----------
   var stream, bucle, detector, jsqrListo;
@@ -317,21 +493,9 @@
       var j = await api('socio?token=' + encodeURIComponent(token)), s = j.socio;
       seleccionado = s.id; $('buscar').value = ''; qBusca = '';
       await cargar();
-      abrirSellar(s);
+      abrirPuntos(datos.find(function(x){ return x.id === s.id; }) || s, true);
     } catch(e){ toast(e.message, 'mal'); }
   }
-
-  // Hoja para elegir qué ha tomado el cliente (se abre al escanear su QR)
-  var sellando = null;
-  function abrirSellar(s){ sellando = s; $('s-nombre').textContent = s.nombre; $('s-tipos').innerHTML = botonesTipos(s); $('sellar').hidden = false; }
-  function cerrarSellar(){ $('sellar').hidden = true; sellando = null; }
-  $('s-cerrar').onclick = cerrarSellar;
-  $('sellar').addEventListener('click', function(e){ if (e.target === $('sellar')) cerrarSellar(); });
-  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !$('sellar').hidden) cerrarSellar(); });
-  $('s-tipos').addEventListener('click', function(e){
-    var b = e.target.closest('button[data-a]'); if (!b || !sellando) return;
-    var s = sellando; cerrarSellar(); pulsarTipo(b.dataset.a, s, b.dataset.tipo);
-  });
 
   iniciar();
 })();

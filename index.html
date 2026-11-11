@@ -110,15 +110,22 @@
         <a class="btn btn--ghost" href="#carta"><span>Ver la carta</span><svg><use href="#arrow"/></svg></a>
       </div>
     </div>
-    <aside class="fid" id="fidelidad" data-in aria-label="Tarjeta de fidelidad">
+    <aside class="fid" id="fidelidad" data-in aria-label="Tarjeta de puntos">
       <div class="fid__top">
         <div>
-          <p class="fid__k">Tarjeta de fidelidad</p>
-          <h2 class="fid__t">8 visitas = tu próximo buffet <b>gratis</b></h2>
+          <p class="fid__k">Tarjeta de puntos</p>
+          <h2 class="fid__t">Cada 10 € sumas <b>1.000 puntos</b></h2>
         </div>
-        <span class="fid__n" id="stampN">0 / 8</span>
+        <span class="fid__n" id="fidN">0</span>
       </div>
-      <ol class="stamps" id="stamps" aria-hidden="true"><li><img src="assets/sello.png" alt="" width="64" height="64"></li><li><img src="assets/sello.png" alt="" width="64" height="64"></li><li><img src="assets/sello.png" alt="" width="64" height="64"></li><li><img src="assets/sello.png" alt="" width="64" height="64"></li><li><img src="assets/sello.png" alt="" width="64" height="64"></li><li><img src="assets/sello.png" alt="" width="64" height="64"></li><li><img src="assets/sello.png" alt="" width="64" height="64"></li><li class="free"><b>Gratis</b></li></ol>
+      <div class="ruta" id="ruta">
+        <div class="ruta__l" aria-hidden="true"><i></i><img src="assets/sello.png" alt="" width="64" height="64"></div>
+        <ol class="ruta__h" id="rutaH">
+          <li style="--x:40%"><b>12.000</b><span>Menú del día</span></li>
+          <li style="--x:73.3%"><b>22.000</b><span>Buffet de mediodía</span></li>
+          <li style="--x:100%"><b>30.000</b><span>Buffet con platos especiales</span></li>
+        </ol>
+      </div>
       <div class="fid__cta">
         <a class="btn btn--cream btn--sm" href="/fidelidad/"><span>Crear mi tarjeta</span><svg><use href="#arrow"/></svg></a>
         <a class="link" href="/fidelidad/?ver=1">Ver mi tarjeta <svg><use href="#arrow"/></svg></a>

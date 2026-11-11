@@ -128,7 +128,7 @@ h2{font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:26
       ['RESERVAS ONLINE', fmt(t.reservas), delta(t.reservas, j.anterior.reservas)],
       ['CONVERSIÓN', conv.toLocaleString(window.HK_LOCALE || 'es-ES', { maximumFractionDigits: 1 }) + '%', '<span>' + T('de visitantes que reservan') + '</span>'],
       ['PERSONAS RESERVADAS', fmt(t.personas), '<span>' + T('en reservas online') + '</span>'],
-      ['TARJETAS NUEVAS', fmt(t.socios), '<span>' + T(t.sellos === 1 ? '{n} sello puesto' : '{n} sellos puestos', { n: fmt(t.sellos) }) + '</span>'],
+      ['TARJETAS NUEVAS', fmt(t.socios), '<span>' + T(t.sellos === 1 ? '{n} cuenta con puntos' : '{n} cuentas con puntos', { n: fmt(t.sellos) }) + '</span>'],
       ['RESEÑAS PEDIDAS', fmt(t.resenas), '<span>' + T('emails a Google') + '</span>'],
       ['NO VINIERON', fmt(j.reservas.no_vinieron), '<span>' + T(j.reservas.canceladas === 1 ? '{n} cancelada' : '{n} canceladas', { n: fmt(j.reservas.canceladas) }) + '</span>'],
     ].map(function(k){ return '<div class="kpi"><small>' + T(k[0]) + '</small><b>' + k[1] + '</b><div>' + k[2] + '</div></div>'; }).join('');

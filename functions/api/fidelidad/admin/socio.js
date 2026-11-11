@@ -6,7 +6,7 @@ export const onRequestGet = handle(async ({ request, env }) => {
   const p = Object.fromEntries(new URL(request.url).searchParams);
   const socio = await buscarSocio(DB, p);
   if (!socio) throw new HttpError(404, 'No se encuentra esa tarjeta.');
-  const mov = await DB.prepare('SELECT tipo, tipo_sello, creado FROM movimientos WHERE socio_id = ? ORDER BY id DESC LIMIT 200').bind(socio.id).all();
+  const mov = await DB.prepare('SELECT tipo, tipo_sello, puntos, importe, nota, creado FROM movimientos WHERE socio_id = ? ORDER BY id DESC LIMIT 200').bind(socio.id).all();
   return json({ socio, movimientos: mov.results });
 });
 

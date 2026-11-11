@@ -12,20 +12,35 @@
 <link rel="stylesheet" href="estilo.css">
 <script src="config.js"></script>
 <script src="/estadisticas.js" defer></script>
+<style>
+.tnd{list-style:none;margin:0 0 26px;padding:0;border-top:1px solid var(--linea)}
+.tnd li{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:13px 0;border-bottom:1px solid var(--linea);font-size:15.5px;color:var(--txt-hi)}
+.tnd li small{display:block;font-size:12.5px;color:var(--muted)}
+.tnd b{font:700 28px/1 var(--num);color:var(--rojo);white-space:nowrap}
+.tnd b.prox{font:600 11px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+</style>
 </head>
 <body>
 <main class="wrap">
   <header class="cab"><a href="../"><img src="../assets/logo.png" alt="花木"><span>HANAKI</span></a></header>
 
-  <div class="etq">Tarjeta de fidelidad</div>
-  <h1>8 visitas,<br>la siguiente <em>invitamos nosotros</em>.</h1>
-  <p class="lead">Regístrate gratis en 30 segundos. Cada vez que vengas te ponemos un sello en tu tarjeta del móvil. Hay un contador para cada opción (buffet de mediodía, buffet de noche y menú): con 8 sellos de una de ellas, la siguiente es gratis.</p>
+  <div class="etq">Tarjeta de puntos</div>
+  <h1>Come, suma puntos<br>y <em>canjéalos</em>.</h1>
+  <p class="lead">Regístrate gratis en 30 segundos. Cada vez que vengas, enseña tu tarjeta al pagar: por cada <b style="color:var(--txt-hi)" id="r-euros">10 €</b> de tu cuenta sumas <b style="color:var(--txt-hi)" id="r-puntos">1.000 puntos</b>, y los canjeas en la tienda por menús, buffets y regalos.</p>
 
   <div class="pasos">
     <div class="paso"><b>1</b><small>Te registras aquí</small></div>
     <div class="paso"><b>2</b><small>Enseñas tu QR al pagar</small></div>
-    <div class="paso"><b>8</b><small>Sellos iguales = gratis</small></div>
+    <div class="paso"><b>3</b><small>Canjeas tus puntos</small></div>
   </div>
+
+  <div class="etq" style="margin-bottom:10px">La tienda</div>
+  <ul class="tnd" id="tnd">
+    <li><span>Menú del día</span><b>12.000</b></li>
+    <li><span>Buffet de mediodía</span><b>22.000</b></li>
+    <li><span>Buffet con platos especiales</span><b>30.000</b></li>
+    <li><span>Gato de la suerte<small>Cada gato lleva sus puntos en la etiqueta</small></span><b class="prox" style="color:var(--rojo)">Según cuál elijas</b></li>
+  </ul>
 
   <div style="margin-bottom:26px">
     <a class="btn oro" id="ver-btn" href="#ver">¿YA TIENES TARJETA? VER MI TARJETA <span aria-hidden="true">→</span></a>
@@ -51,10 +66,22 @@
     <label class="check"><input type="checkbox" name="privacidad" required><span>He leído y acepto la <a href="/legal#privacidad" target="_blank">política de privacidad</a>.</span></label>
     <label class="check"><input type="checkbox" name="promos"><span>Quiero recibir promociones de Hanaki (opcional).</span></label>
     <button class="btn" type="submit" id="enviar">CREAR MI TARJETA <span aria-hidden="true">→</span></button>
-    <p class="nota" style="margin-top:14px">Un sello por visita al buffet, a nombre del titular. El premio es un buffet libre (bebidas no incluidas) y no se puede cambiar por dinero.</p>
+    <p class="nota" style="margin-top:14px">Los puntos se suman al pagar, a nombre del titular, por cada 10 € completos de la cuenta. No se pueden cambiar por dinero.</p>
   </form>
 </main>
 <script>
+(function(){
+  // La tienda y la regla de puntos se leen del servidor (se editan en el panel)
+  var mil = function(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); };
+  var txt = function(v){ var d = document.createElement('div'); d.textContent = v == null ? '' : v; return d.innerHTML; };
+  fetch('/api/fidelidad/premios').then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
+    if (!j) return;
+    if (j.regla) { document.getElementById('r-euros').textContent = j.regla.euros + ' €'; document.getElementById('r-puntos').textContent = mil(j.regla.puntos) + ' puntos'; }
+    if (j.premios && j.premios.length) document.getElementById('tnd').innerHTML = j.premios.map(function(p){
+      return '<li><span>' + txt(p.nombre) + (p.descripcion ? '<small>' + txt(p.descripcion) + '</small>' : '') + '</span>' + (p.variable ? '<b class="prox" style="color:var(--rojo)">Según cuál elijas</b>' : p.puntos == null ? '<b class="prox">Próximamente</b>' : '<b>' + mil(p.puntos) + '</b>') + '</li>';
+    }).join('');
+  }).catch(function(){});
+})();
 (function(){
   // "Ver mi tarjeta": si ya se abrió en este móvil va directa; si no, se busca por teléfono + nombre
   var guardado = HK_TOKEN.leer();

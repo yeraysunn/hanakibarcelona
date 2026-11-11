@@ -1,5 +1,5 @@
 // Petición de reseña en Google al día siguiente de la visita (no crea ninguna ruta).
-// Se llama cuando el personal marca una reserva como «Ha llegado» o pone un sello en la tarjeta.
+// Se llama cuando el personal marca una reserva como «Ha llegado» o le suma puntos en la tarjeta.
 // - Un mismo email recibe como mucho una petición cada DIAS_ENTRE_PETICIONES.
 // - Todos los clientes reciben el mismo enlace a Google (sin filtrar por opinión, como exige Google).
 // - Enlace para darse de baja en cada email (/api/resenas/baja).

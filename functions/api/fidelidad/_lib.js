@@ -1,8 +1,28 @@
 // Utilidades compartidas de la tarjeta de fidelidad (Cloudflare Pages Functions + D1).
 // No exporta onRequest, así que no crea ninguna ruta pública.
 
-export const SELLOS_PREMIO = 8;          // sellos necesarios para el premio (de cada tipo)
-export const MINUTOS_ENTRE_SELLOS = 60;  // aviso si se intenta sellar dos veces seguidas
+export const SELLOS_PREMIO = 8;          // (sistema antiguo de sellos; se conserva para convertir los sellos a puntos)
+export const MINUTOS_ENTRE_SELLOS = 60;
+
+// ---------- SISTEMA DE PUNTOS (sustituye a los sellos) ----------
+// Regla: por cada TRAMO_EUROS completos de consumo, el cliente gana PUNTOS_TRAMO puntos.
+export const TRAMO_EUROS = 10;
+export const PUNTOS_TRAMO = 1000;
+export const MINUTOS_ENTRE_COMPRAS = 30;  // aviso si se suman puntos dos veces seguidas al mismo cliente
+export const IMPORTE_MAXIMO = 3000;       // tope de seguridad por cuenta (€)
+export function puntosDe(importe) {
+  const e = Number(importe);
+  if (!Number.isFinite(e) || e <= 0) return 0;
+  return Math.floor(e / TRAMO_EUROS + 1e-9) * PUNTOS_TRAMO;
+}
+// Tienda inicial (se crea sola la primera vez; después se edita desde el panel). puntos = null → «Próximamente».
+// El 4.º valor marca un premio de precio variable: los puntos se escriben al canjear (p. ej. cada gato lleva su precio).
+export const PREMIOS_INICIALES = [
+  ['Menú del día', 'De lunes a viernes al mediodía', 12000],
+  ['Buffet de mediodía', 'Sin platos especiales', 22000],
+  ['Buffet con platos especiales', 'Noches, fines de semana y festivos', 30000],
+  ['Gato de la suerte', 'Cada gato lleva sus puntos en la etiqueta', null, 1],
+];
 
 // Cada socio colecciona los sellos por separado en tres tipos (columnas sellos_<id> y premios_<id> en la tabla socios).
 export const TIPOS = {
@@ -53,7 +73,29 @@ export async function esquema(DB) {
     if (!socios.has('premios_' + t)) await anadir(`ALTER TABLE socios ADD COLUMN premios_${t} INTEGER NOT NULL DEFAULT 0`);
   }
   if (migrar) await DB.prepare('UPDATE socios SET sellos_mediodia = sellos, premios_mediodia = premios').run();
-  if (!(await columnas('movimientos')).has('tipo_sello')) await anadir('ALTER TABLE movimientos ADD COLUMN tipo_sello TEXT');
+  const movs = await columnas('movimientos');
+  if (!movs.has('tipo_sello')) await anadir('ALTER TABLE movimientos ADD COLUMN tipo_sello TEXT');
+
+  // ----- puntos -----
+  if (!socios.has('puntos')) await anadir('ALTER TABLE socios ADD COLUMN puntos INTEGER');               // NULL = aún con sellos sin convertir
+  if (!socios.has('puntos_totales')) await anadir('ALTER TABLE socios ADD COLUMN puntos_totales INTEGER NOT NULL DEFAULT 0');
+  for (const [c, tipo] of [['puntos', 'INTEGER'], ['importe', 'REAL'], ['premio_id', 'INTEGER'], ['nota', 'TEXT']]) {
+    if (!movs.has(c)) await anadir(`ALTER TABLE movimientos ADD COLUMN ${c} ${tipo}`);
+  }
+  await DB.prepare(`CREATE TABLE IF NOT EXISTS premios (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, descripcion TEXT, puntos INTEGER,
+    activo INTEGER NOT NULL DEFAULT 1, orden INTEGER NOT NULL DEFAULT 0, variable INTEGER NOT NULL DEFAULT 0, creado TEXT NOT NULL DEFAULT (datetime('now')))`).run();
+  if (!(await columnas('premios')).has('variable')) await anadir('ALTER TABLE premios ADD COLUMN variable INTEGER NOT NULL DEFAULT 0');
+  await DB.prepare(`CREATE TABLE IF NOT EXISTS ajustes_fid (clave TEXT PRIMARY KEY, valor TEXT)`).run();
+  if (!(await DB.prepare(`SELECT valor FROM ajustes_fid WHERE clave = 'tienda_creada'`).first())) {
+    await DB.batch([
+      ...PREMIOS_INICIALES.map(([n, d, p, v], i) => DB.prepare('INSERT INTO premios (nombre, descripcion, puntos, orden, variable) VALUES (?, ?, ?, ?, ?)').bind(n, d, p, i, v ? 1 : 0)),
+      DB.prepare(`INSERT OR IGNORE INTO ajustes_fid (clave, valor) VALUES ('tienda_creada', datetime('now'))`),
+    ]);
+  }
+  // Los clientes que venían del sistema de sellos empiezan con 0 puntos (decisión del restaurante, 11-11-2026).
+  // Sus sellos antiguos no se borran de la base de datos, simplemente ya no se usan.
+  await DB.prepare('UPDATE socios SET puntos = 0 WHERE puntos IS NULL').run();
   esquemaListo = true;
 }
 
@@ -102,17 +144,28 @@ export function normalizarTelefono(t) {
   return s;
 }
 
+// Tienda de premios. todos = true incluye los ocultos (para el panel)
+export async function listaPremios(DB, todos = false) {
+  const r = await DB.prepare(`SELECT id, nombre, descripcion, puntos, activo, orden, variable FROM premios ${todos ? '' : 'WHERE activo = 1'} ORDER BY variable, (puntos IS NULL), puntos, orden, id`).all();
+  return r.results;
+}
+export const reglaPuntos = () => ({ euros: TRAMO_EUROS, puntos: PUNTOS_TRAMO });
+
 // Datos que puede ver el propio cliente en su tarjeta
-export function tarjetaPublica(s) {
+export function tarjetaPublica(s, premios = [], movimientos = []) {
+  const saldo = s.puntos || 0;
   return {
     nombre: s.nombre,
     codigo: s.codigo,
-    objetivo: SELLOS_PREMIO,
-    tipos: TIPO_IDS.map((id) => {
-      const n = s['sellos_' + id] || 0;
-      return { id, nombre: TIPOS[id].nombre, premio: TIPOS[id].premio, sellos: n, premioListo: n >= SELLOS_PREMIO, premios: s['premios_' + id] || 0 };
-    }),
-    premios: s.premios,
+    puntos: saldo,
+    puntosTotales: s.puntos_totales || 0,
+    regla: reglaPuntos(),
+    premios: premios.map((p) => ({
+      id: p.id, nombre: p.nombre, descripcion: p.descripcion || '', puntos: p.variable ? null : p.puntos, variable: !!p.variable,
+      listo: !p.variable && p.puntos != null && saldo >= p.puntos, faltan: p.variable || p.puntos == null ? null : Math.max(0, p.puntos - saldo),
+    })),
+    movimientos,
+    canjeados: s.premios || 0,
     desde: s.creado,
   };
 }
