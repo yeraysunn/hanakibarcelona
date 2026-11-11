@@ -216,7 +216,6 @@
 .fid--carta .fid__top{gap:20px}
 .fid--carta .ruta{margin:0 14px 0 20px}
 .fid--carta .ruta__h{margin-top:22px}
-.fid__s{margin-top:10px;font-size:14px;line-height:1.35;color:rgba(243,239,232,.8)}
 .fid--carta .fid__cta{flex-direction:column;align-items:flex-start;gap:12px}
 @media (max-width:1180px){
   .fid--carta{grid-template-columns:minmax(0,1fr);max-width:560px;gap:0}
@@ -227,5 +226,4 @@
 @media (max-width:640px){
   .fid--carta{padding:16px 16px 18px}
   .fid--carta .ruta{margin:26px 18px 12px}
-  .fid__s{font-size:13.5px}
 }
