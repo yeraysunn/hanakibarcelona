@@ -2,10 +2,10 @@
 import { HttpError, escapar } from '../fidelidad/_lib.js';
 export { json, db, handle, body, HttpError, normalizarTelefono, sesionValida, enviarEmail, escapar } from '../fidelidad/_lib.js';
 
-// Turnos (hora de llegada). Se puede reservar de 12:00 a 16:30 y de 20:00 a 23:30, cada media hora.
+// Turnos (hora de llegada). Se puede reservar cada media hora; últimas llegadas 16:15 y 23:15.
 export const HORAS = {
-  mediodia: ['12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'],
-  noche: ['20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'],
+  mediodia: ['12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:15'],
+  noche: ['20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:15'],
 };
 export const TODAS_HORAS = [...HORAS.mediodia, ...HORAS.noche];
 export const MAX_PERSONAS = 20;
