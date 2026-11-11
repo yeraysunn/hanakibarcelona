@@ -207,7 +207,7 @@
     requestAnimationFrame(paso);
   }
   // Los premios y sus puntos se leen de la tienda (se editan en el panel)
-  fetch('/api/fidelidad/premios').then(r => (r.ok ? r.json() : null)).then(j => {
+  if ($('#ruta')) fetch('/api/fidelidad/premios').then(r => (r.ok ? r.json() : null)).then(j => {
     if (!j) return;
     const t = $('.fid__t'); if (t && j.regla) t.innerHTML = `Cada ${j.regla.euros} € sumas <b>${miles(j.regla.puntos)} puntos</b>`;
     let ps = (j.premios || []).filter(p => p.puntos != null).sort((a, b) => a.puntos - b.puntos);

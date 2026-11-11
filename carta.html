@@ -51,7 +51,7 @@
   <div class="hdr__r">
     <div class="langs" aria-label="Idioma"><button class="on">ES</button><button>CA</button><button>EN</button><button>FR</button></div>
     <span class="btn btn--cream btn--sm" aria-current="page"><span>Carta</span></span>
-    <a class="btn btn--red btn--sm" href="/reservas/"><span>Reservar</span><svg><use href="#arrow"/></svg></a>
+    <a class="btn btn--red btn--sm" href="tel:+34931942261"><span>Reservar</span><svg><use href="#arrow"/></svg></a>
     <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false"><i></i><i></i></button>
   </div>
 </header>
@@ -62,7 +62,7 @@
     <a href="/#precios"><em>02</em>Precios</a>
     <a href="/carta"><em>03</em>La carta</a>
     <a href="/#galeria"><em>04</em>Galería</a>
-    <a href="/reservas/"><em>05</em>Reservas</a>
+    <a href="/#reservar"><em>05</em>Reservas</a>
     <a href="/ubicacion"><em>06</em>Ubicación</a>
     <a href="#contacto"><em>07</em>Contacto</a>
   </nav>
@@ -80,6 +80,7 @@
     <p class="eyebrow" data-in><i></i>Buffet a la carta</p>
     <h1 class="phero__t" data-rise>La carta<b>.</b></h1>
     <p class="phero__p" data-in>Todo lo que ves está incluido en el precio del buffet. Pídelo desde la tablet y repite las veces que quieras.</p>
+    <template id="fid-privado"><!-- Tarjeta de puntos: privada hasta que el equipo la active -->
     <aside class="fid fid--carta" id="fidelidad" data-in aria-label="Tarjeta de puntos">
       <div class="fid__top">
         <div>
@@ -102,6 +103,7 @@
         <a class="link" href="/fidelidad/?ver=1">Ver mi tarjeta <svg><use href="#arrow"/></svg></a>
       </div>
     </aside>
+    </template>
     <ul class="tarifas" data-in>
       <li><small>Mediodía · L–V</small><b>16,95<sup>€</sup></b><span>Niños 11,95 €</span></li>
       <li><small>Noches, findes y festivos</small><b>22,95<sup>€</sup></b><span>Niños 13,95 €</span></li>
@@ -126,7 +128,7 @@
 <div class="wrap carta">
   <aside class="carta__lado" aria-label="Categorías de la carta">
     <nav id="catlado"></nav>
-    <a class="link" href="/reservas/">Reservar mesa <svg><use href="#arrow"/></svg></a>
+    <a class="link" href="tel:+34931942261">Llamar para reservar <svg><use href="#arrow"/></svg></a>
   </aside>
   <div class="carta__cuerpo">
     <details class="alg" id="alg">
@@ -144,7 +146,7 @@
       <p>Pequeños placeres, grandes momentos.</p>
     </div>
     <div class="banda__cta" data-in>
-      <a class="btn btn--ink" href="/reservas/"><span>Reservar mesa</span><svg><use href="#arrow"/></svg></a>
+      <a class="btn btn--ink" href="tel:+34931942261"><span>Llamar para reservar</span><svg><use href="#arrow"/></svg></a>
       <a class="btn btn--line-ink" href="tel:+34931942261"><span>931 94 22 61</span></a>
     </div>
   </div>
@@ -192,8 +194,8 @@
 </footer>
 
 <div class="dock" id="dock">
-  <a href="tel:+34931942261"><span>Llamar</span></a>
-  <a class="dock__m" href="/reservas/"><span>Reservar online</span><svg><use href="#arrow"/></svg></a>
+  <a href="/ubicacion"><span>Cómo llegar</span></a>
+  <a class="dock__m" href="tel:+34931942261"><span>Llamar para reservar</span><svg><use href="#arrow"/></svg></a>
 </div>
 
 <script src="/sitio.js"></script>
