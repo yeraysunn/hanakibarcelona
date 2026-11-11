@@ -204,7 +204,21 @@
     ' Se le enviará un email.': '系统会给顾客发送邮件。',
     ' · email enviado': ' · 邮件已发送',
     ' · no se pudo enviar el email': ' · 邮件发送失败',
-    'Nueva reserva ({n})': '新预订（{n}）'
+    'Nueva reserva ({n})': '新预订（{n}）',
+    'HORAS DE RESERVA': '预订时间',
+    'Todas abiertas': '全部开放',
+    'Día cerrado': '全天关闭',
+    '{n} cerrada': '{n} 个已关闭',
+    '{n} cerradas': '{n} 个已关闭',
+    'ABRIR TURNO': '开放本时段',
+    'CERRAR TURNO': '关闭本时段',
+    'CERRAR TODO EL DÍA': '关闭全天',
+    'ABRIR TODO': '全部开放',
+    'Toca una hora para cerrarla o volver a abrirla. Las horas cerradas no se pueden reservar en la web.': '点一个时间可以关闭或重新开放。关闭的时间在网站上不能预订。',
+    '{h} cerrada': '{h} 已关闭',
+    '{h} abierta': '{h} 已开放',
+    'Horas cerradas': '时间已关闭',
+    'Horas abiertas': '时间已开放'
   };
 
   // Traduce un texto en español (con {variables}) al idioma actual

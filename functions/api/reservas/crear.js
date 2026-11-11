@@ -1,5 +1,5 @@
 // POST /api/reservas/crear — reserva desde la web
-import { json, db, handle, body, HttpError, normalizarTelefono, enviarEmail, tabla, TODAS_HORAS, MAX_PERSONAS, DIAS_ANTELACION, hoyMadrid, horaMadrid, validarFecha, emailReserva } from './_comun.js';
+import { json, db, handle, body, HttpError, normalizarTelefono, enviarEmail, tabla, TODAS_HORAS, MAX_PERSONAS, DIAS_ANTELACION, hoyMadrid, horaMadrid, validarFecha, emailReserva, horasCerradas } from './_comun.js';
 import { notificarTelegram } from './_telegram.js';
 
 const ent = (v, min, max) => Math.max(min, Math.min(max, parseInt(v, 10) || 0));
@@ -26,6 +26,7 @@ export const onRequestPost = handle(async (ctx) => {
   if (fecha > limite) throw new HttpError(400, `Solo se puede reservar con ${DIAS_ANTELACION} días de antelación como máximo.`);
   if (!TODAS_HORAS.includes(hora)) throw new HttpError(400, 'Elige una hora.');
   if (fecha === hoy && hora <= horaMadrid()) throw new HttpError(400, 'Esa hora ya ha pasado. Elige otra.');
+  if ((await horasCerradas(DB, fecha)).includes(hora)) throw new HttpError(409, 'Esa hora ya no está disponible. Elige otra o llámanos al 931 94 22 61.');
   if (adultos + ninos < 1) throw new HttpError(400, 'Indica cuántas personas venís.');
   if (adultos + ninos + bebes > MAX_PERSONAS) throw new HttpError(400, `Para más de ${MAX_PERSONAS} personas llámanos al 931 94 22 61.`);
   if (nombre.length < 2) throw new HttpError(400, 'Escribe tu nombre.');

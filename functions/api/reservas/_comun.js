@@ -31,6 +31,18 @@ export async function tabla(DB) {
     creado TEXT NOT NULL DEFAULT (datetime('now')),
     actualizado TEXT)`).run();
   await DB.prepare('CREATE INDEX IF NOT EXISTS idx_res_fecha ON reservas(fecha, hora)').run();
+  // Horas cerradas por el panel (una fila por día y hora)
+  await DB.prepare(`CREATE TABLE IF NOT EXISTS reservas_cierres (
+    fecha TEXT NOT NULL,
+    hora TEXT NOT NULL,
+    creado TEXT NOT NULL DEFAULT (datetime('now')),
+    PRIMARY KEY (fecha, hora))`).run();
+}
+
+// Horas cerradas de un día (array de 'HH:MM')
+export async function horasCerradas(DB, fecha) {
+  const r = await DB.prepare('SELECT hora FROM reservas_cierres WHERE fecha = ? ORDER BY hora').bind(fecha).all();
+  return r.results.map((x) => x.hora);
 }
 
 // Fecha de hoy en Barcelona (YYYY-MM-DD)

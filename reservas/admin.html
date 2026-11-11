@@ -41,6 +41,20 @@
 .acc{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .acc .btn{width:auto;flex:1 1 120px;padding:12px 8px;font-size:10.5px;letter-spacing:.14em}
 .vacio{border:1px dashed var(--linea);padding:28px;text-align:center;color:var(--muted);font-size:14px}
+.cier{border:1px solid var(--linea);background:var(--bg2);margin-bottom:18px}
+.cier summary{list-style:none;cursor:pointer;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--txt-hi)}
+.cier summary::-webkit-details-marker{display:none}
+.cier summary span{font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--muted)}
+.cier summary span.hay{color:#E36B74}
+.cier .in{padding:0 14px 14px}
+.cier .nota{font-size:13px;color:var(--muted);margin:0 0 6px;line-height:1.5}
+.cier .tt{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--oro2);margin:14px 0 8px}
+.cier .tt button,.cier .todo button{background:none;border:1px solid var(--linea);color:var(--txt-hi);padding:7px 10px;font-size:10px;font-weight:600;letter-spacing:.12em;cursor:pointer}
+.hrs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.hrs button{background:#0f0f0f;border:1px solid var(--linea);color:var(--txt-hi);padding:11px 0;font:600 17px/1 var(--num,inherit);cursor:pointer}
+.hrs button.off{background:rgba(227,107,116,.14);border-color:rgba(227,107,116,.6);color:#E36B74;text-decoration:line-through}
+.hrs button:disabled,.cier button:disabled{opacity:.5}
+.cier .todo{display:flex;gap:8px;margin-top:14px}.cier .todo button{flex:1;padding:12px 8px}
 #toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;background:#141414;border:1px solid var(--oro);color:var(--txt-hi);padding:14px 18px;font-size:14px;max-width:calc(100% - 32px);text-align:center}
 </style>
 </head>
@@ -59,6 +73,7 @@
     <div class="titdia" id="titdia"></div>
     <div class="resumen" id="resumen"></div>
     <div id="avisos"></div>
+    <details class="cier" id="cier"><summary><b id="cier-t" style="font-weight:600">HORAS DE RESERVA</b><span id="cier-res"></span></summary><div class="in" id="cier-in"></div></details>
     <div id="lista"></div>
   </section>
 </main>
@@ -68,7 +83,7 @@
   var $ = function(id){ return document.getElementById(id); };
   var DIAS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'], MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
   var ESTADO = { pendiente: 'PENDIENTE', confirmada: 'CONFIRMADA', cancelada: 'CANCELADA', llego: 'HA LLEGADO', no_vino: 'NO VINO' };
-  var fechaSel = null, datos = [], hoy = null, conocidas = null;
+  var fechaSel = null, datos = [], hoy = null, conocidas = null, HORAS = null, cerradas = [];
 
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   var tt; function toast(m){ var t = $('toast'); t.textContent = T(m); t.hidden = false; clearTimeout(tt); tt = setTimeout(function(){ t.hidden = true; }, 3200); }
@@ -89,12 +104,12 @@
   async function cargar(){
     var j = await api('/api/reservas/admin/lista' + (fechaSel ? '?fecha=' + fechaSel : ''));
     $('panel').hidden = false; $('salir').hidden = false;
-    hoy = j.hoy; fechaSel = j.fecha; datos = j.reservas;
+    hoy = j.hoy; fechaSel = j.fecha; datos = j.reservas; HORAS = j.horas; cerradas = j.cerradas || [];
     // aviso de reservas nuevas mientras el panel está abierto
     var ids = datos.map(function(r){ return r.id; });
     if (conocidas && conocidas.fecha === fechaSel) { var nuevas = ids.filter(function(id){ return conocidas.ids.indexOf(id) < 0; }); if (nuevas.length) { toast(T('Nueva reserva ({n})', {n: nuevas.length})); if (navigator.vibrate) navigator.vibrate([80,60,80]); } }
     conocidas = { fecha: fechaSel, ids: ids };
-    pintar(j.pendientes);
+    pintar(j.pendientes); pintarCierres();
   }
 
   function pintar(pendientes){
@@ -138,6 +153,37 @@
       cargar();
     } catch(ex){ toast(ex.message); b.disabled = false; }
   });
+
+  // ---------- cerrar / abrir horas de reserva del día ----------
+  var diaCierre = null;
+  function pintarCierres(){
+    if (!HORAS) return;
+    if (diaCierre !== fechaSel) { diaCierre = fechaSel; $('cier').open = cerradas.length > 0; }
+    var total = HORAS.mediodia.length + HORAS.noche.length, n = cerradas.length;
+    $('cier-t').textContent = T('HORAS DE RESERVA');
+    $('cier-res').className = n ? 'hay' : '';
+    $('cier-res').textContent = !n ? T('Todas abiertas') : n === total ? T('Día cerrado') : T(n === 1 ? '{n} cerrada' : '{n} cerradas', {n: n});
+    var turno = function(t, nom){
+      var hs = HORAS[t], todas = hs.every(function(h){ return cerradas.indexOf(h) >= 0; });
+      return '<div class="tt">' + T(nom) + '<button type="button" data-hs="' + hs.join(',') + '" data-c="' + (todas ? 0 : 1) + '">' + T(todas ? 'ABRIR TURNO' : 'CERRAR TURNO') + '</button></div>' +
+        '<div class="hrs">' + hs.map(function(h){ var off = cerradas.indexOf(h) >= 0; return '<button type="button" class="' + (off ? 'off' : '') + '" data-hs="' + h + '" data-c="' + (off ? 0 : 1) + '">' + h + '</button>'; }).join('') + '</div>';
+    };
+    var todas = HORAS.mediodia.concat(HORAS.noche);
+    $('cier-in').innerHTML = '<p class="nota">' + T('Toca una hora para cerrarla o volver a abrirla. Las horas cerradas no se pueden reservar en la web.') + '</p>' +
+      turno('mediodia', 'MEDIODÍA') + turno('noche', 'NOCHE') +
+      '<div class="todo"><button type="button" data-hs="' + todas.join(',') + '" data-c="1"' + (n === total ? ' disabled' : '') + '>' + T('CERRAR TODO EL DÍA') + '</button><button type="button" data-hs="' + todas.join(',') + '" data-c="0"' + (!n ? ' disabled' : '') + '>' + T('ABRIR TODO') + '</button></div>';
+  }
+  $('cier-in').addEventListener('click', async function(e){
+    var b = e.target.closest('button[data-hs]'); if (!b || b.disabled) return;
+    var horas = b.dataset.hs.split(','), cerrar = b.dataset.c === '1';
+    b.disabled = true;
+    try {
+      var j = await api('/api/reservas/admin/cierres', { method:'POST', body: JSON.stringify({ fecha: fechaSel, horas: horas, cerrar: cerrar }) });
+      cerradas = j.cerradas; pintarCierres();
+      toast(horas.length === 1 ? (cerrar ? T('{h} cerrada', {h: horas[0]}) : T('{h} abierta', {h: horas[0]})) : (cerrar ? T('Horas cerradas') : T('Horas abiertas')));
+    } catch(ex){ toast(ex.message); b.disabled = false; }
+  });
+
   $('avisos').addEventListener('click', function(e){ var b = e.target.closest('[data-ir]'); if (b) { fechaSel = b.dataset.ir; cargar(); } });
   $('fecha').addEventListener('change', function(){ if ($('fecha').value) { fechaSel = $('fecha').value; cargar(); } });
   $('ant').onclick = function(){ fechaSel = mover(fechaSel, -1); cargar(); };

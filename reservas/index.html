@@ -15,6 +15,7 @@
 .horas{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .horas button{background:var(--bg2);border:1px solid var(--linea);color:var(--txt-hi);padding:12px 0;cursor:pointer;font-size:15px}
 .horas button[aria-pressed="true"]{background:var(--rojo);border-color:var(--rojo)}
+.sinhoras{grid-column:1/-1;margin:0;font-size:14px;color:var(--muted);line-height:1.5}.sinhoras a{color:var(--txt-hi)}
 .horas button:disabled{opacity:.3;cursor:not-allowed;text-decoration:line-through}
 .turno{font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--oro2);margin:12px 0 8px}
 .pers{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--linea)}
@@ -148,15 +149,28 @@
   var hoy = new Date(), max = new Date(); max.setDate(max.getDate() + 60);
   fecha.min = ymd(hoy); fecha.max = ymd(max); fecha.value = ymd(hoy);
 
+  // Horas cerradas desde el panel (se piden al cambiar de día)
+  var cerradas = {}, cargando = {};
+  function pedirCerradas(fe){
+    if (cerradas[fe] || cargando[fe]) return;
+    cargando[fe] = true;
+    fetch('/api/reservas/horas?fecha=' + fe, { cache: 'no-store' }).then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(j){ cerradas[fe] = (j && j.cerradas) || []; }).catch(function(){ cerradas[fe] = []; })
+      .then(function(){ cargando[fe] = false; if (fecha.value === fe) pintarHoras(); });
+  }
   function pintarHoras(){
     var esHoy = fecha.value === ymd(new Date());
     var ahora = String(new Date().getHours()).padStart(2,'0') + ':' + String(new Date().getMinutes()).padStart(2,'0');
+    var cer = cerradas[fecha.value] || []; pedirCerradas(fecha.value);
     ['mediodia','noche'].forEach(function(t){
+      var libres = 0;
       $('h-' + t).innerHTML = HORAS[t].map(function(h){
-        var pasada = esHoy && h <= ahora;
-        if (pasada && st.hora === h) st.hora = null;
-        return '<button type="button" data-h="' + h + '" aria-pressed="' + (st.hora === h) + '"' + (pasada ? ' disabled' : '') + '>' + h + '</button>';
+        var no = (esHoy && h <= ahora) || cer.indexOf(h) >= 0;
+        if (no && st.hora === h) st.hora = null;
+        if (!no) libres++;
+        return '<button type="button" data-h="' + h + '" aria-pressed="' + (st.hora === h) + '"' + (no ? ' disabled' : '') + '>' + h + '</button>';
       }).join('');
+      if (!libres && cerradas[fecha.value]) $('h-' + t).innerHTML = '<p class="sinhoras">No quedan horas para reservar en este turno. Llámanos al <a href="tel:+34931942261">931 94 22 61</a>.</p>';
     });
   }
   pintarHoras();
@@ -216,7 +230,7 @@
       if (FID_ABIERTA) { if (tok) { $('h-tarjeta').href = '/fidelidad/tarjeta.html?t=' + tok; $('h-tarjeta').hidden = false; } else $('h-socio').hidden = false; }
       if (window.HK_STATS) HK_STATS.evento('reserva');
       $('form-wrap').hidden = true; $('hecho').hidden = false; scrollTo(0, 0);
-    } catch (ex) { fallo(ex.message); btn.disabled = false; btn.innerHTML = 'RESERVAR <span aria-hidden="true">→</span>'; }
+    } catch (ex) { fallo(ex.message); delete cerradas[fecha.value]; pintarHoras(); btn.disabled = false; btn.innerHTML = 'RESERVAR <span aria-hidden="true">→</span>'; }
   });
 })();
 </script>
