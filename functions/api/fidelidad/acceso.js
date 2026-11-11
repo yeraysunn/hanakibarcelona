@@ -1,5 +1,5 @@
 // POST /api/fidelidad/acceso
-//   {email}          → envía un código de 6 cifras al email del socio (válido 10 min)
+//   {email}          → envía un código de 6 cifras al email del socio (válido 10 min); 404 si ese email no tiene tarjeta
 //   {email, codigo}  → si el código es correcto, devuelve el token de la tarjeta
 // Envío de emails con Resend (variables RESEND_API_KEY y, opcional, EMAIL_FROM).
 import { json, db, handle, body, HttpError } from './_lib.js';
@@ -7,7 +7,8 @@ import { json, db, handle, body, HttpError } from './_lib.js';
 const MINUTOS_VALIDEZ = 10;
 const MAX_INTENTOS = 5;
 const MAX_CODIGOS_HORA = 3;
-const GENERICO = 'Si ese email tiene una tarjeta Hanaki, te llegará un código en un minuto (mira también en spam). Si no llega, es que la tarjeta está con otro email: pide al personal que te la reenvíe o crea una nueva.';
+const ENVIADO = 'Te hemos enviado un código de 6 cifras a tu email. Llega en un minuto; mira también en spam.';
+const SIN_TARJETA = 'No hay ninguna tarjeta con ese email. Revisa que esté bien escrito o crea tu tarjeta aquí abajo.';
 
 const hex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
 const sha = async (s) => hex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)));
@@ -68,7 +69,8 @@ export const onRequestPost = handle(async ({ request, env }) => {
   // Paso 2: comprobar el código
   if (d.codigo != null) {
     const codigo = String(d.codigo).replace(/\D/g, '');
-    if (!socio || codigo.length !== 6) throw new HttpError(400, 'Código incorrecto.');
+    if (!socio) throw new HttpError(404, SIN_TARJETA);
+    if (codigo.length !== 6) throw new HttpError(400, 'Código incorrecto.');
     const acc = await DB.prepare(`SELECT * FROM accesos WHERE socio_id = ? AND usado = 0 AND expira > datetime('now') ORDER BY id DESC LIMIT 1`).bind(socio.id).first();
     if (!acc) throw new HttpError(400, 'El código ha caducado. Pide uno nuevo.');
     if (acc.intentos >= MAX_INTENTOS) throw new HttpError(429, 'Demasiados intentos. Pide un código nuevo.');
@@ -80,16 +82,15 @@ export const onRequestPost = handle(async ({ request, env }) => {
     return json({ token: socio.token });
   }
 
-  // Paso 1: enviar el código (la respuesta es la misma exista o no el email)
-  if (socio) {
+  // Paso 1: enviar el código. Si ese email no tiene tarjeta, se dice claramente (decisión del restaurante)
+  if (!socio) { await new Promise((r) => setTimeout(r, 400)); throw new HttpError(404, SIN_TARJETA); }
+  {
     const { n } = await DB.prepare(`SELECT COUNT(*) n FROM accesos WHERE socio_id = ? AND creado > datetime('now','-1 hour')`).bind(socio.id).first();
     if (n >= MAX_CODIGOS_HORA) throw new HttpError(429, 'Ya te hemos enviado varios códigos. Espera un rato o pide ayuda al personal.');
     const codigo = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, '0');
     const ins = await DB.prepare(`INSERT INTO accesos (socio_id, codigo_hash, expira) VALUES (?, ?, datetime('now', '+${MINUTOS_VALIDEZ} minutes'))`)
       .bind(socio.id, await sha(socio.id + ':' + codigo)).run();
     await enviarEmail(env, socio.email.trim(), socio.nombre, codigo, `hanaki-acceso-${ins.meta.last_row_id}`);
-  } else {
-    await new Promise((r) => setTimeout(r, 700));
   }
-  return json({ ok: true, mensaje: GENERICO });
+  return json({ ok: true, mensaje: ENVIADO });
 });
