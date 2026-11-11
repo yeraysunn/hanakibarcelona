@@ -18,7 +18,7 @@ export const onRequestPost = handle(async ({ request, env }) => {
 
   const existe = await DB.prepare('SELECT id FROM socios WHERE telefono = ?').bind(telefono).first();
   if (existe) throw new HttpError(409, 'Este teléfono ya tiene una tarjeta. Pulsa «Ver mi tarjeta» para abrirla.');
-  const mismoEmail = await DB.prepare('SELECT id FROM socios WHERE email = ?').bind(email).first();
+  const mismoEmail = await DB.prepare('SELECT id FROM socios WHERE lower(trim(email)) = ?').bind(email).first();
   if (mismoEmail) throw new HttpError(409, 'Este email ya tiene una tarjeta. Pulsa «Ver mi tarjeta» para abrirla.');
 
   for (let intento = 0; intento < 5; intento++) {

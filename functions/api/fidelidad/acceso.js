@@ -7,7 +7,7 @@ import { json, db, handle, body, HttpError } from './_lib.js';
 const MINUTOS_VALIDEZ = 10;
 const MAX_INTENTOS = 5;
 const MAX_CODIGOS_HORA = 3;
-const GENERICO = 'Si ese email tiene una tarjeta Hanaki, te llegará un código en un minuto. Mira también en spam.';
+const GENERICO = 'Si ese email tiene una tarjeta Hanaki, te llegará un código en un minuto (mira también en spam). Si no llega, es que la tarjeta está con otro email: pide al personal que te la reenvíe o crea una nueva.';
 
 const hex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
 const sha = async (s) => hex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)));
@@ -63,7 +63,7 @@ export const onRequestPost = handle(async ({ request, env }) => {
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new HttpError(400, 'Escribe un email válido.');
   await tabla(DB);
 
-  const socio = await DB.prepare('SELECT id, token, nombre, email FROM socios WHERE email = ? ORDER BY id DESC LIMIT 1').bind(email).first();
+  const socio = await DB.prepare('SELECT id, token, nombre, email FROM socios WHERE lower(trim(email)) = ? ORDER BY id DESC LIMIT 1').bind(email).first();
 
   // Paso 2: comprobar el código
   if (d.codigo != null) {
@@ -87,7 +87,7 @@ export const onRequestPost = handle(async ({ request, env }) => {
     const codigo = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, '0');
     const ins = await DB.prepare(`INSERT INTO accesos (socio_id, codigo_hash, expira) VALUES (?, ?, datetime('now', '+${MINUTOS_VALIDEZ} minutes'))`)
       .bind(socio.id, await sha(socio.id + ':' + codigo)).run();
-    await enviarEmail(env, socio.email, socio.nombre, codigo, `hanaki-acceso-${ins.meta.last_row_id}`);
+    await enviarEmail(env, socio.email.trim(), socio.nombre, codigo, `hanaki-acceso-${ins.meta.last_row_id}`);
   } else {
     await new Promise((r) => setTimeout(r, 700));
   }
