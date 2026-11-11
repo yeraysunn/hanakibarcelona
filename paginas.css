@@ -209,3 +209,23 @@
   .e404__n{--fit:.9}
   .e404__cta .btn{flex:1}
 }
+
+/* Tarjeta de puntos al principio de la carta */
+.fid--carta{position:relative;right:auto;bottom:auto;width:100%;max-width:1040px;margin-top:clamp(24px,3vw,36px);display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.7fr) auto;align-items:center;gap:8px 28px;padding:22px 26px;max-width:1180px}
+.fid--carta .fid__n{display:none}
+.fid--carta .fid__top{gap:20px}
+.fid--carta .ruta{margin:0 14px 0 20px}
+.fid--carta .ruta__h{margin-top:22px}
+.fid__s{margin-top:10px;font-size:14px;line-height:1.35;color:rgba(243,239,232,.8)}
+.fid--carta .fid__cta{flex-direction:column;align-items:flex-start;gap:12px}
+@media (max-width:1180px){
+  .fid--carta{grid-template-columns:minmax(0,1fr);max-width:560px;gap:0}
+  .fid--carta .fid__n{display:block}
+  .fid--carta .ruta{margin:30px 20px 16px}
+  .fid--carta .fid__cta{flex-direction:row;align-items:center}
+}
+@media (max-width:640px){
+  .fid--carta{padding:16px 16px 18px}
+  .fid--carta .ruta{margin:26px 18px 12px}
+  .fid__s{font-size:13.5px}
+}
