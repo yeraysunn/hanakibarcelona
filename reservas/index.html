@@ -181,7 +181,7 @@
   function largo(fe){ var p = fe.split('-').map(Number), d = new Date(p[0], p[1]-1, p[2]); return DIAS[d.getDay()] + ' ' + p[2] + ' de ' + MESES[p[1]-1]; }
   function pers(){ var a = [st.adultos + ' adulto' + (st.adultos === 1 ? '' : 's')]; if (st.ninos) a.push(st.ninos + ' niño' + (st.ninos === 1 ? '' : 's')); if (st.bebes) a.push(st.bebes + ' bebé' + (st.bebes === 1 ? '' : 's')); return a.join(', '); }
 
-  var FID_ABIERTA = false; // poner a true cuando la tarjeta de puntos sea pública
+  var FID_ABIERTA = true; // poner a true cuando la tarjeta de puntos sea pública
   // Si tiene la tarjeta Hanaki en este móvil: rellena sus datos y la reserva aparecerá en su tarjeta
   var tok = null; try { tok = localStorage.getItem('hk-fid-token'); } catch (e) {}
   if (tok && /^[a-f0-9]{32}$/.test(tok)) {

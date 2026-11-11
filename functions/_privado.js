@@ -5,7 +5,7 @@
 //  · RESERVAS_PRIVADAS: reservas online (/reservas/ y /api/reservas/crear).
 import { sesionValida } from './api/fidelidad/_lib.js';
 
-export const FIDELIDAD_PRIVADA = true;
+export const FIDELIDAD_PRIVADA = false;
 export const RESERVAS_PRIVADAS = false;
 
 export function cerrar(activo, rutas, { pagina = false } = {}) {
