@@ -16,7 +16,7 @@
 <meta property="og:url" content="https://hanakisushi.com/">
 <meta property="og:image" content="https://hanakisushi.com/assets/fachada.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","@id":"https://hanakisushi.com/#restaurante","name":"Hanaki Sushi Barcelona","alternateName":"Restaurante Sushi Hanaki","url":"https://hanakisushi.com/","description":"Buffet libre japonés en Les Corts, Barcelona: sushi, ramen, plancha, fritos y salteados. Pide desde la tablet y repite.","image":["https://hanakisushi.com/assets/fachada.jpg","https://hanakisushi.com/assets/sala.jpg"],"logo":"https://hanakisushi.com/assets/hanaki-logo.png","telephone":"+34 931 94 22 61","address":{"@type":"PostalAddress","streetAddress":"Carrer de Joan Güell, 212","addressLocality":"Barcelona","addressRegion":"Barcelona","postalCode":"08028","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":41.3862641,"longitude":2.1297849},"hasMap":"https://www.google.com/maps/place/Restaurante+Sushi+Hanaki/@41.3862641,2.1297849,17z","servesCuisine":["Japonesa","Sushi","Buffet libre"],"priceRange":"14–23 €","currenciesAccepted":"EUR","acceptsReservations":true,"hasMenu":"https://hanakisushi.com/carta","openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"12:00","closes":"16:30"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"20:00","closes":"23:30"}],"potentialAction":{"@type":"ReserveAction","target":{"@type":"EntryPoint","urlTemplate":"https://hanakisushi.com/reservas/","inLanguage":"es","actionPlatform":["http://schema.org/DesktopWebPlatform","http://schema.org/MobileWebPlatform"]},"result":{"@type":"FoodEstablishmentReservation","name":"Reserva de mesa"}},"sameAs":["https://www.instagram.com/hanakisushi/","https://www.tiktok.com/@hanaki.sushi","https://www.facebook.com/p/Sushi-Hanaki-100067956896925/"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","@id":"https://hanakisushi.com/#restaurante","name":"Hanaki Sushi Barcelona","alternateName":"Restaurante Sushi Hanaki","url":"https://hanakisushi.com/","description":"Buffet libre japonés en Les Corts, Barcelona: sushi, ramen, plancha, fritos y salteados. Pide desde la tablet y repite.","image":["https://hanakisushi.com/assets/fachada.jpg","https://hanakisushi.com/assets/sala.jpg"],"logo":"https://hanakisushi.com/assets/hanaki-logo.png","telephone":"+34 931 94 22 61","address":{"@type":"PostalAddress","streetAddress":"Carrer de Joan Güell, 212","addressLocality":"Barcelona","addressRegion":"Barcelona","postalCode":"08028","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":41.3862641,"longitude":2.1297849},"hasMap":"https://www.google.com/maps/place/Restaurante+Sushi+Hanaki/@41.3862641,2.1297849,17z","servesCuisine":["Japonesa","Sushi","Buffet libre"],"priceRange":"14–23 €","currenciesAccepted":"EUR","acceptsReservations":"https://hanakisushi.com/reservas/","hasMenu":"https://hanakisushi.com/carta","openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"12:00","closes":"16:30"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"20:00","closes":"23:30"}],"potentialAction":{"@type":"ReserveAction","target":{"@type":"EntryPoint","urlTemplate":"https://hanakisushi.com/reservas/","inLanguage":"es","actionPlatform":["http://schema.org/DesktopWebPlatform","http://schema.org/MobileWebPlatform"]},"result":{"@type":"FoodEstablishmentReservation","name":"Reserva de mesa"}},"sameAs":["https://www.instagram.com/hanakisushi/","https://www.tiktok.com/@hanaki.sushi","https://www.facebook.com/p/Sushi-Hanaki-100067956896925/"]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Saira+Extra+Condensed:wght@500;600;700&display=swap">
@@ -356,10 +356,10 @@
       <span class="ln"><span>TU MESA<b>.</b></span></span>
     </h2>
     <div class="book__row">
-      <p data-in>Las reservas se hacen por teléfono y la mesa queda confirmada en la misma llamada. ¿Grupo grande o cumpleaños? Avísanos al llamar.</p>
+      <p data-in>Reserva online en un minuto y te confirmamos la mesa, o llámanos si lo prefieres. ¿Grupo grande o cumpleaños? Avísanos al llamar.</p>
       <div class="book__acts" data-in>
-        <a class="btn btn--red btn--xl" href="tel:+34931942261" data-magnet><span>Llamar para reservar</span><svg><use href="#arrow"/></svg></a>
-        <a class="book__tel" href="tel:+34931942261"><small>Teléfono</small><b>931 94 22 61</b></a>
+        <a class="btn btn--red btn--xl" href="/reservas/" data-magnet><span>Reservar online</span><svg><use href="#arrow"/></svg></a>
+        <a class="book__tel" href="tel:+34931942261"><small>o llámanos</small><b>931 94 22 61</b></a>
       </div>
     </div>
   </div>
@@ -432,8 +432,8 @@
 
 <!-- Barra inferior móvil -->
 <div class="dock" id="dock">
-  <a href="/carta"><span>Ver la carta</span></a>
-  <a class="dock__m" href="tel:+34931942261"><span>Llamar para reservar</span><svg><use href="#arrow"/></svg></a>
+  <a href="tel:+34931942261"><span>Llamar</span></a>
+  <a class="dock__m" href="/reservas/"><span>Reservar online</span><svg><use href="#arrow"/></svg></a>
 </div>
 
 <script src="app.js"></script>
