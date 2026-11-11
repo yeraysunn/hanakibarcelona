@@ -254,7 +254,7 @@
         '<div><h3>' + esc(s.nombre) + (puede ? '<span class="chip">' + T('PUEDE CANJEAR') + '</span>' : '') + '</h3>' +
         '<p>' + esc(s.telefono) + ' · ' + esc(s.codigo) + ' · ' + T('última visita:') + ' ' + fecha(s.ultimo_sello) + '</p>' +
         '<div class="pts"><b>' + num(s.puntos) + '</b><small>' + T('PUNTOS') + '</small></div></div>' +
-        '<div class="tipos"><button class="btn tbtn" data-a="puntos">' + T('+ PUNTOS') + '</button><button class="btn tbtn oro" data-a="canje"' + (puede ? '' : ' disabled') + '>' + T('CANJEAR') + '</button></div>' +
+        '<div class="tipos"><button class="btn tbtn" data-a="puntos">' + T('+ PUNTOS') + '</button><button class="btn tbtn oro" data-a="canje"' + (s.puntos > 0 ? '' : ' disabled') + '>' + T('CANJEAR') + '</button></div>' +
         '<div class="acc"><button class="btn sec" data-a="enlace">' + T('ENLACE') + '</button><button class="btn sec" data-a="ficha">' + T('FICHA') + '</button></div>' +
         '</div>';
     }).join('');
