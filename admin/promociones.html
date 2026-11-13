@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Promociones · Panel Hanaki</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Admin Hanaki">
+<link rel="icon" type="image/png" href="/fidelidad/icono.png">
+<link rel="apple-touch-icon" href="/fidelidad/icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Saira+Extra+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/fidelidad/estilo.css">
+<script src="/admin/i18n.js"></script>
+<script src="/admin/tabs.js"></script>
+<style>
+#idioma{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(243,239,232,.35);color:var(--txt-hi);padding:9px 12px;font-size:12px;font-weight:600;letter-spacing:.08em;cursor:pointer}#idioma:hover{border-color:var(--oro);color:var(--oro)}#idioma span{font:inherit;letter-spacing:inherit;color:inherit}
+.wrap{max-width:1120px}
+.resumen{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:baseline;margin:0 0 26px;font-size:14px;color:var(--muted)}
+.resumen b{font:900 40px/1 var(--disp);color:var(--txt-hi);margin-right:6px;font-variant-numeric:tabular-nums}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:34px;align-items:start}
+@media (max-width:960px){.cols{grid-template-columns:1fr}}
+.bloq{margin-bottom:30px}
+.bloq h2{display:flex;align-items:center;gap:12px;font:900 26px/1 var(--disp);text-transform:uppercase;color:var(--txt-hi);margin:0 0 14px}
+.bloq h2 i{font:600 12px/1 var(--body);font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--rojo);color:var(--tinta);display:inline-flex;align-items:center;justify-content:center;flex:none}
+.tipos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.tipo,.seg{background:var(--bg2);border:1px solid var(--linea);border-radius:14px;color:var(--txt);padding:14px;text-align:left;cursor:pointer;font:inherit;display:flex;flex-direction:column;gap:5px;transition:border-color .2s,background .2s}
+.tipo:hover,.seg:hover{border-color:rgba(243,239,232,.4)}
+.tipo b,.seg b{font-size:14.5px;font-weight:600;color:var(--txt-hi)}
+.tipo span,.seg span{font-size:12.5px;line-height:1.45;color:var(--muted)}
+.tipo[aria-pressed="true"],.seg[aria-pressed="true"]{border-color:var(--rojo);background:#1E1412}
+.tipo .ic{font-size:20px;line-height:1}
+.segs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media (max-width:560px){.segs{grid-template-columns:1fr}}
+.seg{flex-direction:row;align-items:center;justify-content:space-between;gap:12px}
+.seg em{font:900 30px/1 var(--disp);font-style:normal;color:var(--txt-hi);font-variant-numeric:tabular-nums}
+.seg[aria-pressed="true"] em{color:var(--rojo)}
+.campo{margin-bottom:14px}
+.campo textarea{min-height:190px;resize:vertical;font:inherit;line-height:1.55}
+.fila{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.fila{grid-template-columns:1fr}}
+.ayuda{font-size:12.5px;color:var(--muted);margin:6px 0 0;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chips button{background:none;border:1px solid var(--linea);border-radius:99px;color:var(--txt-hi);font:600 12px/1 var(--body);padding:8px 11px;cursor:pointer}
+.chips button:hover{border-color:var(--rojo);color:var(--rojo)}
+select{background:var(--bg2);border:1px solid var(--linea);color:var(--txt-hi);padding:15px 16px;border-radius:14px;width:100%;font:inherit;outline:none}
+.fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:6px}
+.foto{position:relative;aspect-ratio:1;border:2px solid transparent;border-radius:10px;overflow:hidden;padding:0;background:var(--bg2);cursor:pointer}
+.foto img{width:100%;height:100%;object-fit:cover;display:block}
+.foto[aria-pressed="true"]{border-color:var(--rojo)}
+.foto.sin{display:flex;align-items:center;justify-content:center;color:var(--muted);font:600 11px/1.3 var(--body);letter-spacing:.12em;border-color:var(--linea)}
+.foto.sin[aria-pressed="true"]{border-color:var(--rojo);color:var(--txt-hi)}
+.vista{position:sticky;top:14px}
+.vista .marco{border:1px solid var(--linea);border-radius:22px;overflow:hidden;background:#0A0A0A}
+.vista .bandeja{padding:12px 16px;border-bottom:1px solid var(--linea);font-size:12.5px;color:var(--muted);line-height:1.5}
+.vista .bandeja b{display:block;color:var(--txt-hi);font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vista iframe{display:block;width:100%;height:900px;border:0;background:#0A0A0A}
+@media (max-width:960px){.vista{position:static}.vista iframe{height:760px}}
+.envio{border:1px solid var(--linea);border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.prueba{display:grid;grid-template-columns:1fr auto;gap:8px}
+.prueba input{background:var(--bg2);border:1px solid var(--linea);color:var(--txt-hi);padding:14px 16px;border-radius:14px;font:inherit;outline:none;min-width:0}
+.prueba .btn{width:auto;min-height:0;padding:12px 18px}
+.btn.peligro{background:var(--txt-hi);border-color:var(--txt-hi)}
+.ok{background:rgba(95,179,122,.12);border:1px solid rgba(95,179,122,.4);color:#BFE5CB;border-radius:14px;padding:13px 15px;font-size:14px;line-height:1.5}
+.err{border-radius:14px}
+.hist{display:flex;flex-direction:column;gap:1px;background:var(--linea);border:1px solid var(--linea);border-radius:16px;overflow:hidden}
+.h{background:var(--bg2);padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:4px 14px;align-items:center}
+.h b{color:var(--txt-hi);font-weight:600;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.h span{font-size:12.5px;color:var(--muted)}
+.h .n{font:900 24px/1 var(--disp);color:var(--txt-hi);text-align:right;grid-row:span 2;font-variant-numeric:tabular-nums}
+.h .n small{display:block;font:500 11px/1.3 var(--body);color:var(--muted);letter-spacing:.06em}
+.h button{grid-column:1/-1;justify-self:start;margin-top:6px;background:none;border:1px solid var(--rojo);color:var(--rojo);border-radius:99px;padding:8px 13px;font:600 11px/1 var(--body);letter-spacing:.14em;cursor:pointer}
+.vacio{border:1px dashed var(--linea);border-radius:16px;padding:20px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6}
+.legal{font-size:12.5px;line-height:1.6;color:var(--muted);border-top:1px solid var(--linea);padding-top:16px;margin-top:8px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="cab"><a href="/admin/"><img src="/assets/logo.png" alt="花木"><span>HANAKI</span></a><div style="display:flex;gap:8px"><button type="button" id="idioma"></button><button id="salir" class="btn sec" style="width:auto;padding:10px 14px;font-size:10px" hidden>SALIR</button></div></header>
+
+  <div id="cargando" class="cargando">Cargando promociones…</div>
+  <section id="panel" hidden>
+    <nav class="tabs" data-on="promociones"></nav>
+    <div class="resumen" id="resumen"></div>
+
+    <div class="cols">
+      <div>
+        <div class="bloq">
+          <h2><i>1</i><span>Qué quieres enviar</span></h2>
+          <div class="tipos" id="tipos"></div>
+        </div>
+
+        <div class="bloq">
+          <h2><i>2</i><span>A quién</span></h2>
+          <div class="segs" id="segs"></div>
+          <p class="ayuda">Solo salen los socios de la tarjeta que marcaron «Quiero recibir promociones» y tienen email.</p>
+        </div>
+
+        <div class="bloq">
+          <h2><i>3</i><span>El mensaje</span></h2>
+          <div class="campo"><label for="f-asunto">ASUNTO DEL EMAIL</label><input id="f-asunto" maxlength="120" placeholder="Lo primero que se lee en la bandeja de entrada"></div>
+          <div class="fila">
+            <div class="campo"><label for="f-etiqueta">ETIQUETA</label><input id="f-etiqueta" maxlength="40" placeholder="NOVEDAD, OFERTA…"></div>
+            <div class="campo"><label for="f-titulo">TÍTULO GRANDE</label><input id="f-titulo" maxlength="90"></div>
+          </div>
+          <div class="campo">
+            <label for="f-texto">TEXTO</label>
+            <textarea id="f-texto" maxlength="3000"></textarea>
+            <div class="chips" id="chips"><button type="button" data-v="{nombre}">+ Nombre del socio</button><button type="button" data-v="{puntos}">+ Sus puntos</button></div>
+            <p class="ayuda">Deja una línea en blanco para separar párrafos. {nombre} y {puntos} se cambian por los de cada socio.</p>
+          </div>
+          <div class="campo"><label>FOTO</label><div class="fotos" id="fotos"></div></div>
+          <div class="fila">
+            <div class="campo"><label for="f-accion">BOTÓN</label>
+              <select id="f-accion">
+                <option value="/reservas/|RESERVAR MESA">Reservar mesa</option>
+                <option value="/carta|VER LA CARTA">Ver la carta</option>
+                <option value="tel:+34931942261|LLAMAR AL 931 94 22 61">Llamar al restaurante</option>
+                <option value="/ubicacion|CÓMO LLEGAR">Cómo llegar</option>
+                <option value="otro">Otro enlace…</option>
+                <option value="">Sin botón</option>
+              </select>
+            </div>
+            <div class="campo"><label for="f-boton">TEXTO DEL BOTÓN</label><input id="f-boton" maxlength="40"></div>
+          </div>
+          <div class="campo" id="c-enlace" hidden><label for="f-enlace">ENLACE DEL BOTÓN</label><input id="f-enlace" maxlength="300" placeholder="https://…"></div>
+        </div>
+
+        <div class="bloq">
+          <h2><i>4</i><span>Enviar</span></h2>
+          <div class="envio">
+            <div id="e-ok" class="ok" hidden></div>
+            <div id="e-err" class="err" hidden></div>
+            <div>
+              <label for="f-prueba" style="font-size:11.5px;font-weight:600;letter-spacing:.18em;color:var(--txt-hi)">PRIMERO, UNA PRUEBA A TU EMAIL</label>
+              <div class="prueba" style="margin-top:8px"><input id="f-prueba" type="email" placeholder="tu@email.com" autocomplete="email"><button type="button" class="btn sec" id="b-prueba">PROBAR</button></div>
+            </div>
+            <button type="button" class="btn" id="b-enviar">ENVIAR</button>
+            <p class="ayuda" id="e-nota" style="margin:0">El botón pide una segunda pulsación para confirmar.</p>
+          </div>
+        </div>
+
+        <div class="bloq">
+          <h2><span>Enviadas</span></h2>
+          <div id="hist"></div>
+        </div>
+        <p class="legal">Cada email lleva un enlace «Darme de baja»: quien lo pulsa deja de recibir promociones, pero conserva su tarjeta y sus puntos. No envíes promociones a gente que no lo haya aceptado (ni copies emails de las reservas): lo prohíbe la ley (LSSI y RGPD).</p>
+      </div>
+
+      <aside class="vista">
+        <div class="marco">
+          <div class="bandeja">Así lo verá un socio<b id="v-asunto">…</b></div>
+          <iframe id="v-frame" title="Vista previa del email" sandbox></iframe>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var tr = function(s, v){ return window.T ? T(s, v) : s; };
+  var DESC = { novedad: 'Un plato o bebida nueva en la carta', oferta: 'Descuento o menú por tiempo limitado', fecha: 'Navidad, San Valentín, Año Nuevo chino…', echamos: 'Para que vuelvan quienes llevan tiempo sin venir', puntos: 'Recuerda a cada socio sus puntos', aviso: 'Horario, cierre por vacaciones, cambios', libre: 'En blanco, lo escribes todo tú' };
+  var ICONO = { novedad: '🍣', oferta: '%', fecha: '🎉', echamos: '👋', puntos: '★', aviso: '!', libre: '✎' };
+  var datos = null, tipo = 'novedad', segmento = 'todos', foto = '', confirmando = false, enviando = false;
+  var CAMPOS = ['asunto', 'etiqueta', 'titulo', 'texto', 'boton', 'enlace'];
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  var fmt = function(n){ return Number(n || 0).toLocaleString(window.HK_LOCALE || 'es-ES'); };
+  function fechaCorta(s){ if (!s) return ''; var d = new Date(s.replace(' ', 'T') + 'Z'); return d.toLocaleDateString(window.HK_LOCALE || 'es-ES', { day: 'numeric', month: 'short' }) + ' · ' + d.toLocaleTimeString(window.HK_LOCALE || 'es-ES', { hour: '2-digit', minute: '2-digit' }); }
+
+  function mensaje(){
+    var m = { tipo: tipo, foto: foto, segmento: segmento };
+    CAMPOS.forEach(function(c){ m[c] = $('f-' + c).value; });
+    return m;
+  }
+  function guardarBorrador(){ try { localStorage.setItem('hk_promo_borrador', JSON.stringify(mensaje())); } catch(e){} }
+
+  function pintarTipos(){
+    $('tipos').innerHTML = Object.keys(datos.tipos).map(function(k){
+      return '<button type="button" class="tipo" data-t="' + k + '" aria-pressed="' + (k === tipo) + '"><span class="ic" aria-hidden="true">' + ICONO[k] + '</span><b>' + esc(tr(datos.tipos[k].nombre)) + '</b><span>' + esc(tr(DESC[k] || '')) + '</span></button>';
+    }).join('');
+  }
+  function pintarSegs(){
+    $('segs').innerHTML = Object.keys(datos.segmentos).map(function(k){
+      var s = datos.segmentos[k];
+      return '<button type="button" class="seg" data-s="' + k + '" aria-pressed="' + (k === segmento) + '"><b>' + esc(tr(s.nombre)) + '</b><em>' + fmt(s.n) + '</em></button>';
+    }).join('');
+    pintarBoton();
+  }
+  function pintarFotos(){
+    $('fotos').innerHTML = '<button type="button" class="foto sin" data-f="" aria-pressed="' + (!foto) + '">' + esc(tr('SIN FOTO')) + '</button>' + datos.fotos.map(function(f){
+      return '<button type="button" class="foto" data-f="' + f + '" aria-pressed="' + (f === foto) + '" aria-label="' + f + '"><img src="/assets/promos/' + f + '.jpg" alt="" loading="lazy"></button>';
+    }).join('');
+  }
+  function pintarBoton(){
+    var n = datos.segmentos[segmento].n;
+    $('b-enviar').disabled = enviando || !n;
+    $('b-enviar').classList.toggle('peligro', confirmando);
+    $('b-enviar').textContent = enviando ? tr('ENVIANDO…') : !n ? tr('NADIE EN ESTE GRUPO') : confirmando ? tr('¿SEGURO? PULSA OTRA VEZ PARA ENVIAR A {n}', { n: fmt(n) }) : tr(n === 1 ? 'ENVIAR A 1 SOCIO' : 'ENVIAR A {n} SOCIOS', { n: fmt(n) });
+  }
+  function pintarHist(){
+    var h = datos.historial;
+    if (!h.length) { $('hist').innerHTML = '<div class="vacio">' + esc(tr('Todavía no se ha enviado ninguna promoción.')) + '</div>'; return; }
+    $('hist').innerHTML = '<div class="hist">' + h.map(function(p){
+      var faltan = p.destinatarios - p.enviados;
+      var t = datos.tipos[p.tipo] ? tr(datos.tipos[p.tipo].nombre) : '';
+      return '<div class="h"><b>' + esc(p.asunto) + '</b><div class="n">' + fmt(p.enviados) + '<small>' + esc(tr('de {n}', { n: fmt(p.destinatarios) })) + '</small></div>' +
+        '<span>' + esc(fechaCorta(p.creado)) + ' · ' + esc(t) + ' · ' + esc(tr((datos.segmentos[p.segmento] || {}).nombre || '')) + '</span>' +
+        (faltan > 0 ? '<button type="button" data-c="' + p.id + '">' + esc(tr('CONTINUAR ENVÍO ({n} PENDIENTES)', { n: fmt(faltan) })) + '</button>' : '') + '</div>';
+    }).join('') + '</div>';
+  }
+  function pintarResumen(){
+    $('resumen').innerHTML = '<span><b>' + fmt(datos.aceptan) + '</b>' + esc(tr('socios aceptan promociones')) + '</span><span><b>' + fmt(datos.socios) + '</b>' + esc(tr('socios en total')) + '</span>';
+  }
+
+  // Al elegir un tipo se rellena el formulario con su texto de partida
+  function aplicarTipo(k){
+    var t = datos.tipos[k]; tipo = k;
+    $('f-asunto').value = t.asunto; $('f-etiqueta').value = t.etiqueta; $('f-titulo').value = t.titulo; $('f-texto').value = t.texto;
+    foto = t.foto || '';
+    var v = t.enlace ? t.enlace + '|' + t.boton : '';
+    var opt = Array.prototype.find.call($('f-accion').options, function(o){ return o.value === v; });
+    $('f-accion').value = opt ? v : (t.enlace ? 'otro' : '');
+    $('f-boton').value = t.boton; $('f-enlace').value = t.enlace;
+    $('c-enlace').hidden = $('f-accion').value !== 'otro';
+    if (t.segmento) segmento = t.segmento;
+    pintarTipos(); pintarSegs(); pintarFotos(); cambio();
+  }
+
+  var tVista = null;
+  function cambio(){ confirmando = false; pintarBoton(); guardarBorrador(); clearTimeout(tVista); tVista = setTimeout(vista, 350); }
+  async function vista(){
+    try {
+      var r = await fetch('/api/promos/admin/vista', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(mensaje()) });
+      var j = await r.json();
+      if (!r.ok) { $('v-asunto').textContent = tr(j.error || 'Error'); return; }
+      $('v-asunto').textContent = j.asunto;
+      $('v-frame').srcdoc = j.html;
+    } catch(e){}
+  }
+
+  function aviso(ok, texto){ $('e-ok').hidden = !ok; $('e-err').hidden = ok; $(ok ? 'e-ok' : 'e-err').textContent = texto; }
+
+  async function llamar(ruta, cuerpo){
+    var r = await fetch(ruta, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(cuerpo) });
+    var j = await r.json().catch(function(){ return {}; });
+    if (r.status === 401) { location.replace('/admin/?volver=promociones'); throw new Error(''); }
+    if (!r.ok) throw new Error(j.error || 'Error');
+    return j;
+  }
+  function resultado(j){
+    if (j.faltan > 0) aviso(false, tr('Enviada a {a} socios, pero faltan {b}: {m}', { a: fmt(j.total), b: fmt(j.faltan), m: tr(j.aviso || '') }));
+    else aviso(true, tr('¡Enviada! {n} socios recibirán el email en unos minutos.', { n: fmt(j.total) }));
+  }
+
+  async function cargar(){
+    var r = await fetch('/api/promos/admin/resumen', { cache: 'no-store' });
+    var j = await r.json().catch(function(){ return {}; });
+    if (r.status === 401) { location.replace('/admin/?volver=promociones'); return; }
+    if (!r.ok) throw new Error(j.error || 'Error');
+    var primera = !datos; datos = j;
+    $('cargando').hidden = true; $('panel').hidden = false; $('salir').hidden = false;
+    pintarResumen(); pintarHist();
+    if (primera) {
+      var b = null; try { b = JSON.parse(localStorage.getItem('hk_promo_borrador')); } catch(e){}
+      try { $('f-prueba').value = localStorage.getItem('hk_promo_prueba') || ''; } catch(e){}
+      if (b && datos.tipos[b.tipo]) {
+        tipo = b.tipo; foto = datos.fotos.indexOf(b.foto) >= 0 ? b.foto : ''; segmento = datos.segmentos[b.segmento] ? b.segmento : 'todos';
+        CAMPOS.forEach(function(c){ $('f-' + c).value = b[c] || ''; });
+        var v = b.enlace ? b.enlace + '|' + b.boton : '';
+        var opt = Array.prototype.find.call($('f-accion').options, function(o){ return o.value === v; });
+        $('f-accion').value = opt ? v : (b.enlace ? 'otro' : '');
+        $('c-enlace').hidden = $('f-accion').value !== 'otro';
+        pintarTipos(); pintarSegs(); pintarFotos(); vista();
+      } else aplicarTipo('novedad');
+    } else pintarSegs();
+  }
+
+  $('tipos').addEventListener('click', function(e){ var b = e.target.closest('[data-t]'); if (b) aplicarTipo(b.dataset.t); });
+  $('segs').addEventListener('click', function(e){ var b = e.target.closest('[data-s]'); if (!b) return; segmento = b.dataset.s; pintarSegs(); cambio(); });
+  $('fotos').addEventListener('click', function(e){ var b = e.target.closest('[data-f]'); if (!b) return; foto = b.dataset.f; pintarFotos(); cambio(); });
+  $('chips').addEventListener('click', function(e){
+    var b = e.target.closest('[data-v]'); if (!b) return;
+    var t = $('f-texto'), a = t.selectionStart, z = t.selectionEnd;
+    t.value = t.value.slice(0, a) + b.dataset.v + t.value.slice(z); t.focus(); t.selectionStart = t.selectionEnd = a + b.dataset.v.length; cambio();
+  });
+  CAMPOS.forEach(function(c){ $('f-' + c).addEventListener('input', cambio); });
+  $('f-accion').addEventListener('change', function(){
+    var v = this.value;
+    $('c-enlace').hidden = v !== 'otro';
+    if (v === 'otro') { $('f-enlace').value = ''; $('f-enlace').focus(); }
+    else if (!v) { $('f-enlace').value = ''; $('f-boton').value = ''; }
+    else { var p = v.split('|'); $('f-enlace').value = p[0]; $('f-boton').value = p[1]; }
+    cambio();
+  });
+
+  $('b-prueba').onclick = async function(){
+    var para = $('f-prueba').value.trim();
+    if (!para) { aviso(false, tr('Escribe tu email para la prueba.')); $('f-prueba').focus(); return; }
+    try { localStorage.setItem('hk_promo_prueba', para); } catch(e){}
+    this.disabled = true;
+    try { await llamar('/api/promos/admin/enviar', Object.assign(mensaje(), { prueba: para })); aviso(true, tr('Prueba enviada a {e}. Mírala en el móvil antes de enviarla a todos.', { e: para })); }
+    catch(ex){ if (ex.message) aviso(false, tr(ex.message)); }
+    this.disabled = false;
+  };
+  $('b-enviar').onclick = async function(){
+    if (!confirmando) { confirmando = true; pintarBoton(); return; }
+    confirmando = false; enviando = true; pintarBoton();
+    try { resultado(await llamar('/api/promos/admin/enviar', Object.assign(mensaje(), { confirmar: true }))); try { localStorage.removeItem('hk_promo_borrador'); } catch(e){} }
+    catch(ex){ if (ex.message) aviso(false, tr(ex.message)); }
+    enviando = false; await cargar().catch(function(){}); pintarBoton();
+    $('e-ok').scrollIntoView({ block: 'center', behavior: 'smooth' });
+  };
+  $('hist').addEventListener('click', async function(e){
+    var b = e.target.closest('[data-c]'); if (!b) return;
+    b.disabled = true; b.textContent = tr('ENVIANDO…');
+    try { resultado(await llamar('/api/promos/admin/enviar', { continuar: +b.dataset.c })); }
+    catch(ex){ if (ex.message) aviso(false, tr(ex.message)); }
+    await cargar().catch(function(){});
+  });
+  $('salir').onclick = async function(){ try { await fetch('/api/fidelidad/admin/login', { method:'DELETE' }); } catch(e){} location.replace('/admin/'); };
+  cargar().catch(function(ex){ $('cargando').textContent = tr(ex.message || 'Error'); });
+})();
+</script>
+</body>
+</html>
