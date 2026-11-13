@@ -38,6 +38,7 @@
 .chip{font-size:10px;font-weight:600;letter-spacing:.12em;padding:3px 7px;border:1px solid currentColor}
 .e-pendiente{color:#E9B949}.e-confirmada{color:#5FB37A}.e-cancelada{color:#E36B74}.e-llego{color:#7FB2F0}.e-no_vino{color:#A9A39A}
 .tag{font-size:11px;padding:2px 7px;background:#2a2622;color:var(--oro);letter-spacing:.06em}
+.tag.cli{background:var(--rojo);color:var(--tinta);font-weight:600}
 .acc{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .acc .btn{width:auto;flex:1 1 120px;padding:12px 8px;font-size:10.5px;letter-spacing:.14em}
 .vacio{border:1px dashed var(--linea);padding:28px;text-align:center;color:var(--muted);font-size:14px}
@@ -130,7 +131,7 @@
 
   function tarjeta(r){
     var p = [T(r.adultos === 1 ? '{n} adulto' : '{n} adultos', {n: r.adultos})]; if (r.ninos) p.push(T(r.ninos === 1 ? '{n} niño' : '{n} niños', {n: r.ninos})); if (r.bebes) p.push(T(r.bebes === 1 ? '{n} bebé' : '{n} bebés', {n: r.bebes}));
-    var tags = (r.cumple ? '<span class="tag">' + T('CUMPLEAÑOS') + '</span>' : '') + (r.trona ? '<span class="tag">' + T('TRONA') + '</span>' : '') + (r.carrito ? '<span class="tag">' + T('CARRITO') + '</span>' : '');
+    var tags = (r.por_cliente ? '<span class="tag cli">' + T(r.estado === 'cancelada' ? 'CANCELADA POR EL CLIENTE' : 'CAMBIADA POR EL CLIENTE') + '</span>' : '') + (r.cumple ? '<span class="tag">' + T('CUMPLEAÑOS') + '</span>' : '') + (r.trona ? '<span class="tag">' + T('TRONA') + '</span>' : '') + (r.carrito ? '<span class="tag">' + T('CARRITO') + '</span>' : '');
     var b = function(est, txt, cls){ return '<button type="button" class="btn ' + (cls || 'sec') + '" data-id="' + r.id + '" data-e="' + est + '">' + T(txt) + '</button>'; };
     var acc = r.estado === 'pendiente' ? b('confirmada', 'CONFIRMAR', '') + b('cancelada', 'CANCELAR')
       : r.estado === 'confirmada' ? b('llego', 'HA LLEGADO', 'oro') + b('no_vino', 'NO VINO') + b('cancelada', 'CANCELAR')

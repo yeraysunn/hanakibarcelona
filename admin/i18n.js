@@ -28,6 +28,8 @@
     'FIDELIZACIÓN': '会员卡',
     'CARTA': '菜单',
     'ESTADÍSTICAS': '统计',
+    'CAMBIADA POR EL CLIENTE': '客人已修改',
+    'CANCELADA POR EL CLIENTE': '客人已取消',
     // promociones
     'PROMOS': '促销',
     'Promociones · Panel Hanaki': '促销 · Hanaki 管理',

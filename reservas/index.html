@@ -127,7 +127,8 @@
     <h1>Gracias, <em id="h-nombre"></em></h1>
     <p class="lead" id="h-texto"></p>
     <div class="ok-box"><dl><dt>Día</dt><dd id="h-dia"></dd><dt>Hora</dt><dd id="h-hora"></dd><dt>Personas</dt><dd id="h-pers"></dd></dl></div>
-    <p class="nota" style="margin-top:18px">¿Necesitas cambiar algo? Llámanos al <a href="tel:+34931942261">931 94 22 61</a>.</p>
+    <a class="btn sec" id="h-mia" href="#" style="margin-top:18px" hidden>CAMBIAR O CANCELAR MI RESERVA</a>
+    <p class="nota" id="h-cambiar" style="margin-top:14px">¿Necesitas cambiar algo? Llámanos al <a href="tel:+34931942261">931 94 22 61</a>.</p>
     <a class="btn oro" id="h-tarjeta" href="/fidelidad/tarjeta.html" style="margin-top:20px" hidden>VER MI TARJETA Y MIS RESERVAS</a>
     <div id="h-socio" hidden style="margin-top:22px;border:1px solid var(--linea);background:var(--bg2);padding:16px;font-size:14px;line-height:1.6">
       <b style="color:var(--txt-hi)">Crea tu tarjeta Hanaki</b><br>Suma 1.000 puntos por cada 10 € y canjéalos por menús y buffets. Además tendrás tus reservas siempre a mano en el móvil.
@@ -225,6 +226,10 @@
       if (!r.ok) throw new Error(j.error || 'No se pudo enviar la reserva. Llámanos al 931 94 22 61.');
       $('h-nombre').textContent = d.nombre.trim().split(' ')[0];
       $('h-texto').textContent = d.email.trim() ? 'Hemos recibido tu reserva. Te enviaremos la confirmación a ' + d.email.trim() + '.' : 'Hemos recibido tu reserva. El restaurante la revisará en breve.';
+      if (j.reserva && j.reserva.token) {
+        $('h-mia').href = '/reservas/mi-reserva?t=' + j.reserva.token; $('h-mia').hidden = false;
+        $('h-cambiar').textContent = 'Desde ese botón puedes cambiarla o cancelarla hasta 2 horas antes.' + (d.email.trim() ? ' También te llega en el email.' : ' Guarda el enlace: no has puesto email.');
+      }
       $('h-dia').textContent = largo(d.fecha); $('h-hora').textContent = d.hora; $('h-pers').textContent = pers();
       // Tarjeta de puntos: no se anuncia mientras siga privada (functions/_privado.js → FIDELIDAD_PRIVADA)
       if (FID_ABIERTA) { if (tok) { $('h-tarjeta').href = '/fidelidad/tarjeta.html?t=' + tok; $('h-tarjeta').hidden = false; } else $('h-socio').hidden = false; }
