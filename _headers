@@ -1,0 +1,5 @@
+# Panel: menú de pestañas y traducciones siempre al día (si no, el móvil guarda la versión vieja 4 horas)
+/admin/tabs.js
+  Cache-Control: no-cache
+/admin/i18n.js
+  Cache-Control: no-cache
