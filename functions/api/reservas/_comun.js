@@ -116,16 +116,17 @@ export function personasTexto(r) {
   return p.join(', ');
 }
 
-// Email al cliente: recibida / confirmada / cancelada (por el restaurante) / cancelada_cliente / modificada
+// Email al cliente: recibida / confirmada / rechazada (desde Telegram, sin mesa) / cancelada (por el restaurante) / cancelada_cliente / modificada
 // base = origen de la web (https://hanakisushi.com) para el botón «Cambiar o cancelar mi reserva».
 export function emailReserva(r, tipo, base) {
   const titulo = {
-    recibida: 'Hemos recibido tu reserva', confirmada: 'Tu reserva está confirmada', cancelada: 'Tu reserva se ha cancelado',
+    recibida: 'Hemos recibido tu reserva', confirmada: 'Tu reserva está confirmada', rechazada: 'No tenemos mesa para tu reserva', cancelada: 'Tu reserva se ha cancelado',
     cancelada_cliente: 'Has cancelado tu reserva', modificada: 'Hemos recibido el cambio de tu reserva',
   }[tipo];
   const intro = {
     recibida: 'Gracias por reservar en Hanaki. Te avisaremos por email en cuanto el restaurante la confirme.',
     confirmada: '¡Te esperamos! Si no puedes venir o necesitas cambiar algo, hazlo desde el botón de abajo o llámanos.',
+    rechazada: 'lo sentimos mucho: para ese día y esa hora ya no nos queda mesa. Si te va bien otro momento, haz una reserva nueva en hanakisushi.com/reservas o llámanos y te buscamos hueco.',
     cancelada: 'Tu reserva ha quedado cancelada. Si crees que es un error, llámanos.',
     cancelada_cliente: 'Tu reserva ha quedado cancelada. Gracias por avisarnos: así liberamos la mesa. ¡Esperamos verte pronto!',
     modificada: 'Estos son los nuevos datos. Te avisaremos por email en cuanto el restaurante confirme el cambio.',
