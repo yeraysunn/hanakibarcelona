@@ -45,7 +45,7 @@ export async function onRequestGet({ request, env }) {
     }
     diag.webhook = (await tg(env, 'getWebhookInfo', {})).url;
   } catch (e) {
-    return salida({ ok: false, error: String(e.message), diagnostico: diag }, 502);
+    return salida({ ok: false, error: String(e.message), diagnostico: diag }); // 200: Cloudflare tapa los 502 con su página
   }
   return salida({ ok: true, diagnostico: diag });
 }
